@@ -6,11 +6,19 @@ A frosted-glass UI component library for dark, depth-rich interfaces. Every surf
 
 ## Installation
 
-The package is consumed as a local npm workspace:
+Install directly from GitHub:
 
 ```json
-// In the root package.json
-"workspaces": ["packages/*"]
+// package.json
+"dependencies": {
+  "glass-design-system": "github:theted/glass-design-system"
+}
+```
+
+Then run:
+
+```sh
+npm install
 ```
 
 Import in the app:
@@ -20,16 +28,7 @@ import { GlassProvider, GlassPanel, GlassInput } from 'glass-design-system';
 import 'glass-design-system/styles'; // CSS tokens and utilities
 ```
 
-The Vite config resolves the import via alias (no pre-build step required):
-
-```ts
-// vite.config.ts
-resolve: {
-  alias: {
-    'glass-design-system': resolve(__dirname, 'packages/glass-design-system/src/index.ts'),
-  },
-},
-```
+No Vite alias or workspace configuration required — the package ships pre-built in `dist/`.
 
 ---
 
@@ -352,5 +351,5 @@ See `src/glass.css` for the full reference background.
 Run the interactive showcase to explore all intensity tiers, glows, blur levels, tint swatches, nested patterns, and form components live on five background presets:
 
 ```sh
-npm run showcase --workspace=packages/glass-design-system
+npm run showcase
 ```

@@ -20,7 +20,7 @@
   ],
   "scripts": {
     "build": "vite build",
-    "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
+    "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly && node -e \"require('fs').writeFileSync('dist/glass.css.d.ts', 'export {};\\n')\"",
     "showcase": "vite --config vite.showcase.config.ts",
     "typecheck": "tsc --noEmit"
   },
@@ -28,7 +28,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
-  "prepare": "npm run build && npm run build:types",
+  "prepublishOnly": "npm run build && npm run build:types",
   "devDependencies": {
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
