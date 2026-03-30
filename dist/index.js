@@ -356,8 +356,8 @@ var N = ({ intensity: e = "medium", topGlow: t = !0, bottomGlow: n = !1, rounded
 			boxShadow: p ? [
 				`0 0 0 3px oklch(${U} / 0.14)`,
 				`0 0 28px oklch(${H} / 0.12)`,
-				`inset 0 1px 0 oklch(${V} / 0.18)`
-			].join(", ") : `inset 0 1px 0 oklch(${V} / 0.10)`,
+				...l ? [] : [`inset 0 1px 0 oklch(${V} / 0.18)`]
+			].join(", ") : l ? "none" : `inset 0 1px 0 oklch(${V} / 0.10)`,
 			transition: "border-color 300ms ease-out, box-shadow 300ms ease-out, background 300ms ease-out",
 			...c
 		},

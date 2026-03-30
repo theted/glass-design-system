@@ -72,9 +72,9 @@ export const GlassInputWrap: React.FC<WrapProps> = ({
             ? [
                 `0 0 0 3px oklch(${ACCENT} / 0.14)`,
                 `0 0 28px oklch(${GLOW_TR} / 0.12)`,
-                `inset 0 1px 0 oklch(${LIGHT} / 0.18)`,
+                ...(shimmer ? [] : [`inset 0 1px 0 oklch(${LIGHT} / 0.18)`]),
               ].join(', ')
-            : `inset 0 1px 0 oklch(${LIGHT} / 0.10)`,
+            : shimmer ? 'none' : `inset 0 1px 0 oklch(${LIGHT} / 0.10)`,
         transition: 'border-color 300ms ease-out, box-shadow 300ms ease-out, background 300ms ease-out',
         ...wrapperStyle,
     };

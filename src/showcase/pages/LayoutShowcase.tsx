@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { GlassPanel, GlassPill, GlassDivider, GlassProvider } from 'glass-design-system';
+import { GlassPanel, GlassPill, GlassDivider, GlassProvider, GlassInput, GlassTextarea, GlassInputWrap } from 'glass-design-system';
 
 // ── Shared atoms ──────────────────────────────────────────────────────────────
 
@@ -986,6 +986,315 @@ const GapSection: React.FC = () => {
   );
 };
 
+// ── § Form Layouts ───────────────────────────────────────────────────────────
+
+const FormLayoutSection: React.FC = () => {
+  const [formState, setFormState] = useState({ name: '', email: '', role: 'developer', bio: '' });
+
+  return (
+    <>
+      <DemoLabel>Single-column form — stacked fields inside a glass panel</DemoLabel>
+      <div className="grid gap-8 lg:grid-cols-2">
+        {/* Live demo */}
+        <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8">
+          <div className="relative z-10 flex flex-col gap-5">
+            <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+              Create account
+            </p>
+            <div>
+              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Name</p>
+              <GlassInput
+                type="text"
+                placeholder="Jane Doe"
+                value={formState.name}
+                onChange={(e) => setFormState((s) => ({ ...s, name: e.target.value }))}
+              />
+            </div>
+            <div>
+              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Email</p>
+              <GlassInput
+                type="email"
+                placeholder="jane@example.com"
+                value={formState.email}
+                onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))}
+              />
+            </div>
+            <div>
+              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Role</p>
+              <GlassInputWrap>
+                <select
+                  value={formState.role}
+                  onChange={(e) => setFormState((s) => ({ ...s, role: e.target.value }))}
+                  className="block w-full appearance-none bg-transparent px-5 py-4 text-base leading-normal text-[var(--color-text)] focus:outline-none"
+                >
+                  {['developer', 'designer', 'manager', 'other'].map((r) => (
+                    <option key={r} value={r} style={{ background: 'oklch(0.14 0.02 254)' }}>{r}</option>
+                  ))}
+                </select>
+              </GlassInputWrap>
+            </div>
+            <div>
+              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Bio</p>
+              <GlassTextarea
+                placeholder="Tell us about yourself…"
+                rows={3}
+                value={formState.bio}
+                onChange={(e) => setFormState((s) => ({ ...s, bio: e.target.value }))}
+              />
+            </div>
+            <div className="flex gap-3 pt-2">
+              <GlassPill size="sm" variant="accent" className="flex-1 justify-center">Create account</GlassPill>
+              <GlassPill size="sm" className="flex-1 justify-center">Cancel</GlassPill>
+            </div>
+          </div>
+        </GlassPanel>
+
+        {/* Code snippet */}
+        <div className="flex flex-col gap-6">
+          <CodeBlock>{`{/* Stacked form inside a glass panel */}
+<GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8">
+  <div className="flex flex-col gap-5">
+    <div>
+      <label>Name</label>
+      <GlassInput type="text" placeholder="Jane Doe" … />
+    </div>
+    <div>
+      <label>Email</label>
+      <GlassInput type="email" placeholder="jane@example.com" … />
+    </div>
+    <div>
+      <label>Role</label>
+      <GlassInputWrap>
+        <select …>{options}</select>
+      </GlassInputWrap>
+    </div>
+    <div>
+      <label>Bio</label>
+      <GlassTextarea placeholder="Tell us about yourself…" rows={3} … />
+    </div>
+    <div className="flex gap-3">
+      <GlassPill variant="accent">Create account</GlassPill>
+      <GlassPill>Cancel</GlassPill>
+    </div>
+  </div>
+</GlassPanel>`}</CodeBlock>
+        </div>
+      </div>
+
+      <GlassDivider className="my-10" />
+
+      {/* Two-column form layout */}
+      <DemoLabel>Two-column form — side-by-side fields for wider viewports</DemoLabel>
+      <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8">
+        <div className="relative z-10 flex flex-col gap-6">
+          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+            Project settings
+          </p>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div>
+              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Project name</p>
+              <GlassInput type="text" placeholder="My project" />
+            </div>
+            <div>
+              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Repository URL</p>
+              <GlassInput type="url" placeholder="https://github.com/…" />
+            </div>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-3">
+            <div>
+              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Language</p>
+              <GlassInputWrap>
+                <select className="block w-full appearance-none bg-transparent px-5 py-4 text-base leading-normal text-[var(--color-text)] focus:outline-none">
+                  {['TypeScript', 'JavaScript', 'Python', 'Rust', 'Go'].map((l) => (
+                    <option key={l} style={{ background: 'oklch(0.14 0.02 254)' }}>{l}</option>
+                  ))}
+                </select>
+              </GlassInputWrap>
+            </div>
+            <div>
+              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Visibility</p>
+              <GlassInputWrap>
+                <select className="block w-full appearance-none bg-transparent px-5 py-4 text-base leading-normal text-[var(--color-text)] focus:outline-none">
+                  {['Public', 'Private', 'Team only'].map((v) => (
+                    <option key={v} style={{ background: 'oklch(0.14 0.02 254)' }}>{v}</option>
+                  ))}
+                </select>
+              </GlassInputWrap>
+            </div>
+            <div>
+              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">License</p>
+              <GlassInputWrap>
+                <select className="block w-full appearance-none bg-transparent px-5 py-4 text-base leading-normal text-[var(--color-text)] focus:outline-none">
+                  {['MIT', 'Apache 2.0', 'GPL 3.0', 'BSD 3-Clause', 'Unlicense'].map((l) => (
+                    <option key={l} style={{ background: 'oklch(0.14 0.02 254)' }}>{l}</option>
+                  ))}
+                </select>
+              </GlassInputWrap>
+            </div>
+          </div>
+          <div>
+            <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Description</p>
+            <GlassTextarea placeholder="Describe your project…" rows={3} />
+          </div>
+          <div className="flex justify-end gap-3 pt-2">
+            <GlassPill size="sm">Reset</GlassPill>
+            <GlassPill size="sm" variant="accent">Save settings</GlassPill>
+          </div>
+        </div>
+      </GlassPanel>
+
+      <CodeBlock>{`{/* Two-column form layout */}
+<GlassPanel intensity="medium" topGlow className="p-8">
+  <div className="flex flex-col gap-6">
+    {/* Side-by-side row */}
+    <div className="grid gap-5 sm:grid-cols-2">
+      <div>
+        <label>Project name</label>
+        <GlassInput type="text" … />
+      </div>
+      <div>
+        <label>Repository URL</label>
+        <GlassInput type="url" … />
+      </div>
+    </div>
+
+    {/* Three-column row */}
+    <div className="grid gap-5 sm:grid-cols-3">
+      <div><label>Language</label><GlassInputWrap><select …/></GlassInputWrap></div>
+      <div><label>Visibility</label><GlassInputWrap><select …/></GlassInputWrap></div>
+      <div><label>License</label><GlassInputWrap><select …/></GlassInputWrap></div>
+    </div>
+
+    {/* Full-width field */}
+    <div>
+      <label>Description</label>
+      <GlassTextarea rows={3} … />
+    </div>
+  </div>
+</GlassPanel>`}</CodeBlock>
+
+      <GlassDivider className="my-10" />
+
+      {/* Form inside sidebar layout */}
+      <DemoLabel>Form in sidebar — search + filters alongside content</DemoLabel>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '320px 1fr',
+          gap: '1.25rem',
+          minHeight: '400px',
+        }}
+      >
+        {/* Sidebar with form */}
+        <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.6rem]" className="p-5">
+          <div className="relative z-10 flex flex-col gap-4">
+            <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+              Filters
+            </p>
+            <GlassInput type="search" placeholder="Search snippets…" />
+            <div>
+              <p className="mb-1.5 text-[0.56rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Category</p>
+              <GlassInputWrap>
+                <select className="block w-full appearance-none bg-transparent px-4 py-3 text-sm text-[var(--color-text)] focus:outline-none">
+                  {['All categories', 'Functions', 'Classes', 'Utilities', 'Hooks'].map((c) => (
+                    <option key={c} style={{ background: 'oklch(0.14 0.02 254)' }}>{c}</option>
+                  ))}
+                </select>
+              </GlassInputWrap>
+            </div>
+            <div>
+              <p className="mb-1.5 text-[0.56rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Language</p>
+              <GlassInputWrap>
+                <select className="block w-full appearance-none bg-transparent px-4 py-3 text-sm text-[var(--color-text)] focus:outline-none">
+                  {['All languages', 'TypeScript', 'Python', 'Rust', 'CSS'].map((l) => (
+                    <option key={l} style={{ background: 'oklch(0.14 0.02 254)' }}>{l}</option>
+                  ))}
+                </select>
+              </GlassInputWrap>
+            </div>
+            <GlassDivider className="my-1" />
+            <div>
+              <p className="mb-1.5 text-[0.56rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Sort by</p>
+              <GlassInputWrap>
+                <select className="block w-full appearance-none bg-transparent px-4 py-3 text-sm text-[var(--color-text)] focus:outline-none">
+                  {['Newest', 'Most used', 'Alphabetical', 'Recently edited'].map((s) => (
+                    <option key={s} style={{ background: 'oklch(0.14 0.02 254)' }}>{s}</option>
+                  ))}
+                </select>
+              </GlassInputWrap>
+            </div>
+            <GlassPill size="sm" variant="accent" className="mt-2 w-full justify-center">Apply filters</GlassPill>
+          </div>
+        </GlassPanel>
+
+        {/* Content area */}
+        <GlassPanel intensity="medium" topGlow rounded="rounded-[1.6rem]" className="p-6">
+          <div className="relative z-10">
+            <div className="mb-5 flex items-center justify-between">
+              <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+                Results
+              </p>
+              <GlassPill size="xs">+ New snippet</GlassPill>
+            </div>
+            <div className="space-y-3">
+              {[
+                { name: 'useDebounce.ts', desc: 'React hook for debounced values', lang: 'TS' },
+                { name: 'binary-search.py', desc: 'Generic binary search implementation', lang: 'PY' },
+                { name: 'flex-center.css', desc: 'Flexbox centering utility', lang: 'CSS' },
+                { name: 'error-boundary.tsx', desc: 'React error boundary wrapper', lang: 'TSX' },
+                { name: 'merge-sort.rs', desc: 'Generic merge sort in Rust', lang: 'RS' },
+              ].map(({ name, desc, lang }) => (
+                <div
+                  key={name}
+                  className="flex items-center gap-3 rounded-[0.8rem] px-4 py-3 transition-colors duration-200 hover:bg-[oklch(0.52_0.24_238_/_0.06)]"
+                  style={{ border: '1px solid oklch(0.48 0.06 248 / 0.12)' }}
+                >
+                  <span
+                    className="flex-none rounded text-[0.48rem] font-bold px-1.5 py-0.5"
+                    style={{
+                      background: 'oklch(0.52 0.24 238 / 0.14)',
+                      color: 'var(--color-accent-bright)',
+                      border: '1px solid oklch(0.52 0.24 238 / 0.20)',
+                      minWidth: '2.2rem',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {lang}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[0.72rem] font-semibold text-[var(--color-text)]">{name}</p>
+                    <p className="text-[0.60rem] text-[var(--color-text-muted)]">{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </GlassPanel>
+      </div>
+
+      <CodeBlock>{`{/* Form sidebar + content grid */}
+<div style={{
+  display: 'grid',
+  gridTemplateColumns: '320px 1fr',
+  gap: '1.25rem',
+}}>
+  {/* Sidebar with search + filter fields */}
+  <GlassPanel intensity="subtle" …>
+    <GlassInput type="search" placeholder="Search…" />
+    <GlassInputWrap><select …>Category</select></GlassInputWrap>
+    <GlassInputWrap><select …>Language</select></GlassInputWrap>
+    <GlassPill variant="accent">Apply filters</GlassPill>
+  </GlassPanel>
+
+  {/* Content area */}
+  <GlassPanel intensity="medium" …>
+    {results}
+  </GlassPanel>
+</div>`}</CodeBlock>
+    </>
+  );
+};
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 const NAV_ITEMS = [
@@ -996,6 +1305,7 @@ const NAV_ITEMS = [
   { id: 'stacking',      label: 'Stacking' },
   { id: 'provider-scope', label: 'Provider scope' },
   { id: 'gap-scale',     label: 'Gap scale' },
+  { id: 'form-layouts',  label: 'Form Layouts' },
 ];
 
 const LayoutShowcase: React.FC = () => (
@@ -1118,6 +1428,20 @@ const LayoutShowcase: React.FC = () => (
       </SectionSub>
       <GlassDivider className="my-10" />
       <GapSection />
+    </PageSection>
+
+    {/* ── Form Layouts */}
+    <PageSection id="form-layouts">
+      <SectionLabel>Layout pattern</SectionLabel>
+      <SectionTitle>Form Layouts</SectionTitle>
+      <SectionSub>
+        Glass form fields integrate seamlessly into any layout pattern — stacked single-column
+        forms, multi-column grids, or sidebar filter panels. Use <Code>GlassInput</Code>,{' '}
+        <Code>GlassTextarea</Code>, and <Code>GlassInputWrap</Code> inside panels for a
+        cohesive depth language.
+      </SectionSub>
+      <GlassDivider className="my-10" />
+      <FormLayoutSection />
     </PageSection>
 
     {/* Footer */}
