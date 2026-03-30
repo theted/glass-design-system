@@ -225,6 +225,29 @@ const GlassFormFieldsDemo: React.FC = () => {
             </div>
           </div>
         </GlassPanel>
+
+        {/* Input types */}
+        <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-5 flex flex-col gap-3">
+          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Input types</p>
+          <div className="flex flex-col gap-3">
+            <div>
+              <p className="mb-1 text-[0.58rem] text-[var(--color-text-subtle)]">Search</p>
+              <GlassInput type="search" placeholder="Search snippets…" fieldBlur={blur} />
+            </div>
+            <div>
+              <p className="mb-1 text-[0.58rem] text-[var(--color-text-subtle)]">Email</p>
+              <GlassInput type="email" placeholder="user@example.com" fieldBlur={blur} />
+            </div>
+            <div>
+              <p className="mb-1 text-[0.58rem] text-[var(--color-text-subtle)]">Password</p>
+              <GlassInput type="password" placeholder="Enter password" fieldBlur={blur} />
+            </div>
+            <div>
+              <p className="mb-1 text-[0.58rem] text-[var(--color-text-subtle)]">Number</p>
+              <GlassInput type="number" placeholder="0" fieldBlur={blur} />
+            </div>
+          </div>
+        </GlassPanel>
       </div>
     </div>
   );
