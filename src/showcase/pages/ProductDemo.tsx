@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { GlassPanel, GlassPill, GlassDivider, GlassProvider } from 'glass-design-system';
+import { GlassPanel, GlassPill, GlassDivider, GlassProvider, GlassOrbs } from 'glass-design-system';
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
 
@@ -8,17 +8,8 @@ const Hero: React.FC = () => (
   <section
     className="relative flex min-h-screen flex-col items-center justify-center px-6 py-24 text-center"
   >
-    {/* Ambient orbs */}
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0"
-      style={{
-        background: [
-          'radial-gradient(ellipse 70% 50% at 30% 20%, oklch(0.52 0.24 238 / 0.22), transparent 60%)',
-          'radial-gradient(ellipse 60% 40% at 75% 75%, oklch(0.58 0.14 210 / 0.18), transparent 55%)',
-        ].join(', '),
-      }}
-    />
+    {/* Animated orb background */}
+    <GlassOrbs preset="drift" speed={8} opacity={0.7} />
 
     <div className="relative z-10 mx-auto max-w-4xl">
       <p

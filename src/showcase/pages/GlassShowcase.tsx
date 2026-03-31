@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { GlassPanel, GLASS_BLUR, GLASS_OPACITY, getGlassStyles } from 'glass-design-system';
+import { GlassPanel, GlassOrbs, GLASS_BLUR, GLASS_OPACITY, getGlassStyles } from 'glass-design-system';
 import { useBackground } from '../context/BackgroundContext';
 
 // ── Inline tinted panel — wraps GlassPanel with a colour wash overlay ──────
@@ -269,8 +269,11 @@ const GlassShowcase: React.FC = () => {
   return (
   <div className="relative min-h-screen">
 
+    {/* Subtle orb background behind the whole page */}
+    <GlassOrbs preset="silk" speed={12} opacity={0.4} blendMode="screen" />
+
     <div
-      className="mx-auto px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,6vw,5rem)]"
+      className="relative z-10 mx-auto px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,6vw,5rem)]"
       style={{ maxWidth: '132rem', color: isDawn ? 'oklch(0.22 0.03 50)' : undefined }}
     >
 

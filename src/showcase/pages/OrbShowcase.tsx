@@ -151,28 +151,29 @@ const PreviewPane: React.FC<{
   speed: number;
   opacity: number;
   blendMode: OrbBlendMode;
-}> = ({ preset, speed, opacity, blendMode }) => (
-  <div
-    className="relative overflow-hidden"
-    style={{
-      height: '50vh',
-      minHeight: 340,
-      borderRadius: '1.6rem',
-      background: 'oklch(0.08 0.022 248)',
-    }}
-  >
-    {/* Orbs scoped inside the preview box */}
-    <GlassOrbs
-      key={preset}
-      preset={preset}
-      speed={speed}
-      opacity={opacity}
-      blendMode={blendMode}
-    />
+}> = ({ preset, speed, opacity, blendMode }) => {
+  return (
+    <div
+      className="relative overflow-hidden"
+      style={{
+        height: '50vh',
+        minHeight: 340,
+        borderRadius: '1.6rem',
+        background: 'oklch(0.08 0.022 248)',
+      }}
+    >
+      <GlassOrbs
+        key={preset}
+        preset={preset}
+        speed={speed}
+        opacity={opacity}
+        blendMode={blendMode}
+      />
+      <PatternOverlay />
 
-    {/* Centered label */}
-    <div className="relative z-10 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
-      <h3
+      {/* Centered label */}
+      <div className="relative z-10 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
+        <h3
         className="font-[var(--font-display)] text-[clamp(2rem,6vw,4rem)] font-[200] leading-[0.92] tracking-[-0.06em] text-bevel-strong"
         style={{ color: 'var(--color-text)' }}
       >
@@ -181,9 +182,10 @@ const PreviewPane: React.FC<{
       <p className="max-w-md text-sm leading-7" style={{ color: 'var(--color-text-muted)' }}>
         {PRESETS.find((p) => p.id === preset)!.description}
       </p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // ── Inline usage snippet ─────────────────────────────────────────────────────
 
@@ -294,6 +296,29 @@ const FullPageDemo: React.FC<{ preset: OrbPreset; speed: number; opacity: number
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
+// Reusable pattern overlay for preview containers
+const PatternOverlay: React.FC = () => {
+  const { activePattern } = useBackground();
+  if (!activePattern.url) return null;
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 1,
+        pointerEvents: 'none',
+        backgroundImage: `url("${activePattern.url}")`,
+        backgroundSize: activePattern.size,
+        backgroundRepeat: 'repeat',
+        mixBlendMode: 'soft-light',
+        opacity: 0.22,
+        borderRadius: 'inherit',
+      }}
+    />
+  );
+};
+
 const OrbShowcase: React.FC = () => {
   const [activePreset, setActivePreset] = useState<OrbPreset>('drift');
   const [speed, setSpeed] = useState(6);
@@ -399,6 +424,7 @@ const OrbShowcase: React.FC = () => {
                 }}
               >
                 <GlassOrbs preset={p.id} speed={8} opacity={0.8} />
+                <PatternOverlay />
                 <div className="relative z-10 flex h-full items-end p-5">
                   <GlassPill size="xs" variant={activePreset === p.id ? 'active' : 'default'}>
                     {p.label}

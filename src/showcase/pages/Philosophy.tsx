@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
-import { GlassPanel, GLASS_OPACITY, GLASS_BLUR } from 'glass-design-system';
+import { GlassPanel, GlassOrbs, GLASS_OPACITY, GLASS_BLUR } from 'glass-design-system';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // § Illustrations
@@ -444,6 +444,9 @@ const Philosophy: React.FC = () => {
             Hero
         ══════════════════════════════════════════════════════════════ */}
         <header className="relative flex min-h-[92vh] flex-col justify-end pb-[clamp(3rem,8vw,6rem)]">
+          {/* Animated orb background */}
+          <GlassOrbs preset="nebula" speed={10} opacity={0.6} blendMode="screen" />
+
           {/* Giant decorative background word */}
           <div
             aria-hidden
