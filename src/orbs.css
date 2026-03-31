@@ -394,6 +394,314 @@
 }
 
 
+/* ── Preset: orbit ────────────────────────────────────────────────────────── *
+   Smooth circular orbital paths — a planetarium feel.                       */
+
+.glass-orbs--orbit .glass-orb-1 {
+  width: 55vw; height: 55vw;
+  top: 10vh; left: 20vw;
+  background: radial-gradient(circle, oklch(0.50 0.24 230 / var(--orb-opacity)) 0%, transparent 62%);
+  animation: orb-orbit-1 calc(var(--orb-speed) * 5) linear infinite;
+}
+.glass-orbs--orbit .glass-orb-2 {
+  width: 65vw; height: 65vw;
+  top: 5vh; left: 10vw;
+  background: radial-gradient(circle, oklch(0.44 0.20 280 / var(--orb-opacity)) 0%, transparent 60%);
+  animation: orb-orbit-2 calc(var(--orb-speed) * 7) linear infinite;
+}
+.glass-orbs--orbit .glass-orb-3 {
+  width: 45vw; height: 45vw;
+  top: 20vh; left: 30vw;
+  background: radial-gradient(circle, oklch(0.48 0.22 200 / var(--orb-opacity)) 0%, transparent 65%);
+  animation: orb-orbit-3 calc(var(--orb-speed) * 6) linear infinite reverse;
+}
+.glass-orbs--orbit .glass-orb-4 {
+  width: 50vw; height: 50vw;
+  top: 15vh; left: 25vw;
+  background: radial-gradient(circle, oklch(0.42 0.18 260 / var(--orb-opacity)) 0%, transparent 60%);
+  animation: orb-orbit-1 calc(var(--orb-speed) * 8.5) linear infinite reverse;
+}
+.glass-orbs--orbit .glass-orb-5 {
+  width: 40vw; height: 40vw;
+  top: 25vh; left: 30vw;
+  background: radial-gradient(circle, oklch(0.46 0.16 310 / var(--orb-opacity)) 0%, transparent 65%);
+  animation: orb-orbit-2 calc(var(--orb-speed) * 9) linear infinite;
+}
+.glass-orbs--orbit .glass-orb-6 {
+  width: 70vw; height: 70vw;
+  top: 0; left: 15vw;
+  background: radial-gradient(circle, oklch(0.38 0.14 245 / var(--orb-opacity)) 0%, transparent 55%);
+  animation: orb-orbit-3 calc(var(--orb-speed) * 10) linear infinite;
+}
+
+@keyframes orb-orbit-1 {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(18vw, 12vh); }
+  50%  { transform: translate(0, 24vh); }
+  75%  { transform: translate(-18vw, 12vh); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes orb-orbit-2 {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-14vw, 18vh); }
+  50%  { transform: translate(0, 0); }
+  75%  { transform: translate(14vw, -18vh); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes orb-orbit-3 {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(20vw, -10vh); }
+  50%  { transform: translate(0, -20vh); }
+  75%  { transform: translate(-20vw, -10vh); }
+  100% { transform: translate(0, 0); }
+}
+
+
+/* ── Preset: silk ─────────────────────────────────────────────────────────── *
+   Ultra-smooth diagonal flows with elongated, overlapping shapes.           */
+
+.glass-orbs--silk .glass-orb {
+  border-radius: 50%;
+}
+.glass-orbs--silk .glass-orb-1 {
+  width: 110vw; height: 45vh;
+  top: -5vh; left: -15vw;
+  background: radial-gradient(ellipse 100% 100%, oklch(0.46 0.20 240 / var(--orb-opacity)) 0%, transparent 65%);
+  animation: orb-silk-1 calc(var(--orb-speed) * 6) ease-in-out infinite alternate;
+}
+.glass-orbs--silk .glass-orb-2 {
+  width: 100vw; height: 40vh;
+  top: 15vh; left: -5vw;
+  background: radial-gradient(ellipse 100% 100%, oklch(0.42 0.18 280 / var(--orb-opacity)) 0%, transparent 60%);
+  animation: orb-silk-2 calc(var(--orb-speed) * 8) ease-in-out infinite alternate;
+}
+.glass-orbs--silk .glass-orb-3 {
+  width: 120vw; height: 50vh;
+  top: 30vh; left: -10vw;
+  background: radial-gradient(ellipse 100% 100%, oklch(0.50 0.22 210 / var(--orb-opacity)) 0%, transparent 65%);
+  animation: orb-silk-3 calc(var(--orb-speed) * 7) ease-in-out infinite alternate;
+}
+.glass-orbs--silk .glass-orb-4 {
+  width: 90vw; height: 35vh;
+  top: 50vh; left: 5vw;
+  background: radial-gradient(ellipse 100% 100%, oklch(0.44 0.16 260 / var(--orb-opacity)) 0%, transparent 60%);
+  animation: orb-silk-1 calc(var(--orb-speed) * 9) ease-in-out infinite alternate-reverse;
+}
+.glass-orbs--silk .glass-orb-5 {
+  width: 105vw; height: 42vh;
+  top: 60vh; left: -8vw;
+  background: radial-gradient(ellipse 100% 100%, oklch(0.48 0.20 195 / var(--orb-opacity)) 0%, transparent 65%);
+  animation: orb-silk-2 calc(var(--orb-speed) * 10) ease-in-out infinite alternate-reverse;
+}
+.glass-orbs--silk .glass-orb-6 {
+  width: 80vw; height: 30vh;
+  bottom: -5vh; left: 10vw;
+  background: radial-gradient(ellipse 100% 100%, oklch(0.40 0.14 300 / var(--orb-opacity)) 0%, transparent 60%);
+  animation: orb-silk-3 calc(var(--orb-speed) * 7.5) ease-in-out infinite alternate;
+}
+
+@keyframes orb-silk-1 {
+  0%   { transform: translate(0, 0) rotate(-2deg) scaleX(1); opacity: 0.8; }
+  50%  { transform: translate(10vw, 8vh) rotate(1deg) scaleX(1.08); opacity: 1; }
+  100% { transform: translate(-5vw, 16vh) rotate(-1deg) scaleX(0.95); opacity: 0.7; }
+}
+@keyframes orb-silk-2 {
+  0%   { transform: translate(0, 0) rotate(1deg) scaleX(1.05); opacity: 0.7; }
+  50%  { transform: translate(-8vw, 6vh) rotate(-2deg) scaleX(0.92); opacity: 0.95; }
+  100% { transform: translate(6vw, -4vh) rotate(2deg) scaleX(1.1); opacity: 0.6; }
+}
+@keyframes orb-silk-3 {
+  0%   { transform: translate(0, 0) rotate(0deg) scaleX(1); opacity: 0.9; }
+  50%  { transform: translate(12vw, -6vh) rotate(-1deg) scaleX(1.12); opacity: 0.65; }
+  100% { transform: translate(-8vw, 10vh) rotate(1deg) scaleX(0.9); opacity: 1; }
+}
+
+
+/* ── Preset: tide ─────────────────────────────────────────────────────────── *
+   Horizontal wave-like undulation — calm oceanic motion.                    */
+
+.glass-orbs--tide .glass-orb-1 {
+  width: 85vw; height: 85vw;
+  top: -20vh; left: -10vw;
+  background: radial-gradient(circle, oklch(0.44 0.22 205 / var(--orb-opacity)) 0%, transparent 60%);
+  animation: orb-tide-1 calc(var(--orb-speed) * 4) ease-in-out infinite alternate;
+}
+.glass-orbs--tide .glass-orb-2 {
+  width: 75vw; height: 75vw;
+  top: -10vh; right: -15vw;
+  background: radial-gradient(circle, oklch(0.48 0.20 190 / var(--orb-opacity)) 0%, transparent 62%);
+  animation: orb-tide-2 calc(var(--orb-speed) * 5) ease-in-out infinite alternate;
+}
+.glass-orbs--tide .glass-orb-3 {
+  width: 90vw; height: 90vw;
+  bottom: -25vh; left: -5vw;
+  background: radial-gradient(circle, oklch(0.40 0.24 220 / var(--orb-opacity)) 0%, transparent 58%);
+  animation: orb-tide-3 calc(var(--orb-speed) * 6) ease-in-out infinite alternate;
+}
+.glass-orbs--tide .glass-orb-4 {
+  width: 70vw; height: 70vw;
+  bottom: -15vh; right: -10vw;
+  background: radial-gradient(circle, oklch(0.46 0.18 175 / var(--orb-opacity)) 0%, transparent 60%);
+  animation: orb-tide-1 calc(var(--orb-speed) * 5.5) ease-in-out infinite alternate-reverse;
+}
+.glass-orbs--tide .glass-orb-5 {
+  width: 60vw; height: 60vw;
+  top: 20vh; left: 20vw;
+  background: radial-gradient(circle, oklch(0.42 0.16 235 / var(--orb-opacity)) 0%, transparent 65%);
+  animation: orb-tide-2 calc(var(--orb-speed) * 7) ease-in-out infinite alternate-reverse;
+}
+.glass-orbs--tide .glass-orb-6 {
+  width: 95vw; height: 50vw;
+  bottom: -8vh; left: 0;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, oklch(0.38 0.20 200 / var(--orb-opacity)) 0%, transparent 65%);
+  animation: orb-tide-3 calc(var(--orb-speed) * 4.5) ease-in-out infinite alternate-reverse;
+}
+
+@keyframes orb-tide-1 {
+  0%   { transform: translateX(0) translateY(0); }
+  25%  { transform: translateX(15vw) translateY(4vh); }
+  50%  { transform: translateX(0) translateY(8vh); }
+  75%  { transform: translateX(-15vw) translateY(4vh); }
+  100% { transform: translateX(0) translateY(0); }
+}
+@keyframes orb-tide-2 {
+  0%   { transform: translateX(0) translateY(0); }
+  25%  { transform: translateX(-12vw) translateY(-5vh); }
+  50%  { transform: translateX(0) translateY(-10vh); }
+  75%  { transform: translateX(12vw) translateY(-5vh); }
+  100% { transform: translateX(0) translateY(0); }
+}
+@keyframes orb-tide-3 {
+  0%   { transform: translateX(0) translateY(0); }
+  33%  { transform: translateX(18vw) translateY(6vh); }
+  66%  { transform: translateX(-18vw) translateY(6vh); }
+  100% { transform: translateX(0) translateY(0); }
+}
+
+
+/* ── Preset: nebula ───────────────────────────────────────────────────────── *
+   Deep cosmic drifts — rich color mixing with very slow motion.             */
+
+.glass-orbs--nebula .glass-orb-1 {
+  width: 80vw; height: 80vw;
+  top: -15vh; left: -10vw;
+  background: radial-gradient(circle, oklch(0.42 0.26 290 / var(--orb-opacity)) 0%, transparent 58%);
+  animation: orb-nebula-1 calc(var(--orb-speed) * 6) ease-in-out infinite alternate;
+}
+.glass-orbs--nebula .glass-orb-2 {
+  width: 70vw; height: 70vw;
+  top: -5vh; right: -10vw;
+  background: radial-gradient(circle, oklch(0.50 0.24 340 / var(--orb-opacity)) 0%, transparent 60%);
+  animation: orb-nebula-2 calc(var(--orb-speed) * 8) ease-in-out infinite alternate;
+}
+.glass-orbs--nebula .glass-orb-3 {
+  width: 85vw; height: 85vw;
+  bottom: -20vh; left: 5vw;
+  background: radial-gradient(circle, oklch(0.46 0.22 250 / var(--orb-opacity)) 0%, transparent 55%);
+  animation: orb-nebula-3 calc(var(--orb-speed) * 7) ease-in-out infinite alternate;
+}
+.glass-orbs--nebula .glass-orb-4 {
+  width: 60vw; height: 60vw;
+  top: 25vh; left: 25vw;
+  background: radial-gradient(circle, oklch(0.38 0.20 315 / var(--orb-opacity)) 0%, transparent 62%);
+  animation: orb-nebula-1 calc(var(--orb-speed) * 9) ease-in-out infinite alternate-reverse;
+}
+.glass-orbs--nebula .glass-orb-5 {
+  width: 55vw; height: 55vw;
+  bottom: 5vh; right: 5vw;
+  background: radial-gradient(circle, oklch(0.44 0.18 270 / var(--orb-opacity)) 0%, transparent 60%);
+  animation: orb-nebula-2 calc(var(--orb-speed) * 10) ease-in-out infinite alternate-reverse;
+}
+.glass-orbs--nebula .glass-orb-6 {
+  width: 75vw; height: 75vw;
+  top: 10vh; right: 15vw;
+  background: radial-gradient(circle, oklch(0.48 0.22 220 / var(--orb-opacity)) 0%, transparent 58%);
+  animation: orb-nebula-3 calc(var(--orb-speed) * 8.5) ease-in-out infinite alternate;
+}
+
+@keyframes orb-nebula-1 {
+  0%   { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  33%  { transform: translate(10vw, 8vh) scale(1.06); opacity: 1; }
+  66%  { transform: translate(-6vw, 16vh) scale(0.96); opacity: 0.7; }
+  100% { transform: translate(4vw, 22vh) scale(1.04); opacity: 0.9; }
+}
+@keyframes orb-nebula-2 {
+  0%   { transform: translate(0, 0) scale(1.04); opacity: 0.7; }
+  33%  { transform: translate(-8vw, -6vh) scale(0.94); opacity: 0.9; }
+  66%  { transform: translate(5vw, -14vh) scale(1.08); opacity: 0.6; }
+  100% { transform: translate(-10vw, -8vh) scale(1); opacity: 1; }
+}
+@keyframes orb-nebula-3 {
+  0%   { transform: translate(0, 0) scale(0.98); opacity: 0.9; }
+  33%  { transform: translate(12vw, 6vh) scale(1.1); opacity: 0.65; }
+  66%  { transform: translate(-4vw, -10vh) scale(0.92); opacity: 1; }
+  100% { transform: translate(8vw, -4vh) scale(1.02); opacity: 0.75; }
+}
+
+
+/* ── Preset: ember ────────────────────────────────────────────────────────── *
+   Warm flickering glow with gentle scale pulses.                            */
+
+.glass-orbs--ember .glass-orb-1 {
+  width: 70vw; height: 70vw;
+  top: -10vh; right: -5vw;
+  background: radial-gradient(circle, oklch(0.52 0.28 35 / var(--orb-opacity)) 0%, transparent 60%);
+  animation: orb-ember-1 calc(var(--orb-speed) * 3.5) ease-in-out infinite;
+}
+.glass-orbs--ember .glass-orb-2 {
+  width: 60vw; height: 60vw;
+  bottom: -10vh; left: -5vw;
+  background: radial-gradient(circle, oklch(0.48 0.26 20 / var(--orb-opacity)) 0%, transparent 58%);
+  animation: orb-ember-2 calc(var(--orb-speed) * 4.2) ease-in-out infinite;
+}
+.glass-orbs--ember .glass-orb-3 {
+  width: 55vw; height: 55vw;
+  top: 15vh; left: 10vw;
+  background: radial-gradient(circle, oklch(0.46 0.24 50 / var(--orb-opacity)) 0%, transparent 62%);
+  animation: orb-ember-3 calc(var(--orb-speed) * 5) ease-in-out infinite;
+}
+.glass-orbs--ember .glass-orb-4 {
+  width: 65vw; height: 65vw;
+  bottom: 5vh; right: 10vw;
+  background: radial-gradient(circle, oklch(0.50 0.22 10 / var(--orb-opacity)) 0%, transparent 55%);
+  animation: orb-ember-1 calc(var(--orb-speed) * 4.8) ease-in-out infinite reverse;
+}
+.glass-orbs--ember .glass-orb-5 {
+  width: 50vw; height: 50vw;
+  top: 35vh; left: 30vw;
+  background: radial-gradient(circle, oklch(0.44 0.20 40 / var(--orb-opacity)) 0%, transparent 60%);
+  animation: orb-ember-2 calc(var(--orb-speed) * 3.8) ease-in-out infinite reverse;
+}
+.glass-orbs--ember .glass-orb-6 {
+  width: 80vw; height: 45vw;
+  bottom: -8vh; left: 10vw;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, oklch(0.42 0.18 25 / var(--orb-opacity)) 0%, transparent 65%);
+  animation: orb-ember-3 calc(var(--orb-speed) * 5.5) ease-in-out infinite reverse;
+}
+
+@keyframes orb-ember-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+  20%      { transform: translate(3vw, 2vh) scale(1.08); opacity: 1; }
+  40%      { transform: translate(-2vw, 4vh) scale(0.96); opacity: 0.6; }
+  60%      { transform: translate(4vw, -2vh) scale(1.12); opacity: 0.9; }
+  80%      { transform: translate(-3vw, 3vh) scale(0.94); opacity: 0.75; }
+}
+@keyframes orb-ember-2 {
+  0%, 100% { transform: translate(0, 0) scale(1.04); opacity: 0.8; }
+  25%      { transform: translate(-4vw, -3vh) scale(0.92); opacity: 1; }
+  50%      { transform: translate(2vw, -5vh) scale(1.1); opacity: 0.55; }
+  75%      { transform: translate(-3vw, 2vh) scale(0.98); opacity: 0.9; }
+}
+@keyframes orb-ember-3 {
+  0%, 100% { transform: translate(0, 0) scale(0.96); opacity: 0.85; }
+  30%      { transform: translate(5vw, 3vh) scale(1.14); opacity: 0.6; }
+  60%      { transform: translate(-4vw, -4vh) scale(1); opacity: 1; }
+  90%      { transform: translate(2vw, 5vh) scale(0.9); opacity: 0.7; }
+}
+
+
 /* ── Accessibility & performance ──────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {

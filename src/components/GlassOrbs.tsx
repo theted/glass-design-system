@@ -9,7 +9,12 @@ export type OrbPreset =
   | 'aurora'
   | 'float'
   | 'breathe'
-  | 'lava';
+  | 'lava'
+  | 'orbit'
+  | 'silk'
+  | 'tide'
+  | 'nebula'
+  | 'ember';
 
 export type OrbBlendMode = 'screen' | 'normal' | 'soft-light' | 'overlay' | 'hard-light' | 'color-dodge';
 
@@ -22,6 +27,11 @@ export interface GlassOrbsProps {
    * - `float`   – Smaller orbs floating upward in a gentle loop
    * - `breathe` – Very subtle, slow-breathing ambient glow
    * - `lava`    – Slow-morphing organic blobs
+   * - `orbit`   – Smooth circular orbital paths
+   * - `silk`    – Ultra-smooth diagonal flows
+   * - `tide`    – Horizontal wave-like undulation
+   * - `nebula`  – Deep cosmic drifts with rich color mixing
+   * - `ember`   – Warm flickering glow
    */
   preset?: OrbPreset;
   /** Override the base animation speed in seconds (default 6). */

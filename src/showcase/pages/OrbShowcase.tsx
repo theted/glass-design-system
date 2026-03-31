@@ -41,6 +41,36 @@ const PRESETS: { id: OrbPreset; label: string; description: string }[] = [
     description:
       'Slow-morphing organic blobs with warm tones. Adds a molten, dynamic quality with gentle rotation.',
   },
+  {
+    id: 'orbit',
+    label: 'Orbit',
+    description:
+      'Smooth circular orbital paths with staggered timing. A calm, planetarium-like feel with layered depth.',
+  },
+  {
+    id: 'silk',
+    label: 'Silk',
+    description:
+      'Ultra-smooth diagonal flows with elongated shapes. Overlapping ribbons of color that glide and layer.',
+  },
+  {
+    id: 'tide',
+    label: 'Tide',
+    description:
+      'Horizontal wave-like undulation — calm oceanic motion. Orbs sway side-to-side in a soothing rhythm.',
+  },
+  {
+    id: 'nebula',
+    label: 'Nebula',
+    description:
+      'Deep cosmic drifts with rich color mixing. Very slow, majestic motion — purples, magentas, and deep blues.',
+  },
+  {
+    id: 'ember',
+    label: 'Ember',
+    description:
+      'Warm flickering glow with gentle scale pulses. Orbs shimmer and breathe like embers in a dying fire.',
+  },
 ];
 
 // ── Speed / opacity controls ─────────────────────────────────────────────────
@@ -417,7 +447,7 @@ const OrbShowcase: React.FC = () => {
                 {[
                   {
                     prop: 'preset',
-                    type: "'drift' | 'pulse' | 'aurora' | 'float' | 'breathe' | 'lava'",
+                    type: "'drift' | 'pulse' | 'aurora' | 'float' | 'breathe' | 'lava' | 'orbit' | 'silk' | 'tide' | 'nebula' | 'ember'",
                     def: "'drift'",
                     desc: 'Animation preset to use.',
                   },
