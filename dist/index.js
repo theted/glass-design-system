@@ -374,8 +374,8 @@ var N = ({ preset: e = "drift", speed: t = 6, opacity: n = .95, className: r = "
 			boxShadow: p ? [
 				`0 0 0 3px oklch(${W} / 0.14)`,
 				`0 0 28px oklch(${U} / 0.12)`,
-				`inset 0 1px 0 oklch(${H} / 0.18)`
-			].join(", ") : `inset 0 1px 0 oklch(${H} / 0.10)`,
+				...l ? [] : [`inset 0 1px 0 oklch(${H} / 0.18)`]
+			].join(", ") : l ? "none" : `inset 0 1px 0 oklch(${H} / 0.10)`,
 			transition: "border-color 300ms ease-out, box-shadow 300ms ease-out, background 300ms ease-out",
 			...c
 		},
