@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { GlassPill } from 'glass-design-system';
 import { BackgroundProvider, useBackground } from './context/BackgroundContext';
 import BackgroundSwitcher from './components/BackgroundSwitcher';
@@ -12,6 +12,13 @@ import ComponentDocs from './pages/ComponentDocs';
 import Portfolio from './pages/Portfolio';
 import LayoutShowcase from './pages/LayoutShowcase';
 import OrbShowcase from './pages/OrbShowcase';
+
+// Reset scroll position on every route change
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+};
 
 // Inner component so it can consume the BackgroundContext
 const AppInner: React.FC = () => {
@@ -98,6 +105,7 @@ const AppInner: React.FC = () => {
         </div>
       </div>
 
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<GlassShowcase />} />
         <Route path="/components" element={<ComponentDocs />} />
