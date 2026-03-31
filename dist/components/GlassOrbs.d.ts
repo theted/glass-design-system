@@ -1,0 +1,23 @@
+import React from 'react';
+import '../orbs.css';
+export type OrbPreset = 'drift' | 'pulse' | 'aurora' | 'float' | 'breathe' | 'lava';
+export interface GlassOrbsProps {
+    /**
+     * Animation preset.
+     * - `drift`   – Large orbs slowly drifting across the viewport (classic)
+     * - `pulse`   – Orbs that gently breathe in size and opacity
+     * - `aurora`  – Elongated horizontal bands shimmering like northern lights
+     * - `float`   – Smaller orbs floating upward in a gentle loop
+     * - `breathe` – Very subtle, slow-breathing ambient glow
+     * - `lava`    – Slow-morphing organic blobs
+     */
+    preset?: OrbPreset;
+    /** Override the base animation speed in seconds (default 6). */
+    speed?: number;
+    /** Override global orb opacity 0–1 (default 0.95). */
+    opacity?: number;
+    /** Extra CSS class on the root element. */
+    className?: string;
+}
+declare const GlassOrbs: React.FC<GlassOrbsProps>;
+export default GlassOrbs;

@@ -255,8 +255,26 @@ function M(e, t) {
   `;
 }
 //#endregion
-//#region src/components/GlassPanel.tsx
-var N = ({ intensity: e = "medium", topGlow: t = !0, bottomGlow: n = !1, rounded: r = "rounded-[2.2rem]", className: s = "", style: c, children: l, as: d = "div", ...f }) => {
+//#region src/components/GlassOrbs.tsx
+var N = ({ preset: e = "drift", speed: t = 6, opacity: n = .95, className: r = "" }) => {
+	let i = {
+		"--orb-speed": `${t}s`,
+		"--orb-opacity": String(n)
+	};
+	return /* @__PURE__ */ o("div", {
+		"aria-hidden": "true",
+		className: `glass-orbs glass-orbs--${e} ${r}`.trim(),
+		style: i,
+		children: [
+			/* @__PURE__ */ a("div", { className: "glass-orb glass-orb-1" }),
+			/* @__PURE__ */ a("div", { className: "glass-orb glass-orb-2" }),
+			/* @__PURE__ */ a("div", { className: "glass-orb glass-orb-3" }),
+			/* @__PURE__ */ a("div", { className: "glass-orb glass-orb-4" }),
+			/* @__PURE__ */ a("div", { className: "glass-orb glass-orb-5" }),
+			/* @__PURE__ */ a("div", { className: "glass-orb glass-orb-6" })
+		]
+	});
+}, P = ({ intensity: e = "medium", topGlow: t = !0, bottomGlow: n = !1, rounded: r = "rounded-[2.2rem]", className: s = "", style: c, children: l, as: d = "div", ...f }) => {
 	let p = u(), m = O(e, p), [h, g] = i({
 		x: 50,
 		y: 30
@@ -313,34 +331,34 @@ var N = ({ intensity: e = "medium", topGlow: t = !0, bottomGlow: n = !1, rounded
 			l
 		]
 	});
-}, P = {
+}, F = {
 	xs: "gap-1.5 px-3 py-1 text-[0.60rem] tracking-[0.20em]",
 	sm: "gap-2 px-4 py-2 text-[0.68rem] tracking-[0.24em]",
 	md: "gap-2 px-5 py-2.5 text-[0.68rem] tracking-[0.24em]",
 	lg: "gap-2 px-6 py-3.5 text-[0.72rem] tracking-[0.24em]"
-}, F = {
+}, I = {
 	default: ["border-[var(--color-border)] bg-[var(--color-surface-muted)] text-[var(--color-text-muted)]", "hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface)] hover:text-[var(--color-text)]"].join(" "),
 	active: "border-[var(--color-border-strong)] bg-[var(--color-surface-strong)] text-[var(--color-text)]",
 	accent: ["border-[oklch(0.62_0.16_240_/_0.5)] bg-[oklch(0.62_0.16_240_/_0.10)] text-[var(--color-accent-bright)]", "hover:bg-[oklch(0.62_0.16_240_/_0.18)]"].join(" ")
-}, I = [
+}, L = [
 	"inline-flex items-center rounded-full border font-semibold uppercase",
 	"text-bevel backdrop-blur-md",
 	"transition duration-300 ease-out",
 	"hover:-translate-y-0.5",
 	"focus:outline-none focus:ring-4 focus:ring-[var(--color-accent-soft)]",
 	"disabled:opacity-30 disabled:pointer-events-none"
-].join(" "), L = ({ size: e = "md", variant: t = "default", as: n = "button", className: r = "", children: i, ...o }) => {
+].join(" "), R = ({ size: e = "md", variant: t = "default", as: n = "button", className: r = "", children: i, ...o }) => {
 	let s = n === "button" && !o.type ? { type: "button" } : {};
 	return /* @__PURE__ */ a(n, {
-		className: `${I} ${P[e]} ${F[t]} ${r}`,
+		className: `${L} ${F[e]} ${I[t]} ${r}`,
 		...s,
 		...o,
 		children: i
 	});
-}, R = ({ className: e = "" }) => /* @__PURE__ */ a("div", {
+}, z = ({ className: e = "" }) => /* @__PURE__ */ a("div", {
 	"aria-hidden": "true",
 	className: `h-px w-full bg-gradient-to-r from-transparent via-[oklch(0.48_0.06_248_/_0.30)] to-transparent ${e}`
-}), z = "0.48 0.06 248", B = "0.69 0.13 240", V = "0.82 0.1  230", H = "0.52 0.24 238", U = "0.72 0.14 236", W = "0.18 0.022 254", G = "0.22 0.026 250", K = ({ children: e, focused: t, fieldBlur: n = 16, radius: r = "1.4rem", wrapperClassName: s = "", wrapperStyle: c, shimmer: l = !0 }) => {
+}), B = "0.48 0.06 248", V = "0.69 0.13 240", H = "0.82 0.1  230", U = "0.52 0.24 238", W = "0.72 0.14 236", G = "0.18 0.022 254", K = "0.22 0.026 250", q = ({ children: e, focused: t, fieldBlur: n = 16, radius: r = "1.4rem", wrapperClassName: s = "", wrapperStyle: c, shimmer: l = !0 }) => {
 	let [d, f] = i(!1), p = t ?? d, { opacity: m } = u();
 	function h(e) {
 		return Math.round(e * m * 1e3) / 1e3;
@@ -351,13 +369,13 @@ var N = ({ intensity: e = "medium", topGlow: t = !0, bottomGlow: n = !1, rounded
 			position: "relative",
 			borderRadius: r,
 			backdropFilter: `blur(${n}px)`,
-			background: p ? `oklch(${G} / ${h(.6)})` : `oklch(${W}  / ${h(.42)})`,
-			border: `1px solid oklch(${p ? B : z} / ${p ? .55 : .28})`,
+			background: p ? `oklch(${K} / ${h(.6)})` : `oklch(${G}  / ${h(.42)})`,
+			border: `1px solid oklch(${p ? V : B} / ${p ? .55 : .28})`,
 			boxShadow: p ? [
-				`0 0 0 3px oklch(${U} / 0.14)`,
-				`0 0 28px oklch(${H} / 0.12)`,
-				...l ? [] : [`inset 0 1px 0 oklch(${V} / 0.18)`]
-			].join(", ") : l ? "none" : `inset 0 1px 0 oklch(${V} / 0.10)`,
+				`0 0 0 3px oklch(${W} / 0.14)`,
+				`0 0 28px oklch(${U} / 0.12)`,
+				`inset 0 1px 0 oklch(${H} / 0.18)`
+			].join(", ") : `inset 0 1px 0 oklch(${H} / 0.10)`,
 			transition: "border-color 300ms ease-out, box-shadow 300ms ease-out, background 300ms ease-out",
 			...c
 		},
@@ -376,13 +394,13 @@ var N = ({ intensity: e = "medium", topGlow: t = !0, bottomGlow: n = !1, rounded
 				right: "10%",
 				height: "1px",
 				pointerEvents: "none",
-				background: `linear-gradient(90deg, transparent, oklch(${V} / 0.22), transparent)`
+				background: `linear-gradient(90deg, transparent, oklch(${H} / 0.22), transparent)`
 			}
 		}), e]
 	});
-}, q = e.forwardRef(({ fieldBlur: e, wrapperClassName: t, wrapperStyle: n, shimmer: r, onFocus: o, onBlur: s, className: c, ...l }, u) => {
+}, J = e.forwardRef(({ fieldBlur: e, wrapperClassName: t, wrapperStyle: n, shimmer: r, onFocus: o, onBlur: s, className: c, ...l }, u) => {
 	let [d, f] = i(!1);
-	return /* @__PURE__ */ a(K, {
+	return /* @__PURE__ */ a(q, {
 		focused: d,
 		fieldBlur: e,
 		wrapperClassName: t,
@@ -401,10 +419,10 @@ var N = ({ intensity: e = "medium", topGlow: t = !0, bottomGlow: n = !1, rounded
 		})
 	});
 });
-q.displayName = "GlassInput";
-var J = ({ fieldBlur: e, wrapperClassName: t, wrapperStyle: n, shimmer: r, onFocus: o, onBlur: s, className: c, ...l }) => {
+J.displayName = "GlassInput";
+var Y = ({ fieldBlur: e, wrapperClassName: t, wrapperStyle: n, shimmer: r, onFocus: o, onBlur: s, className: c, ...l }) => {
 	let [u, d] = i(!1);
-	return /* @__PURE__ */ a(K, {
+	return /* @__PURE__ */ a(q, {
 		focused: u,
 		fieldBlur: e,
 		radius: "1.6rem",
@@ -424,4 +442,4 @@ var J = ({ fieldBlur: e, wrapperClassName: t, wrapperStyle: n, shimmer: r, onFoc
 	});
 };
 //#endregion
-export { j as BG_PRESETS, D as CARD_BG_ALPHA, f as GLASS_BLUR, s as GLASS_DEFAULTS, p as GLASS_LIGHT_ALPHA, d as GLASS_OPACITY, m as GLASS_SHADOW_ALPHA, E as GLOW_BL, T as GLOW_TR, R as GlassDivider, q as GlassInput, K as GlassInputWrap, N as GlassPanel, L as GlassPill, l as GlassProvider, J as GlassTextarea, A as PATTERNS, O as getGlassStyles, M as makeHueGradient, u as useGlass };
+export { j as BG_PRESETS, D as CARD_BG_ALPHA, f as GLASS_BLUR, s as GLASS_DEFAULTS, p as GLASS_LIGHT_ALPHA, d as GLASS_OPACITY, m as GLASS_SHADOW_ALPHA, E as GLOW_BL, T as GLOW_TR, z as GlassDivider, J as GlassInput, q as GlassInputWrap, N as GlassOrbs, P as GlassPanel, R as GlassPill, l as GlassProvider, Y as GlassTextarea, A as PATTERNS, O as getGlassStyles, M as makeHueGradient, u as useGlass };
