@@ -29,7 +29,7 @@
 .glass-orb {
   position: absolute;
   border-radius: 9999px;
-  will-change: transform;
+  will-change: transform, opacity;
   mix-blend-mode: var(--orb-blend, screen);
 }
 

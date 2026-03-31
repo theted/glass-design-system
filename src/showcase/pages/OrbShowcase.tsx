@@ -152,6 +152,7 @@ const PreviewPane: React.FC<{
   opacity: number;
   blendMode: OrbBlendMode;
 }> = ({ preset, speed, opacity, blendMode }) => {
+  const current = PRESETS.find((p) => p.id === preset)!;
   return (
     <div
       className="relative overflow-hidden"
@@ -162,26 +163,18 @@ const PreviewPane: React.FC<{
         background: 'oklch(0.08 0.022 248)',
       }}
     >
-      <GlassOrbs
-        key={preset}
-        preset={preset}
-        speed={speed}
-        opacity={opacity}
-        blendMode={blendMode}
-      />
+      <GlassOrbs key={preset} preset={preset} speed={speed} opacity={opacity} blendMode={blendMode} />
       <PatternOverlay />
-
-      {/* Centered label */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
         <h3
-        className="font-[var(--font-display)] text-[clamp(2rem,6vw,4rem)] font-[200] leading-[0.92] tracking-[-0.06em] text-bevel-strong"
-        style={{ color: 'var(--color-text)' }}
-      >
-        {PRESETS.find((p) => p.id === preset)!.label}
-      </h3>
-      <p className="max-w-md text-sm leading-7" style={{ color: 'var(--color-text-muted)' }}>
-        {PRESETS.find((p) => p.id === preset)!.description}
-      </p>
+          className="font-[var(--font-display)] text-[clamp(2rem,6vw,4rem)] font-[200] leading-[0.92] tracking-[-0.06em] text-bevel-strong"
+          style={{ color: 'var(--color-text)' }}
+        >
+          {current.label}
+        </h3>
+        <p className="max-w-md text-sm leading-7" style={{ color: 'var(--color-text-muted)' }}>
+          {current.description}
+        </p>
       </div>
     </div>
   );
@@ -204,14 +197,12 @@ const UsageSnippet: React.FC<{ preset: OrbPreset; speed: number; opacity: number
 
   return (
     <GlassPanel intensity="subtle" className="p-5">
-      <div className="relative z-10">
-        <pre
-          className="overflow-x-auto font-[var(--font-code)] text-[0.78rem] leading-6"
-          style={{ color: 'var(--color-accent-bright)' }}
-        >
-          {code}
-        </pre>
-      </div>
+      <pre
+        className="relative z-10 overflow-x-auto font-[var(--font-code)] text-[0.78rem] leading-6"
+        style={{ color: 'var(--color-accent-bright)' }}
+      >
+        {code}
+      </pre>
     </GlassPanel>
   );
 };
@@ -225,7 +216,6 @@ const FullPageDemo: React.FC<{ preset: OrbPreset; speed: number; opacity: number
   blendMode,
 }) => {
   const [open, setOpen] = useState(false);
-  const { activePattern } = useBackground();
 
   return (
     <>
@@ -243,24 +233,7 @@ const FullPageDemo: React.FC<{ preset: OrbPreset; speed: number; opacity: number
           }}
         >
           <GlassOrbs preset={preset} speed={speed} opacity={opacity} blendMode={blendMode} fixed />
-
-          {/* Pattern overlay — mirrors the main app pattern */}
-          {activePattern.url && (
-            <div
-              aria-hidden="true"
-              style={{
-                position: 'fixed',
-                inset: 0,
-                zIndex: 1,
-                pointerEvents: 'none',
-                backgroundImage: `url("${activePattern.url}")`,
-                backgroundSize: activePattern.size,
-                backgroundRepeat: 'repeat',
-                mixBlendMode: 'soft-light',
-                opacity: 0.22,
-              }}
-            />
-          )}
+          <PatternOverlay fixed />
 
           <div className="relative z-10 flex h-full flex-col items-center justify-center gap-6 p-8">
             <GlassPanel intensity="medium" topGlow className="max-w-lg p-10 text-center">
@@ -296,15 +269,14 @@ const FullPageDemo: React.FC<{ preset: OrbPreset; speed: number; opacity: number
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
-// Reusable pattern overlay for preview containers
-const PatternOverlay: React.FC = () => {
+const PatternOverlay: React.FC<{ fixed?: boolean }> = ({ fixed }) => {
   const { activePattern } = useBackground();
   if (!activePattern.url) return null;
   return (
     <div
       aria-hidden="true"
       style={{
-        position: 'absolute',
+        position: fixed ? 'fixed' : 'absolute',
         inset: 0,
         zIndex: 1,
         pointerEvents: 'none',
@@ -313,7 +285,7 @@ const PatternOverlay: React.FC = () => {
         backgroundRepeat: 'repeat',
         mixBlendMode: 'soft-light',
         opacity: 0.22,
-        borderRadius: 'inherit',
+        borderRadius: fixed ? undefined : 'inherit',
       }}
     />
   );
@@ -473,7 +445,7 @@ const OrbShowcase: React.FC = () => {
                 {[
                   {
                     prop: 'preset',
-                    type: "'drift' | 'pulse' | 'aurora' | 'float' | 'breathe' | 'lava' | 'orbit' | 'silk' | 'tide' | 'nebula' | 'ember'",
+                    type: PRESETS.map((p) => `'${p.id}'`).join(' | '),
                     def: "'drift'",
                     desc: 'Animation preset to use.',
                   },
@@ -497,7 +469,7 @@ const OrbShowcase: React.FC = () => {
                   },
                   {
                     prop: 'blendMode',
-                    type: "'screen' | 'normal' | 'soft-light' | 'overlay' | 'hard-light' | 'color-dodge'",
+                    type: BLEND_MODES.map((m) => `'${m}'`).join(' | '),
                     def: "'screen'",
                     desc: 'Mix-blend-mode applied to each orb.',
                   },
@@ -559,7 +531,7 @@ const OrbShowcase: React.FC = () => {
             },
             {
               title: 'Performance',
-              body: 'Only CSS transforms are animated (GPU compositor). Softness comes from radial-gradient falloff — no filter:blur() is used. Animations pause with prefers-reduced-motion.',
+              body: 'Only CSS transforms and opacity are animated (both GPU compositor-friendly). Softness comes from radial-gradient falloff — no filter:blur() is used. Animations are disabled with prefers-reduced-motion.',
             },
             {
               title: 'Combine with patterns',

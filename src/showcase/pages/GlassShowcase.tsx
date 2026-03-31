@@ -270,7 +270,7 @@ const GlassShowcase: React.FC = () => {
   <div className="relative min-h-screen">
 
     {/* Subtle orb background behind the whole page */}
-    <GlassOrbs preset="silk" speed={12} opacity={0.4} blendMode="screen" />
+    <GlassOrbs preset="silk" speed={12} opacity={0.4} />
 
     <div
       className="relative z-10 mx-auto px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,6vw,5rem)]"

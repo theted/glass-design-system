@@ -445,7 +445,7 @@ const Philosophy: React.FC = () => {
         ══════════════════════════════════════════════════════════════ */}
         <header className="relative flex min-h-[92vh] flex-col justify-end pb-[clamp(3rem,8vw,6rem)]">
           {/* Animated orb background */}
-          <GlassOrbs preset="nebula" speed={10} opacity={0.6} blendMode="screen" />
+          <GlassOrbs preset="nebula" speed={10} opacity={0.6} fixed />
 
           {/* Giant decorative background word */}
           <div
