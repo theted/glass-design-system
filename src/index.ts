@@ -28,7 +28,7 @@ export type { BgPreset, BgId } from './backgrounds';
 
 // Components
 export { default as GlassOrbs } from './components/GlassOrbs';
-export type { OrbPreset, GlassOrbsProps } from './components/GlassOrbs';
+export type { OrbPreset, OrbBlendMode, GlassOrbsProps } from './components/GlassOrbs';
 export { default as GlassPanel } from './components/GlassPanel';
 export { default as GlassPill } from './components/GlassPill';
 export type { GlassPillSize, GlassPillVariant } from './components/GlassPill';

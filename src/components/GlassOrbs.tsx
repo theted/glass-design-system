@@ -11,6 +11,8 @@ export type OrbPreset =
   | 'breathe'
   | 'lava';
 
+export type OrbBlendMode = 'screen' | 'normal' | 'soft-light' | 'overlay' | 'hard-light' | 'color-dodge';
+
 export interface GlassOrbsProps {
   /**
    * Animation preset.
@@ -28,6 +30,8 @@ export interface GlassOrbsProps {
   opacity?: number;
   /** Use position:fixed to cover the full viewport (default false — uses absolute). */
   fixed?: boolean;
+  /** Mix-blend-mode for each orb (default 'screen'). */
+  blendMode?: OrbBlendMode;
   /** Extra CSS class on the root element. */
   className?: string;
 }
@@ -37,11 +41,13 @@ const GlassOrbs: React.FC<GlassOrbsProps> = ({
   speed = 6,
   opacity = 0.95,
   fixed = false,
+  blendMode = 'screen',
   className = '',
 }) => {
   const vars = {
     '--orb-speed': `${speed}s`,
     '--orb-opacity': String(opacity),
+    '--orb-blend': blendMode,
   } as React.CSSProperties;
 
   return (

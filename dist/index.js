@@ -256,15 +256,16 @@ function M(e, t) {
 }
 //#endregion
 //#region src/components/GlassOrbs.tsx
-var N = ({ preset: e = "drift", speed: t = 6, opacity: n = .95, fixed: r = !1, className: i = "" }) => {
-	let s = {
+var N = ({ preset: e = "drift", speed: t = 6, opacity: n = .95, fixed: r = !1, blendMode: i = "screen", className: s = "" }) => {
+	let c = {
 		"--orb-speed": `${t}s`,
-		"--orb-opacity": String(n)
+		"--orb-opacity": String(n),
+		"--orb-blend": i
 	};
 	return /* @__PURE__ */ o("div", {
 		"aria-hidden": "true",
-		className: `glass-orbs glass-orbs--${e}${r ? " glass-orbs--fixed" : ""} ${i}`.trim(),
-		style: s,
+		className: `glass-orbs glass-orbs--${e}${r ? " glass-orbs--fixed" : ""} ${s}`.trim(),
+		style: c,
 		children: [
 			/* @__PURE__ */ a("div", { className: "glass-orb glass-orb-1" }),
 			/* @__PURE__ */ a("div", { className: "glass-orb glass-orb-2" }),

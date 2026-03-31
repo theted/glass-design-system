@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { GlassPanel, GlassPill, GlassDivider, GlassOrbs, type OrbPreset } from 'glass-design-system';
+import { GlassPanel, GlassPill, GlassDivider, GlassOrbs, type OrbPreset, type OrbBlendMode } from 'glass-design-system';
+import { useBackground } from '../context/BackgroundContext';
 
 // ── Preset catalogue ─────────────────────────────────────────────────────────
 
@@ -44,12 +45,16 @@ const PRESETS: { id: OrbPreset; label: string; description: string }[] = [
 
 // ── Speed / opacity controls ─────────────────────────────────────────────────
 
-const SpeedControl: React.FC<{
+const BLEND_MODES: OrbBlendMode[] = ['screen', 'normal', 'soft-light', 'overlay', 'hard-light', 'color-dodge'];
+
+const OrbControls: React.FC<{
   speed: number;
   onSpeed: (v: number) => void;
   opacity: number;
   onOpacity: (v: number) => void;
-}> = ({ speed, onSpeed, opacity, onOpacity }) => (
+  blendMode: OrbBlendMode;
+  onBlendMode: (v: OrbBlendMode) => void;
+}> = ({ speed, onSpeed, opacity, onOpacity, blendMode, onBlendMode }) => (
   <div className="flex flex-wrap items-center gap-6">
     <label className="flex items-center gap-3 text-sm" style={{ color: 'var(--color-text-muted)' }}>
       <span className="w-16 shrink-0">Speed</span>
@@ -88,6 +93,24 @@ const SpeedControl: React.FC<{
         {opacity.toFixed(2)}
       </code>
     </label>
+
+    <label className="flex items-center gap-3 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+      <span className="w-16 shrink-0">Blend</span>
+      <select
+        value={blendMode}
+        onChange={(e) => onBlendMode(e.target.value as OrbBlendMode)}
+        className="rounded-lg px-2 py-1 text-sm backdrop-blur-md"
+        style={{
+          background: 'var(--color-glass-field)',
+          color: 'var(--color-text)',
+          border: '1px solid var(--color-border)',
+        }}
+      >
+        {BLEND_MODES.map((m) => (
+          <option key={m} value={m}>{m}</option>
+        ))}
+      </select>
+    </label>
   </div>
 );
 
@@ -97,7 +120,8 @@ const PreviewPane: React.FC<{
   preset: OrbPreset;
   speed: number;
   opacity: number;
-}> = ({ preset, speed, opacity }) => (
+  blendMode: OrbBlendMode;
+}> = ({ preset, speed, opacity, blendMode }) => (
   <div
     className="relative overflow-hidden"
     style={{
@@ -113,6 +137,7 @@ const PreviewPane: React.FC<{
       preset={preset}
       speed={speed}
       opacity={opacity}
+      blendMode={blendMode}
     />
 
     {/* Centered label */}
@@ -132,14 +157,16 @@ const PreviewPane: React.FC<{
 
 // ── Inline usage snippet ─────────────────────────────────────────────────────
 
-const UsageSnippet: React.FC<{ preset: OrbPreset; speed: number; opacity: number }> = ({
+const UsageSnippet: React.FC<{ preset: OrbPreset; speed: number; opacity: number; blendMode: OrbBlendMode }> = ({
   preset,
   speed,
   opacity,
+  blendMode,
 }) => {
   const parts = [`preset="${preset}"`];
   if (speed !== 6) parts.push(`speed={${speed}}`);
   if (opacity !== 0.95) parts.push(`opacity={${opacity}}`);
+  if (blendMode !== 'screen') parts.push(`blendMode="${blendMode}"`);
 
   const code = `<GlassOrbs ${parts.join(' ')} />`;
 
@@ -159,12 +186,14 @@ const UsageSnippet: React.FC<{ preset: OrbPreset; speed: number; opacity: number
 
 // ── Full-page backdrop demo ──────────────────────────────────────────────────
 
-const FullPageDemo: React.FC<{ preset: OrbPreset; speed: number; opacity: number }> = ({
+const FullPageDemo: React.FC<{ preset: OrbPreset; speed: number; opacity: number; blendMode: OrbBlendMode }> = ({
   preset,
   speed,
   opacity,
+  blendMode,
 }) => {
   const [open, setOpen] = useState(false);
+  const { activePattern } = useBackground();
 
   return (
     <>
@@ -181,7 +210,25 @@ const FullPageDemo: React.FC<{ preset: OrbPreset; speed: number; opacity: number
             background: 'oklch(0.06 0.018 248)',
           }}
         >
-          <GlassOrbs preset={preset} speed={speed} opacity={opacity} fixed />
+          <GlassOrbs preset={preset} speed={speed} opacity={opacity} blendMode={blendMode} fixed />
+
+          {/* Pattern overlay — mirrors the main app pattern */}
+          {activePattern.url && (
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'fixed',
+                inset: 0,
+                zIndex: 1,
+                pointerEvents: 'none',
+                backgroundImage: `url("${activePattern.url}")`,
+                backgroundSize: activePattern.size,
+                backgroundRepeat: 'repeat',
+                mixBlendMode: 'soft-light',
+                opacity: 0.22,
+              }}
+            />
+          )}
 
           <div className="relative z-10 flex h-full flex-col items-center justify-center gap-6 p-8">
             <GlassPanel intensity="medium" topGlow className="max-w-lg p-10 text-center">
@@ -221,6 +268,7 @@ const OrbShowcase: React.FC = () => {
   const [activePreset, setActivePreset] = useState<OrbPreset>('drift');
   const [speed, setSpeed] = useState(6);
   const [opacity, setOpacity] = useState(0.95);
+  const [blendMode, setBlendMode] = useState<OrbBlendMode>('screen');
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-24">
@@ -266,22 +314,22 @@ const OrbShowcase: React.FC = () => {
       <section className="mb-6">
         <GlassPanel intensity="subtle" className="p-6">
           <div className="relative z-10">
-            <SpeedControl speed={speed} onSpeed={setSpeed} opacity={opacity} onOpacity={setOpacity} />
+            <OrbControls speed={speed} onSpeed={setSpeed} opacity={opacity} onOpacity={setOpacity} blendMode={blendMode} onBlendMode={setBlendMode} />
           </div>
         </GlassPanel>
       </section>
 
       {/* Live preview */}
       <section className="mb-6">
-        <PreviewPane preset={activePreset} speed={speed} opacity={opacity} />
+        <PreviewPane preset={activePreset} speed={speed} opacity={opacity} blendMode={blendMode} />
       </section>
 
       {/* Code snippet + full-page button */}
       <section className="mb-16 flex flex-wrap items-start gap-4">
         <div className="flex-1">
-          <UsageSnippet preset={activePreset} speed={speed} opacity={opacity} />
+          <UsageSnippet preset={activePreset} speed={speed} opacity={opacity} blendMode={blendMode} />
         </div>
-        <FullPageDemo preset={activePreset} speed={speed} opacity={opacity} />
+        <FullPageDemo preset={activePreset} speed={speed} opacity={opacity} blendMode={blendMode} />
       </section>
 
       <GlassDivider className="my-16" />
@@ -384,6 +432,18 @@ const OrbShowcase: React.FC = () => {
                     type: 'number',
                     def: '0.95',
                     desc: 'Global orb opacity (0–1).',
+                  },
+                  {
+                    prop: 'fixed',
+                    type: 'boolean',
+                    def: 'false',
+                    desc: 'Use position:fixed for full-viewport backgrounds.',
+                  },
+                  {
+                    prop: 'blendMode',
+                    type: "'screen' | 'normal' | 'soft-light' | 'overlay' | 'hard-light' | 'color-dodge'",
+                    def: "'screen'",
+                    desc: 'Mix-blend-mode applied to each orb.',
                   },
                   {
                     prop: 'className',

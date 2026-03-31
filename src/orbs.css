@@ -30,7 +30,7 @@
   position: absolute;
   border-radius: 9999px;
   will-change: transform;
-  mix-blend-mode: screen;
+  mix-blend-mode: var(--orb-blend, screen);
 }
 
 /* ── Preset: drift ────────────────────────────────────────────────────────── *
