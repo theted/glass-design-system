@@ -108,15 +108,12 @@ const PreviewPane: React.FC<{
     }}
   >
     {/* Orbs scoped inside the preview box */}
-    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: 'inherit' }}>
-      <GlassOrbs
-        key={preset}
-        preset={preset}
-        speed={speed}
-        opacity={opacity}
-        className="!position-absolute"
-      />
-    </div>
+    <GlassOrbs
+      key={preset}
+      preset={preset}
+      speed={speed}
+      opacity={opacity}
+    />
 
     {/* Centered label */}
     <div className="relative z-10 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
@@ -184,7 +181,7 @@ const FullPageDemo: React.FC<{ preset: OrbPreset; speed: number; opacity: number
             background: 'oklch(0.06 0.018 248)',
           }}
         >
-          <GlassOrbs preset={preset} speed={speed} opacity={opacity} />
+          <GlassOrbs preset={preset} speed={speed} opacity={opacity} fixed />
 
           <div className="relative z-10 flex h-full flex-col items-center justify-center gap-6 p-8">
             <GlassPanel intensity="medium" topGlow className="max-w-lg p-10 text-center">
@@ -323,9 +320,7 @@ const OrbShowcase: React.FC = () => {
                   background: 'oklch(0.08 0.022 248)',
                 }}
               >
-                <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: 'inherit' }}>
-                  <GlassOrbs preset={p.id} speed={8} opacity={0.8} />
-                </div>
+                <GlassOrbs preset={p.id} speed={8} opacity={0.8} />
                 <div className="relative z-10 flex h-full items-end p-5">
                   <GlassPill size="xs" variant={activePreset === p.id ? 'active' : 'default'}>
                     {p.label}

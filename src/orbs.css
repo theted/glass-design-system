@@ -8,13 +8,17 @@
   --orb-speed: 6s;
   --orb-opacity: 0.95;
 
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   isolation: isolate;
   overflow: hidden;
   animation: glass-orbs-reveal 2s ease-out both;
+}
+
+.glass-orbs--fixed {
+  position: fixed;
 }
 
 @keyframes glass-orbs-reveal {

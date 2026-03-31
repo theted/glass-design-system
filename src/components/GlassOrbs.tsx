@@ -26,6 +26,8 @@ export interface GlassOrbsProps {
   speed?: number;
   /** Override global orb opacity 0–1 (default 0.95). */
   opacity?: number;
+  /** Use position:fixed to cover the full viewport (default false — uses absolute). */
+  fixed?: boolean;
   /** Extra CSS class on the root element. */
   className?: string;
 }
@@ -34,6 +36,7 @@ const GlassOrbs: React.FC<GlassOrbsProps> = ({
   preset = 'drift',
   speed = 6,
   opacity = 0.95,
+  fixed = false,
   className = '',
 }) => {
   const vars = {
@@ -44,7 +47,7 @@ const GlassOrbs: React.FC<GlassOrbsProps> = ({
   return (
     <div
       aria-hidden="true"
-      className={`glass-orbs glass-orbs--${preset} ${className}`.trim()}
+      className={`glass-orbs glass-orbs--${preset}${fixed ? ' glass-orbs--fixed' : ''} ${className}`.trim()}
       style={vars}
     >
       <div className="glass-orb glass-orb-1" />
