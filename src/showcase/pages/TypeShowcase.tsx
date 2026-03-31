@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { GlassPanel } from 'glass-design-system';
+import { GlassPanel, GlassOrbs } from 'glass-design-system';
 
 // ── Section wrapper ───────────────────────────────────────────────────────────
 
@@ -121,8 +121,9 @@ const WidthBar: React.FC<{ rem: number; label: string; sub: string; isActive?: b
 
 const TypeShowcase: React.FC = () => (
   <div className="relative min-h-screen">
+    <GlassOrbs preset="breathe" speed={14} opacity={0.35} />
     <div
-      className="mx-auto px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,6vw,5rem)]"
+      className="relative z-10 mx-auto px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,6vw,5rem)]"
       style={{ maxWidth: '132rem' }}
     >
 
@@ -578,6 +579,68 @@ const TypeShowcase: React.FC = () => (
                 <div className="mx-auto h-4 w-3/4 rounded-full" style={{ background: 'oklch(0.71 0.17 244 / 0.22)' }} />
               </div>
             </div>
+          </div>
+        </GlassPanel>
+      </Section>
+
+      <Section label="07 — Fluid sizing" sub="How font sizes scale across viewports. No global zoom — sizing is handled per-element with CSS clamp().">
+        <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8 md:p-10">
+          <div className="relative z-10">
+            <p className="mb-6 text-sm leading-7 text-[var(--color-text-muted)]">
+              The Glass Design System does <strong className="text-[var(--color-text)]">not</strong> use a global font-size
+              multiplier or document-wide zoom variable. Instead, every text element uses{' '}
+              <code className="font-[var(--font-code)] text-[0.78em] text-[var(--color-accent-bright)]">clamp(min, preferred, max)</code>{' '}
+              for fluid scaling that adapts to the viewport.
+            </p>
+
+            <Rule />
+
+            <p className="mb-5 text-[0.62rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">
+              How clamp() works
+            </p>
+            <div className="mb-8 grid gap-4 md:grid-cols-3">
+              {[
+                { label: 'min', value: '3.5rem', desc: 'Floor — never smaller than this, even on narrow screens.' },
+                { label: 'preferred', value: '10vw', desc: 'Scales linearly with viewport width. The "fluid" part.' },
+                { label: 'max', value: '8rem', desc: 'Ceiling — stops growing past this on wide displays.' },
+              ].map((s) => (
+                <div key={s.label} className="rounded-xl p-4" style={{ background: 'oklch(0.16 0.018 258 / 0.50)', border: '1px solid var(--color-border)' }}>
+                  <code className="text-[0.72rem] font-[var(--font-code)] text-[var(--color-accent-bright)]">{s.label}</code>
+                  <p className="mt-1 font-[var(--font-display)] text-lg font-[300] text-[var(--color-text)] text-bevel">{s.value}</p>
+                  <p className="mt-2 text-[0.72rem] leading-5 text-[var(--color-text-muted)]">{s.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <Rule />
+
+            <p className="mb-5 text-[0.62rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">
+              Sizing tiers used in the system
+            </p>
+            <div className="space-y-4">
+              {[
+                { example: 'clamp(3.5rem, 10vw, 8rem)', use: 'Page hero headlines', demo: 'Hero' },
+                { example: 'clamp(2rem, 5vw, 3.5rem)', use: 'Section headings', demo: 'Section' },
+                { example: 'clamp(0.9rem, 1.4vw, 1.1rem)', use: 'Body / intro paragraphs', demo: 'Body text' },
+                { example: '0.72rem (fixed)', use: 'Labels, badges, pills', demo: 'Label' },
+                { example: '0.68rem (fixed)', use: 'Micro-labels, nav items', demo: 'Micro' },
+              ].map((t) => (
+                <div key={t.use} className="flex items-baseline gap-4">
+                  <code className="shrink-0 font-[var(--font-code)] text-[0.68rem] text-[var(--color-accent-bright)]">{t.example}</code>
+                  <span className="text-sm text-[var(--color-text-muted)]">{t.use}</span>
+                </div>
+              ))}
+            </div>
+
+            <Rule />
+
+            <p className="text-sm leading-7 text-[var(--color-text-muted)]">
+              <strong className="text-[var(--color-text)]">Why no global zoom?</strong>{' '}
+              A single multiplier scales everything uniformly — headings, body text, labels — which
+              breaks visual hierarchy at extremes. Per-element clamp() lets each tier scale independently:
+              large display text can grow fast while micro-labels stay readable. The result is fluid
+              typography that preserves hierarchy at every viewport width without a master knob.
+            </p>
           </div>
         </GlassPanel>
       </Section>
