@@ -168,7 +168,8 @@
 
 
 /* ── Preset: aurora ───────────────────────────────────────────────────────── *
-   Elongated horizontal bands that shimmer like northern lights.             */
+   Elongated horizontal bands shimmering like northern lights — deep         *
+   blue-greens with very gentle opacity and scale variance for smooth silk.  */
 
 .glass-orbs--aurora .glass-orb {
   border-radius: 50%;
@@ -176,54 +177,54 @@
 .glass-orbs--aurora .glass-orb-1 {
   width: 140vw; height: 30vh;
   top: 5vh; left: -20vw;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.45 0.24 165 / var(--orb-opacity)) 0%, transparent 70%);
-  animation: orb-aurora-1 calc(var(--orb-speed) * 3) ease-in-out infinite alternate;
+  background: radial-gradient(ellipse 65% 100%, oklch(0.42 0.16 175 / var(--orb-opacity)) 0%, transparent 75%);
+  animation: orb-aurora-1 calc(var(--orb-speed) * 3.5) ease-in-out infinite alternate;
 }
 .glass-orbs--aurora .glass-orb-2 {
   width: 120vw; height: 25vh;
   top: 20vh; left: -10vw;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.50 0.22 195 / var(--orb-opacity)) 0%, transparent 65%);
-  animation: orb-aurora-2 calc(var(--orb-speed) * 4.2) ease-in-out infinite alternate;
+  background: radial-gradient(ellipse 65% 100%, oklch(0.46 0.16 198 / var(--orb-opacity)) 0%, transparent 72%);
+  animation: orb-aurora-2 calc(var(--orb-speed) * 5) ease-in-out infinite alternate;
 }
 .glass-orbs--aurora .glass-orb-3 {
   width: 130vw; height: 35vh;
   top: 35vh; left: -15vw;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.42 0.20 280 / var(--orb-opacity)) 0%, transparent 60%);
-  animation: orb-aurora-3 calc(var(--orb-speed) * 5) ease-in-out infinite alternate;
+  background: radial-gradient(ellipse 65% 100%, oklch(0.38 0.14 220 / var(--orb-opacity)) 0%, transparent 72%);
+  animation: orb-aurora-3 calc(var(--orb-speed) * 6) ease-in-out infinite alternate;
 }
 .glass-orbs--aurora .glass-orb-4 {
   width: 110vw; height: 20vh;
   top: 55vh; left: -5vw;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.48 0.18 145 / var(--orb-opacity)) 0%, transparent 65%);
-  animation: orb-aurora-1 calc(var(--orb-speed) * 3.6) ease-in-out infinite alternate-reverse;
+  background: radial-gradient(ellipse 65% 100%, oklch(0.44 0.14 162 / var(--orb-opacity)) 0%, transparent 74%);
+  animation: orb-aurora-1 calc(var(--orb-speed) * 4.2) ease-in-out infinite alternate-reverse;
 }
 .glass-orbs--aurora .glass-orb-5 {
   width: 100vw; height: 28vh;
   top: 65vh; left: 0;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.40 0.22 210 / var(--orb-opacity)) 0%, transparent 65%);
-  animation: orb-aurora-2 calc(var(--orb-speed) * 4.8) ease-in-out infinite alternate-reverse;
+  background: radial-gradient(ellipse 65% 100%, oklch(0.40 0.16 208 / var(--orb-opacity)) 0%, transparent 73%);
+  animation: orb-aurora-2 calc(var(--orb-speed) * 5.5) ease-in-out infinite alternate-reverse;
 }
 .glass-orbs--aurora .glass-orb-6 {
   width: 90vw; height: 22vh;
   bottom: 5vh; left: 5vw;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.44 0.16 250 / var(--orb-opacity)) 0%, transparent 70%);
-  animation: orb-aurora-3 calc(var(--orb-speed) * 3.3) ease-in-out infinite alternate;
+  background: radial-gradient(ellipse 65% 100%, oklch(0.40 0.12 240 / var(--orb-opacity)) 0%, transparent 75%);
+  animation: orb-aurora-3 calc(var(--orb-speed) * 4) ease-in-out infinite alternate;
 }
 
 @keyframes orb-aurora-1 {
-  0%   { transform: translateX(0) scaleY(1); opacity: 0.8; }
-  50%  { transform: translateX(8vw) scaleY(1.4); opacity: 1; }
-  100% { transform: translateX(-6vw) scaleY(0.8); opacity: 0.6; }
+  0%   { transform: translateX(0) scaleY(1); opacity: 0.72; }
+  50%  { transform: translateX(8vw) scaleY(1.10); opacity: 0.88; }
+  100% { transform: translateX(-6vw) scaleY(0.94); opacity: 0.68; }
 }
 @keyframes orb-aurora-2 {
-  0%   { transform: translateX(0) scaleY(1.2); opacity: 0.7; }
-  50%  { transform: translateX(-10vw) scaleY(0.7); opacity: 1; }
-  100% { transform: translateX(5vw) scaleY(1.3); opacity: 0.5; }
+  0%   { transform: translateX(0) scaleY(1.05); opacity: 0.70; }
+  50%  { transform: translateX(-10vw) scaleY(0.93); opacity: 0.86; }
+  100% { transform: translateX(5vw) scaleY(1.08); opacity: 0.64; }
 }
 @keyframes orb-aurora-3 {
-  0%   { transform: translateX(0) scaleY(0.9); opacity: 0.9; }
-  50%  { transform: translateX(6vw) scaleY(1.5); opacity: 0.5; }
-  100% { transform: translateX(-8vw) scaleY(1.1); opacity: 0.8; }
+  0%   { transform: translateX(0) scaleY(0.96); opacity: 0.78; }
+  50%  { transform: translateX(6vw) scaleY(1.12); opacity: 0.65; }
+  100% { transform: translateX(-8vw) scaleY(1.02); opacity: 0.82; }
 }
 
 
@@ -458,7 +459,8 @@
 
 
 /* ── Preset: silk ─────────────────────────────────────────────────────────── *
-   Ultra-smooth diagonal flows with elongated, overlapping shapes.           */
+   Ultra-smooth diagonal flows with elongated, softly feathered shapes.      *
+   Deep blue-indigo hues with minimal opacity and scale variance.            */
 
 .glass-orbs--silk .glass-orb {
   border-radius: 50%;
@@ -466,54 +468,54 @@
 .glass-orbs--silk .glass-orb-1 {
   width: 110vw; height: 45vh;
   top: -5vh; left: -15vw;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.46 0.20 240 / var(--orb-opacity)) 0%, transparent 65%);
-  animation: orb-silk-1 calc(var(--orb-speed) * 6) ease-in-out infinite alternate;
+  background: radial-gradient(ellipse 60% 100%, oklch(0.42 0.16 232 / var(--orb-opacity)) 0%, transparent 72%);
+  animation: orb-silk-1 calc(var(--orb-speed) * 7) ease-in-out infinite alternate;
 }
 .glass-orbs--silk .glass-orb-2 {
   width: 100vw; height: 40vh;
   top: 15vh; left: -5vw;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.42 0.18 280 / var(--orb-opacity)) 0%, transparent 60%);
-  animation: orb-silk-2 calc(var(--orb-speed) * 8) ease-in-out infinite alternate;
+  background: radial-gradient(ellipse 60% 100%, oklch(0.38 0.14 252 / var(--orb-opacity)) 0%, transparent 72%);
+  animation: orb-silk-2 calc(var(--orb-speed) * 9) ease-in-out infinite alternate;
 }
 .glass-orbs--silk .glass-orb-3 {
   width: 120vw; height: 50vh;
   top: 30vh; left: -10vw;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.50 0.22 210 / var(--orb-opacity)) 0%, transparent 65%);
-  animation: orb-silk-3 calc(var(--orb-speed) * 7) ease-in-out infinite alternate;
+  background: radial-gradient(ellipse 60% 100%, oklch(0.44 0.16 215 / var(--orb-opacity)) 0%, transparent 74%);
+  animation: orb-silk-3 calc(var(--orb-speed) * 8) ease-in-out infinite alternate;
 }
 .glass-orbs--silk .glass-orb-4 {
   width: 90vw; height: 35vh;
   top: 50vh; left: 5vw;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.44 0.16 260 / var(--orb-opacity)) 0%, transparent 60%);
-  animation: orb-silk-1 calc(var(--orb-speed) * 9) ease-in-out infinite alternate-reverse;
+  background: radial-gradient(ellipse 60% 100%, oklch(0.40 0.14 262 / var(--orb-opacity)) 0%, transparent 73%);
+  animation: orb-silk-1 calc(var(--orb-speed) * 10) ease-in-out infinite alternate-reverse;
 }
 .glass-orbs--silk .glass-orb-5 {
   width: 105vw; height: 42vh;
   top: 60vh; left: -8vw;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.48 0.20 195 / var(--orb-opacity)) 0%, transparent 65%);
-  animation: orb-silk-2 calc(var(--orb-speed) * 10) ease-in-out infinite alternate-reverse;
+  background: radial-gradient(ellipse 60% 100%, oklch(0.44 0.16 200 / var(--orb-opacity)) 0%, transparent 74%);
+  animation: orb-silk-2 calc(var(--orb-speed) * 11) ease-in-out infinite alternate-reverse;
 }
 .glass-orbs--silk .glass-orb-6 {
   width: 80vw; height: 30vh;
   bottom: -5vh; left: 10vw;
-  background: radial-gradient(ellipse 100% 100%, oklch(0.40 0.14 300 / var(--orb-opacity)) 0%, transparent 60%);
-  animation: orb-silk-3 calc(var(--orb-speed) * 7.5) ease-in-out infinite alternate;
+  background: radial-gradient(ellipse 60% 100%, oklch(0.36 0.12 275 / var(--orb-opacity)) 0%, transparent 75%);
+  animation: orb-silk-3 calc(var(--orb-speed) * 8.5) ease-in-out infinite alternate;
 }
 
 @keyframes orb-silk-1 {
-  0%   { transform: translate(0, 0) rotate(-2deg) scaleX(1); opacity: 0.8; }
-  50%  { transform: translate(10vw, 8vh) rotate(1deg) scaleX(1.08); opacity: 1; }
-  100% { transform: translate(-5vw, 16vh) rotate(-1deg) scaleX(0.95); opacity: 0.7; }
+  0%   { transform: translate(0, 0) rotate(-2deg) scaleX(1); opacity: 0.72; }
+  50%  { transform: translate(10vw, 8vh) rotate(1deg) scaleX(1.06); opacity: 0.88; }
+  100% { transform: translate(-5vw, 16vh) rotate(-1deg) scaleX(0.96); opacity: 0.68; }
 }
 @keyframes orb-silk-2 {
-  0%   { transform: translate(0, 0) rotate(1deg) scaleX(1.05); opacity: 0.7; }
-  50%  { transform: translate(-8vw, 6vh) rotate(-2deg) scaleX(0.92); opacity: 0.95; }
-  100% { transform: translate(6vw, -4vh) rotate(2deg) scaleX(1.1); opacity: 0.6; }
+  0%   { transform: translate(0, 0) rotate(1deg) scaleX(1.04); opacity: 0.68; }
+  50%  { transform: translate(-8vw, 6vh) rotate(-2deg) scaleX(0.95); opacity: 0.84; }
+  100% { transform: translate(6vw, -4vh) rotate(2deg) scaleX(1.08); opacity: 0.65; }
 }
 @keyframes orb-silk-3 {
-  0%   { transform: translate(0, 0) rotate(0deg) scaleX(1); opacity: 0.9; }
-  50%  { transform: translate(12vw, -6vh) rotate(-1deg) scaleX(1.12); opacity: 0.65; }
-  100% { transform: translate(-8vw, 10vh) rotate(1deg) scaleX(0.9); opacity: 1; }
+  0%   { transform: translate(0, 0) rotate(0deg) scaleX(1); opacity: 0.78; }
+  50%  { transform: translate(12vw, -6vh) rotate(-1deg) scaleX(1.08); opacity: 0.66; }
+  100% { transform: translate(-8vw, 10vh) rotate(1deg) scaleX(0.94); opacity: 0.86; }
 }
 
 
@@ -581,42 +583,42 @@
 
 
 /* ── Preset: nebula ───────────────────────────────────────────────────────── *
-   Deep cosmic drifts — rich color mixing with very slow motion.             */
+   Deep cosmic drifts — rich blue-violet mixing with very slow motion.       */
 
 .glass-orbs--nebula .glass-orb-1 {
   width: 80vw; height: 80vw;
   top: -15vh; left: -10vw;
-  background: radial-gradient(circle, oklch(0.42 0.26 290 / var(--orb-opacity)) 0%, transparent 58%);
+  background: radial-gradient(circle, oklch(0.40 0.20 268 / var(--orb-opacity)) 0%, transparent 65%);
   animation: orb-nebula-1 calc(var(--orb-speed) * 6) ease-in-out infinite alternate;
 }
 .glass-orbs--nebula .glass-orb-2 {
   width: 70vw; height: 70vw;
   top: -5vh; right: -10vw;
-  background: radial-gradient(circle, oklch(0.50 0.24 340 / var(--orb-opacity)) 0%, transparent 60%);
+  background: radial-gradient(circle, oklch(0.44 0.18 312 / var(--orb-opacity)) 0%, transparent 65%);
   animation: orb-nebula-2 calc(var(--orb-speed) * 8) ease-in-out infinite alternate;
 }
 .glass-orbs--nebula .glass-orb-3 {
   width: 85vw; height: 85vw;
   bottom: -20vh; left: 5vw;
-  background: radial-gradient(circle, oklch(0.46 0.22 250 / var(--orb-opacity)) 0%, transparent 55%);
+  background: radial-gradient(circle, oklch(0.42 0.18 240 / var(--orb-opacity)) 0%, transparent 65%);
   animation: orb-nebula-3 calc(var(--orb-speed) * 7) ease-in-out infinite alternate;
 }
 .glass-orbs--nebula .glass-orb-4 {
   width: 60vw; height: 60vw;
   top: 25vh; left: 25vw;
-  background: radial-gradient(circle, oklch(0.38 0.20 315 / var(--orb-opacity)) 0%, transparent 62%);
+  background: radial-gradient(circle, oklch(0.36 0.16 295 / var(--orb-opacity)) 0%, transparent 68%);
   animation: orb-nebula-1 calc(var(--orb-speed) * 9) ease-in-out infinite alternate-reverse;
 }
 .glass-orbs--nebula .glass-orb-5 {
   width: 55vw; height: 55vw;
   bottom: 5vh; right: 5vw;
-  background: radial-gradient(circle, oklch(0.44 0.18 270 / var(--orb-opacity)) 0%, transparent 60%);
+  background: radial-gradient(circle, oklch(0.40 0.16 258 / var(--orb-opacity)) 0%, transparent 66%);
   animation: orb-nebula-2 calc(var(--orb-speed) * 10) ease-in-out infinite alternate-reverse;
 }
 .glass-orbs--nebula .glass-orb-6 {
   width: 75vw; height: 75vw;
   top: 10vh; right: 15vw;
-  background: radial-gradient(circle, oklch(0.48 0.22 220 / var(--orb-opacity)) 0%, transparent 58%);
+  background: radial-gradient(circle, oklch(0.44 0.18 220 / var(--orb-opacity)) 0%, transparent 65%);
   animation: orb-nebula-3 calc(var(--orb-speed) * 8.5) ease-in-out infinite alternate;
 }
 
