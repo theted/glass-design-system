@@ -243,6 +243,24 @@ var k = (e) => `data:image/svg+xml,${encodeURIComponent(e.trim())}`, A = [
 		label: "Abyss",
 		swatch: "linear-gradient(135deg, oklch(0.12 0.04 245), oklch(0.05 0.02 255))",
 		gradient: "\n      radial-gradient(circle at 30% 20%, oklch(0.34 0.10 238 / 0.22), transparent 36%),\n      radial-gradient(circle at 72% 68%, oklch(0.26 0.08 258 / 0.18), transparent 32%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.07 0.04 248 / 0.96), transparent 100%),\n      linear-gradient(180deg, oklch(0.07 0.018 244) 0%, oklch(0.04 0.012 252) 100%)\n    "
+	},
+	{
+		id: "biolume",
+		label: "Biolume",
+		swatch: "linear-gradient(135deg, oklch(0.18 0.10 192), oklch(0.08 0.05 218))",
+		gradient: "\n      radial-gradient(circle at 25% 25%, oklch(0.40 0.16 192 / 0.20), transparent 40%),\n      radial-gradient(circle at 72% 18%, oklch(0.36 0.14 175 / 0.16), transparent 36%),\n      radial-gradient(circle at 48% 74%, oklch(0.32 0.18 215 / 0.18), transparent 44%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.08 0.06 204 / 0.96), transparent 100%),\n      linear-gradient(180deg, oklch(0.09 0.022 196) 0%, oklch(0.05 0.016 218) 100%)\n    "
+	},
+	{
+		id: "grove",
+		label: "Grove",
+		swatch: "linear-gradient(135deg, oklch(0.18 0.08 148), oklch(0.08 0.04 162))",
+		gradient: "\n      radial-gradient(circle at 30% 22%, oklch(0.42 0.16 148 / 0.20), transparent 38%),\n      radial-gradient(circle at 68% 28%, oklch(0.36 0.14 164 / 0.16), transparent 34%),\n      radial-gradient(circle at 20% 74%, oklch(0.34 0.18 140 / 0.18), transparent 40%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.08 0.05 152 / 0.96), transparent 100%),\n      linear-gradient(180deg, oklch(0.09 0.020 145) 0%, oklch(0.05 0.014 160) 100%)\n    "
+	},
+	{
+		id: "pelagic",
+		label: "Pelagic",
+		swatch: "linear-gradient(135deg, oklch(0.16 0.08 232), oklch(0.07 0.04 248))",
+		gradient: "\n      radial-gradient(circle at 22% 18%, oklch(0.38 0.16 228 / 0.20), transparent 38%),\n      radial-gradient(circle at 78% 24%, oklch(0.32 0.14 248 / 0.16), transparent 34%),\n      radial-gradient(circle at 52% 78%, oklch(0.28 0.12 238 / 0.18), transparent 42%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.07 0.05 240 / 0.97), transparent 100%),\n      linear-gradient(180deg, oklch(0.08 0.020 232) 0%, oklch(0.04 0.014 248) 100%)\n    "
 	}
 ];
 function M(e, t) {
