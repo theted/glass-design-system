@@ -36,17 +36,17 @@ const BASE_BG:      Record<GlassIntensity, number> = { subtle: 0.17, medium: 0.3
 const BASE_BORDER:  Record<GlassIntensity, number> = { subtle: 0.20, medium: 0.32, strong: 0.44 };
 const BASE_SHIMMER: Record<GlassIntensity, number> = { subtle: 0.24, medium: 0.38, strong: 0.64 };
 const BASE_SHADOW:  Record<GlassIntensity, number> = { subtle: 0.20, medium: 0.34, strong: 0.46 };
-const BASE_GLOW:    Record<GlassIntensity, number> = { subtle: 0.07, medium: 0.10, strong: 0.13 };
-const GLOW_BLUR:    Record<GlassIntensity, number> = { subtle: 96,   medium: 120,  strong: 108 };
+const BASE_GLOW:    Record<GlassIntensity, number> = { subtle: 0.06, medium: 0.09, strong: 0.12 };
+const SATURATE:     Record<GlassIntensity, number> = { subtle: 1.35, medium: 1.5,  strong: 1.6 };
 
 // ── Colour constants ────────────────────────────────────────────────
 
-const BG_L    = '0.20 0.024 254';  // panel background base
-const EDGE    = '0.48 0.06 248';   // border edge
-const LIGHT   = '0.82 0.1  230';   // shimmer / inner highlight
-const DEPTH   = '0.05 0.015 250';  // shadow depth
-export const GLOW_TR = '0.52 0.24 238';   // top-right glow (deep blue)
-export const GLOW_BL = '0.58 0.14 210';   // bottom-left glow (teal)
+const BG_L    = '0.21 0.034 260';  // panel background base — cobalt smoke
+const EDGE    = '0.52 0.05 255';   // border edge
+const LIGHT   = '0.93 0.07 80';    // shimmer / inner highlight — warm light
+const DEPTH   = '0.05 0.02 262';   // shadow depth
+export const GLOW_TR = '0.80 0.12 72';    // top-right glow (the warm light source)
+export const GLOW_BL = '0.55 0.18 262';   // bottom-left glow (cobalt bounce light)
 
 // Base alpha for the flat background layer used by Snippet cards
 // (they render their own background outside GlassPanel — this keeps
@@ -97,7 +97,6 @@ export function getGlassStyles(
   config: GlassConfig = GLASS_DEFAULTS,
 ): GlassStyles {
   const { blur, opacity } = config;
-  const glowBlur = GLOW_BLUR[intensity];
 
   /** Scale base alpha against the provider's opacity master. */
   function a(base: number): string {
@@ -107,21 +106,23 @@ export function getGlassStyles(
   return {
     panel: {
       background:     `oklch(${BG_L} / ${a(BASE_BG[intensity])})`,
-      backdropFilter: `blur(${blur}px)`,
+      backdropFilter: `blur(${blur}px) saturate(${SATURATE[intensity]})`,
       border:         `1px solid oklch(${EDGE} / ${a(BASE_BORDER[intensity])})`,
       boxShadow: [
-        `0 8px 40px oklch(${DEPTH} / ${a(BASE_SHADOW[intensity])})`,
-        `inset 0 1px 0 oklch(${LIGHT} / ${a(BASE_SHIMMER[intensity] * 0.55)})`,
+        `0 1px 1px oklch(${DEPTH} / ${a(BASE_SHADOW[intensity] * 0.8)})`,
+        `0 24px 64px -16px oklch(${DEPTH} / ${a(BASE_SHADOW[intensity] * 1.6)})`,
+        `inset 0 1px 0 oklch(${LIGHT} / ${a(BASE_SHIMMER[intensity] * 0.45)})`,
+        `inset 0 -1px 0 oklch(${DEPTH} / ${a(BASE_SHADOW[intensity])})`,
       ].join(', '),
     },
     shimmerColor:  `oklch(${LIGHT} / ${a(BASE_SHIMMER[intensity])})`,
     topRightGlow: {
-      background: `radial-gradient(circle, oklch(${GLOW_TR} / ${a(BASE_GLOW[intensity])}) 0%, transparent 70%)`,
-      filter:     `blur(${glowBlur}px)`,
+      background: `radial-gradient(closest-side, oklch(${GLOW_TR} / ${a(BASE_GLOW[intensity])}) 0%, oklch(${GLOW_TR} / ${a(BASE_GLOW[intensity] * 0.4)}) 45%, transparent 100%)`,
+      filter:     'none',
     },
     bottomLeftGlow: {
-      background: `radial-gradient(circle, oklch(${GLOW_BL} / ${a(BASE_GLOW[intensity] * 0.75)}) 0%, transparent 70%)`,
-      filter:     `blur(${Math.round(glowBlur * 0.9)}px)`,
+      background: `radial-gradient(closest-side, oklch(${GLOW_BL} / ${a(BASE_GLOW[intensity] * 1.4)}) 0%, oklch(${GLOW_BL} / ${a(BASE_GLOW[intensity] * 0.5)}) 45%, transparent 100%)`,
+      filter:     'none',
     },
   };
 }

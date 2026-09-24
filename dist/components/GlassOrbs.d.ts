@@ -1,6 +1,6 @@
 import React from 'react';
 import '../orbs.css';
-export type OrbPreset = 'drift' | 'pulse' | 'aurora' | 'float' | 'breathe' | 'lava' | 'orbit' | 'silk' | 'tide' | 'nebula' | 'ember';
+export type OrbPreset = 'drift' | 'pulse' | 'aurora' | 'float' | 'breathe' | 'lava' | 'orbit' | 'silk' | 'tide' | 'nebula' | 'ember' | 'kiln';
 export type OrbBlendMode = 'screen' | 'normal' | 'soft-light' | 'overlay' | 'hard-light' | 'color-dodge';
 export interface GlassOrbsProps {
     /**
@@ -16,6 +16,7 @@ export interface GlassOrbsProps {
      * - `tide`    – Horizontal wave-like undulation
      * - `nebula`  – Deep cosmic drifts with rich color mixing
      * - `ember`   – Warm flickering glow
+     * - `kiln`    – Cobalt field with one slow, low amber sun (the house look)
      */
     preset?: OrbPreset;
     /** Override the base animation speed in seconds (default 6). */

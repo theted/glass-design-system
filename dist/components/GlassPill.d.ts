@@ -18,8 +18,7 @@ type Props = React.PropsWithChildren<{
 /**
  * GlassPill — the canonical chrome button/link for navigation and UI controls.
  *
- * Handles sizing, glass surface (backdrop-blur + transparent bg), text-bevel,
- * hover lift, and focus rings automatically. Use `as={Link}` for router links.
+ * Handles sizing, glass surface, hover glint, press spring and focus ring. Use `as={Link}` for router links.
  *
  * ```tsx
  * <GlassPill size="lg" as={Link} to="/favorites">

@@ -4,12 +4,12 @@ import { GlassPill } from 'glass-design-system';
 import { BackgroundProvider, useBackground } from './context/BackgroundContext';
 import BackgroundSwitcher from './components/BackgroundSwitcher';
 import GlassShowcase from './pages/GlassShowcase';
+import MaterialShowcase from './pages/MaterialShowcase';
 import Philosophy from './pages/Philosophy';
 import TypeShowcase from './pages/TypeShowcase';
 import ColorShowcase from './pages/ColorShowcase';
 import ProductDemo from './pages/ProductDemo';
 import ComponentDocs from './pages/ComponentDocs';
-import Portfolio from './pages/Portfolio';
 import LayoutShowcase from './pages/LayoutShowcase';
 import OrbShowcase from './pages/OrbShowcase';
 
@@ -24,7 +24,7 @@ const ScrollToTop: React.FC = () => {
 const AppInner: React.FC = () => {
   const { activeGradient, activePattern } = useBackground();
   const [topBarVisible, setTopBarVisible] = useState(false);
-  const hideTimer = useRef<ReturnType<typeof setTimeout>>();
+  const hideTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const showBar = () => { clearTimeout(hideTimer.current); setTopBarVisible(true); };
   const scheduleHide = () => { hideTimer.current = setTimeout(() => setTopBarVisible(false), 300); };
@@ -89,13 +89,13 @@ const AppInner: React.FC = () => {
         >
           {/* Page nav */}
           <nav style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-            <GlassPill as={Link} to="/" size="sm">Glass</GlassPill>
+            <GlassPill as={Link} to="/" size="sm">Material</GlassPill>
+            <GlassPill as={Link} to="/surfaces" size="sm">Surfaces</GlassPill>
             <GlassPill as={Link} to="/components" size="sm">Components</GlassPill>
             <GlassPill as={Link} to="/philosophy" size="sm">Philosophy</GlassPill>
             <GlassPill as={Link} to="/type" size="sm">Type</GlassPill>
             <GlassPill as={Link} to="/colors" size="sm">Colors</GlassPill>
             <GlassPill as={Link} to="/product" size="sm">Product</GlassPill>
-            <GlassPill as={Link} to="/portfolio" size="sm">Portfolio</GlassPill>
             <GlassPill as={Link} to="/layouts" size="sm">Layouts</GlassPill>
             <GlassPill as={Link} to="/orbs" size="sm">Orbs</GlassPill>
           </nav>
@@ -107,13 +107,13 @@ const AppInner: React.FC = () => {
 
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<GlassShowcase />} />
+        <Route path="/" element={<MaterialShowcase />} />
+        <Route path="/surfaces" element={<GlassShowcase />} />
         <Route path="/components" element={<ComponentDocs />} />
         <Route path="/philosophy" element={<Philosophy />} />
         <Route path="/type" element={<TypeShowcase />} />
         <Route path="/colors" element={<ColorShowcase />} />
         <Route path="/product" element={<ProductDemo />} />
-        <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/layouts" element={<LayoutShowcase />} />
         <Route path="/orbs" element={<OrbShowcase />} />
       </Routes>

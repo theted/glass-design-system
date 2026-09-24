@@ -1,8 +1,10 @@
 import './glass.css';
+import './material.css';
 export { GlassProvider, useGlass, GLASS_DEFAULTS } from './context/GlassContext';
 export type { GlassConfig } from './context/GlassContext';
 export { getGlassStyles, GLASS_OPACITY, GLASS_BLUR, GLASS_LIGHT_ALPHA, GLASS_SHADOW_ALPHA, CARD_BG_ALPHA, GLOW_TR, GLOW_BL, } from './glass';
 export type { GlassIntensity, GlassStyles } from './glass';
+export { useGlassPointer, useGlassReveal, GLASS_REST_ANGLE } from './hooks/useGlassPointer';
 export { PATTERNS } from './patterns';
 export type { PatternDef, PatternId } from './patterns';
 export { BG_PRESETS, makeHueGradient } from './backgrounds';
@@ -15,3 +17,5 @@ export type { GlassPillSize, GlassPillVariant } from './components/GlassPill';
 export { default as GlassDivider } from './components/GlassDivider';
 export { default as GlassInput, GlassInputWrap, GlassTextarea, } from './components/GlassInput';
 export type { GlassInputVariant } from './components/GlassInput';
+export { default as GlassToast } from './components/GlassToast';
+export type { GlassToastProps, GlassToastTone } from './components/GlassToast';

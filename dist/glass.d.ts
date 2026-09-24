@@ -24,8 +24,8 @@ export declare const GLASS_BLUR: number;
 export declare const GLASS_LIGHT_ALPHA: number;
 export declare const GLASS_SHADOW_ALPHA: number;
 export type GlassIntensity = 'subtle' | 'medium' | 'strong';
-export declare const GLOW_TR = "0.52 0.24 238";
-export declare const GLOW_BL = "0.58 0.14 210";
+export declare const GLOW_TR = "0.80 0.12 72";
+export declare const GLOW_BL = "0.55 0.18 262";
 export declare const CARD_BG_ALPHA: number;
 export interface GlassStyles {
     /** Apply directly to the panel wrapper element. */

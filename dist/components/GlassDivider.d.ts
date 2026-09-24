@@ -4,11 +4,9 @@ type Props = {
     className?: string;
 };
 /**
- * GlassDivider — a 1px horizontal rule that fades to transparent at both ends,
- * matching the glass design system's use of atmosphere over hard lines.
- *
- * Uses the same mid-colour as the global `--color-border` token so it reads
- * as part of the glass surface rather than cutting through it.
+ * GlassDivider — a 1px rule that fades out at both ends and warms where the
+ * light hits its centre, with a faint split-light line beneath, as if the
+ * edge of a glass sheet were seen through a prism.
  *
  * ```tsx
  * <GlassDivider className="my-10" />

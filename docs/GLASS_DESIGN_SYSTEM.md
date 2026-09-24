@@ -129,8 +129,8 @@ Defined in `:root` in `src/index.css`.
 
 | Token | Stack |
 |-------|-------|
-| `--font-display` | `'Manrope'`, Avenir Next, Segoe UI Variable |
-| `--font-body` | `'Space Grotesk'`, Avenir Next, Segoe UI Variable |
+| `--font-display` | `'Bricolage Grotesque'`, Avenir Next, Segoe UI Variable Display |
+| `--font-body` | `'Schibsted Grotesk'`, Avenir Next, Segoe UI Variable Text |
 | `--font-code` | `'JetBrains Mono'`, SFMono-Regular, Cascadia Code, Fira Code |
 
 ---
