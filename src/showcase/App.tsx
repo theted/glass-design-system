@@ -9,7 +9,6 @@ import TypeShowcase from './pages/TypeShowcase';
 import ColorShowcase from './pages/ColorShowcase';
 import ProductDemo from './pages/ProductDemo';
 import ComponentDocs from './pages/ComponentDocs';
-import Portfolio from './pages/Portfolio';
 import LayoutShowcase from './pages/LayoutShowcase';
 import OrbShowcase from './pages/OrbShowcase';
 
@@ -95,7 +94,7 @@ const AppInner: React.FC = () => {
             <GlassPill as={Link} to="/type" size="sm">Type</GlassPill>
             <GlassPill as={Link} to="/colors" size="sm">Colors</GlassPill>
             <GlassPill as={Link} to="/product" size="sm">Product</GlassPill>
-            <GlassPill as={Link} to="/portfolio" size="sm">Portfolio</GlassPill>
+            <GlassPill as="a" href="https://sundbergsolutions.se" size="sm">Portfolio</GlassPill>
             <GlassPill as={Link} to="/layouts" size="sm">Layouts</GlassPill>
             <GlassPill as={Link} to="/orbs" size="sm">Orbs</GlassPill>
           </nav>
@@ -113,7 +112,6 @@ const AppInner: React.FC = () => {
         <Route path="/type" element={<TypeShowcase />} />
         <Route path="/colors" element={<ColorShowcase />} />
         <Route path="/product" element={<ProductDemo />} />
-        <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/layouts" element={<LayoutShowcase />} />
         <Route path="/orbs" element={<OrbShowcase />} />
       </Routes>

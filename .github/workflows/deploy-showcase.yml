@@ -1,0 +1,15 @@
+name: Deploy showcase
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    uses: theted/workflows/.github/workflows/deploy-static.yml@master
+    with:
+      node-version: '22'
+      build-command: npm run build:showcase
+      dist-dir: showcase-dist
+    secrets: inherit

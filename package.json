@@ -22,6 +22,7 @@
     "build": "vite build",
     "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly && node -e \"require('fs').writeFileSync('dist/glass.css.d.ts', 'export {};\\n')\"",
     "showcase": "vite --config vite.showcase.config.ts",
+    "build:showcase": "vite build --config vite.showcase.config.ts",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
