@@ -96,6 +96,7 @@ const AppInner: React.FC = () => {
             <GlassPill as={Link} to="/type" size="sm">Type</GlassPill>
             <GlassPill as={Link} to="/colors" size="sm">Colors</GlassPill>
             <GlassPill as={Link} to="/product" size="sm">Product</GlassPill>
+            <GlassPill as="a" href="https://sundbergsolutions.se" size="sm">Portfolio</GlassPill>
             <GlassPill as={Link} to="/layouts" size="sm">Layouts</GlassPill>
             <GlassPill as={Link} to="/orbs" size="sm">Orbs</GlassPill>
           </nav>
