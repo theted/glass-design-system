@@ -71,6 +71,12 @@ const PRESETS: { id: OrbPreset; label: string; description: string }[] = [
     description:
       'Warm flickering glow with gentle scale pulses. Orbs shimmer and breathe like embers in a dying fire.',
   },
+  {
+    id: 'kiln',
+    label: 'Kiln',
+    description:
+      'The house look: a cobalt field with one low amber sun that rises and sets very slowly. Cool glass, warm light.',
+  },
 ];
 
 // ── Speed / opacity controls ─────────────────────────────────────────────────

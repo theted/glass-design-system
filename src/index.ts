@@ -1,5 +1,6 @@
 // CSS tokens and utilities — consumers import via 'glass-design-system/styles'
 import './glass.css';
+import './material.css';
 
 // Context / provider
 export { GlassProvider, useGlass, GLASS_DEFAULTS } from './context/GlassContext';
@@ -17,6 +18,9 @@ export {
   GLOW_BL,
 } from './glass';
 export type { GlassIntensity, GlassStyles } from './glass';
+
+// Material hooks — drive the glass light from the pointer on custom surfaces
+export { useGlassPointer, useGlassReveal, GLASS_REST_ANGLE } from './hooks/useGlassPointer';
 
 // Patterns
 export { PATTERNS } from './patterns';
@@ -39,3 +43,5 @@ export {
   GlassTextarea,
 } from './components/GlassInput';
 export type { GlassInputVariant } from './components/GlassInput';
+export { default as GlassToast } from './components/GlassToast';
+export type { GlassToastProps, GlassToastTone } from './components/GlassToast';

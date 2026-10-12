@@ -156,18 +156,19 @@ const TypeShowcase: React.FC = () => (
       <Section label="00 — Typefaces" sub="Three families, each assigned a semantic role that never overlaps.">
         <div className="flex flex-col gap-10">
 
-          {/* Manrope */}
+          {/* Bricolage Grotesque */}
           <GlassPanel intensity="medium" topGlow bottomGlow rounded="rounded-[2rem]" className="p-8 md:p-10">
             <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
               <div>
                 <Chip>Display · var(--font-display)</Chip>
                 <p className="mt-3 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">
-                  Manrope · Geometric sans · Weights 200–800
+                  Bricolage Grotesque · Variable grotesque · Weight 200–800, width 75–100
                 </p>
               </div>
               <p className="text-xs leading-6 text-[var(--color-text-muted)] max-w-sm text-bevel">
-                Used for hero headlines, snippet titles, section headings, and any large display text.
-                The extra-light weight (200) gives editorial gravity without visual bulk.
+                Used for hero headlines, titles, section headings, and any large display text.
+                Its ink traps and optical sizing keep it lively when large; the width axis lets a
+                headline condense without changing family.
               </p>
             </div>
             <Rule />
@@ -192,23 +193,23 @@ const TypeShowcase: React.FC = () => (
             </div>
           </GlassPanel>
 
-          {/* Space Grotesk */}
+          {/* Schibsted Grotesk */}
           <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8 md:p-10">
             <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
               <div>
                 <Chip>Body · var(--font-body)</Chip>
                 <p className="mt-3 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">
-                  Space Grotesk · Humanist sans · Weights 300–700
+                  Schibsted Grotesk · Newsroom grotesque · Weights 400–900
                 </p>
               </div>
               <p className="text-xs leading-6 text-[var(--color-text-muted)] max-w-sm text-bevel">
-                Used for all prose — descriptions, paragraph text, form labels, nav items. The slightly
-                quirky letterforms add personality at small sizes where Manrope would feel too stark.
+                Used for all prose: descriptions, paragraphs, form labels, nav items. Drawn for a
+                Nordic news publisher, it's built to stay calm and legible at small sizes.
               </p>
             </div>
             <Rule />
             <p
-              className="text-[clamp(1.4rem,4vw,2.5rem)] font-[300] leading-[1.3] tracking-[-0.02em] text-[var(--color-text)] text-bevel-strong"
+              className="text-[clamp(1.4rem,4vw,2.5rem)] font-[400] leading-[1.3] tracking-[-0.02em] text-[var(--color-text)] text-bevel-strong"
               style={{ fontFamily: 'var(--font-body)' }}
             >
               A spacious, low-light workspace for the fragments you return to most.

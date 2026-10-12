@@ -1,47 +1,117 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Glass Design System — tokens
+
+   Cool glass, warm light. The glass body is cobalt smoke (Kosta/Orrefors
+   blue); the single light source is a low, warm sun. Anything that catches
+   light — rims, speculars, focus, the primary action — is amber. Everything
+   else stays cool.
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --font-display: 'Manrope', 'Avenir Next', 'Segoe UI Variable', sans-serif;
-  --font-body: 'Space Grotesk', 'Avenir Next', 'Segoe UI Variable', sans-serif;
+  /* ── Type ──────────────────────────────────────────────────────────────── */
+  --font-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI Variable Display', sans-serif;
+  --font-body: 'Schibsted Grotesk', 'Avenir Next', 'Segoe UI Variable Text', sans-serif;
   --font-code: 'JetBrains Mono', 'SFMono-Regular', 'Cascadia Code', 'Fira Code', monospace;
-  --color-bg: oklch(0.12 0.030 246);
-  --color-bg-deep: oklch(0.08 0.022 248);
-  --color-surface: oklch(0.23 0.03 254 / 0.58);
-  --color-surface-strong: oklch(0.27 0.04 252 / 0.72);
-  --color-surface-muted: oklch(0.2 0.024 254 / 0.62);
-  --color-border: oklch(0.4 0.044 248 / 0.38);
-  --color-border-strong: oklch(0.69 0.13 240 / 0.42);
-  --color-accent: oklch(0.71 0.17 244);
-  --color-accent-bright: oklch(0.79 0.14 226);
-  --color-accent-soft: oklch(0.72 0.14 236 / 0.18);
-  --color-text: oklch(0.98 0.006 255);
-  --color-text-muted: oklch(0.82 0.025 255);
-  --color-text-subtle: oklch(0.65 0.04 252);
-  --color-success: oklch(0.76 0.16 160);
-  --color-warning: oklch(0.8 0.13 88);
-  --color-danger: oklch(0.65 0.19 25);
-  --color-ink: oklch(0.2 0.02 255);
+
+  /* ── Ground ────────────────────────────────────────────────────────────── */
+  --color-bg: oklch(0.15 0.035 262);
+  --color-bg-deep: oklch(0.09 0.028 264);
+
+  /* ── Glass body (cool) ─────────────────────────────────────────────────── */
+  --color-surface: oklch(0.25 0.04 260 / 0.56);
+  --color-surface-strong: oklch(0.30 0.05 260 / 0.72);
+  --color-surface-muted: oklch(0.21 0.03 260 / 0.58);
+  --color-border: oklch(0.52 0.05 255 / 0.30);
+  --color-border-strong: oklch(0.74 0.08 250 / 0.42);
+
+  /* ── Accent (cobalt) ───────────────────────────────────────────────────── */
+  --color-accent: oklch(0.66 0.17 262);
+  --color-accent-bright: oklch(0.82 0.10 250);
+  --color-accent-soft: oklch(0.66 0.17 262 / 0.20);
+
+  /* ── Light (warm) — the only warm colour in the system ─────────────────── */
+  --color-light: oklch(0.86 0.12 78);
+  --color-light-bright: oklch(0.94 0.07 85);
+  --color-light-soft: oklch(0.86 0.12 78 / 0.18);
+
+  /* ── Text ──────────────────────────────────────────────────────────────── */
+  --color-text: oklch(0.97 0.008 250);
+  --color-text-muted: oklch(0.84 0.022 252);
+  --color-text-subtle: oklch(0.68 0.035 256);
+
+  /* ── Status ────────────────────────────────────────────────────────────── */
+  --color-success: oklch(0.80 0.13 165);
+  --color-warning: oklch(0.84 0.13 85);
+  --color-danger: oklch(0.70 0.17 25);
+  --color-ink: oklch(0.20 0.03 262);
 
   /* ─── Glass surface tokens ──────────────────────────────
      Shared by every frosted-glass element (cards, modals,
      form fields). Edit here to retheme all glass at once. */
-  --color-glass-card:  oklch(0.2 0.025 254 / 0.32);
-  --color-glass-row:   oklch(0.2 0.024 254 / 0.28);
-  --color-glass-field: oklch(0.15 0.018 258 / 0.22);
+  --color-glass-card:  oklch(0.22 0.035 260 / 0.32);
+  --color-glass-row:   oklch(0.22 0.03 260 / 0.28);
+  --color-glass-field: oklch(0.16 0.025 262 / 0.24);
+
+  /* ── Rim light ─────────────────────────────────────────────────────────
+     The edge of thick glass: a warm catch-light on the lit side, a cool
+     reflection opposite, and a faint spectral fringe where light splits. */
+  --glass-rim-hot:  oklch(0.99 0.04 90);
+  --glass-rim-warm: oklch(0.90 0.12 78 / 0.9);
+  --glass-rim-cool: oklch(0.80 0.10 240 / 0.5);
+  --glass-rim-dim:  oklch(0.66 0.05 255 / 0.2);
+  --glass-spectrum: conic-gradient(
+    from calc(var(--glass-angle, 45deg) + 14deg),
+    transparent 0deg,
+    oklch(0.72 0.20 25 / 0.9) 12deg,
+    oklch(0.88 0.17 95 / 0.9) 24deg,
+    oklch(0.82 0.17 155 / 0.9) 36deg,
+    oklch(0.72 0.16 235 / 0.9) 48deg,
+    oklch(0.62 0.22 300 / 0.9) 60deg,
+    transparent 76deg,
+    transparent 360deg
+  );
+
+  /* ── Motion ────────────────────────────────────────────────────────────
+     glass:  decelerates hard, like something heavy settling into place.
+     spring: a real mass-spring curve (slight overshoot) for press/release.
+     Durations are a 2× scale — pick the step, don't invent numbers. */
+  --ease-glass: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-glass: cubic-bezier(0.55, 0, 0.75, 0.3);
+  --ease-spring: linear(
+    0, 0.033, 0.116, 0.23, 0.359, 0.491, 0.617, 0.73, 0.828, 0.909, 0.972,
+    1.019, 1.052, 1.072, 1.081, 1.083, 1.08, 1.072, 1.062, 1.051, 1.04, 1.03,
+    1.021, 1.013, 1.006, 1.001, 0.998, 0.995, 0.994, 0.993, 0.993, 0.993,
+    0.994, 0.995, 0.996, 0.997, 1
+  );
+  --dur-1: 140ms;
+  --dur-2: 280ms;
+  --dur-3: 560ms;
+  --dur-4: 1120ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 1ms;
+    --dur-2: 1ms;
+    --dur-3: 1ms;
+    --dur-4: 1ms;
+  }
 }
 
 /* ─── Typography utilities ───────────────────────────────────────────────
    text-bevel:     subtle raised letterform for light text on dark surfaces
    text-bevel-ink: raised letterform for dark (ink) text on light surfaces  */
 @utility text-bevel {
-  text-shadow: 0 1px 1px oklch(0 0 0 / 0.48), 0 -1px 0 oklch(1 0 0 / 0.07);
+  text-shadow: 0 1px 1px oklch(0 0 0 / 0.42), 0 -1px 0 oklch(1 0 0 / 0.06);
 }
 
 @utility text-bevel-strong {
   text-shadow:
-    0 1px 2px oklch(0 0 0 / 0.62),
-    0 -1px 0 oklch(1 0 0 / 0.20),
-    0 2px 16px oklch(0 0 0 / 0.36);
+    0 1px 2px oklch(0 0 0 / 0.55),
+    0 -1px 0 oklch(1 0 0 / 0.16),
+    0 2px 16px oklch(0 0 0 / 0.30);
 }
 
 @utility text-bevel-ink {
@@ -49,6 +119,6 @@
 }
 
 ::selection {
-  background: oklch(0.74 0.14 236 / 0.3);
+  background: oklch(0.86 0.12 78 / 0.32);
   color: var(--color-text);
 }

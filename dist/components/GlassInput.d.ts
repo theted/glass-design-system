@@ -13,11 +13,10 @@ type SharedProps = {
 type WrapProps = React.PropsWithChildren<SharedProps & {
     /** Controlled focus state — useful when wrapping <select> or custom elements. */
     focused?: boolean;
-    /** Border-radius CSS value. Default: '1.4rem' */
+    /** Border-radius CSS value. Default: '1.1rem' */
     radius?: string;
 }>;
 export declare const GlassInputWrap: React.FC<WrapProps>;
 export declare const GlassInput: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & SharedProps & React.RefAttributes<HTMLInputElement>>;
-type TextareaProps = React.ComponentPropsWithoutRef<'textarea'> & SharedProps;
-export declare const GlassTextarea: React.FC<TextareaProps>;
+export declare const GlassTextarea: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>, "ref"> & SharedProps & React.RefAttributes<HTMLTextAreaElement>>;
 export default GlassInput;

@@ -1,0 +1,480 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Glass material — the physical details every surface shares.
+
+   Pointer state lives in four registered custom properties, written by
+   useGlassPointer() straight onto the element (no React re-renders):
+
+     --glass-x, --glass-y   pointer position, 0 → 1 across the element
+     --glass-angle          direction of the light, 0deg = straight up
+     --glass-hover          0 → 1 presence of the pointer
+
+   Because they're registered with @property, the browser interpolates
+   them: the light glides after the cursor instead of snapping to it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Same order Tailwind v4 declares. Declaring it here first means that when
+   this file is imported ahead of Tailwind, consumer utilities (className=
+   "absolute …") still override component defaults, and preflight never does. */
+@layer theme, base, components, utilities;
+
+@property --glass-x      { syntax: '<number>'; inherits: true; initial-value: 0.5; }
+@property --glass-y      { syntax: '<number>'; inherits: true; initial-value: 0.3; }
+@property --glass-hover  { syntax: '<number>'; inherits: true; initial-value: 0; }
+@property --glass-angle  { syntax: '<angle>';  inherits: true; initial-value: 45deg; }
+
+@layer components {
+
+  /* ── Surface ──────────────────────────────────────────────────────────────── */
+
+  .glass-surface {
+    --glass-tilt-max: 5deg;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      --glass-x var(--dur-3) var(--ease-glass),
+      --glass-y var(--dur-3) var(--ease-glass),
+      --glass-angle var(--dur-4) var(--ease-glass),
+      --glass-hover var(--dur-3) var(--ease-glass),
+      border-color var(--dur-3) var(--ease-glass);
+  }
+
+  /* Shared recipe for anything drawn only on the 1px edge. */
+  .glass-surface__rim,
+  .glass-surface__spectrum,
+  .glass-field::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+  }
+
+  /* Catch-light on the lit side, a cool reflection opposite, dim between. */
+  .glass-surface__rim {
+    background: conic-gradient(
+      from var(--glass-angle),
+      var(--glass-rim-hot) 0deg,
+      var(--glass-rim-warm) 14deg,
+      var(--glass-rim-dim) 70deg,
+      transparent 120deg,
+      var(--glass-rim-cool) 180deg,
+      transparent 240deg,
+      var(--glass-rim-dim) 290deg,
+      var(--glass-rim-warm) 346deg,
+      var(--glass-rim-hot) 360deg
+    );
+    opacity: calc(0.7 + var(--glass-hover) * 0.3);
+  }
+
+  /* Dispersion: thick glass splits the light just past the catch-light. */
+  .glass-surface__spectrum {
+    background: var(--glass-spectrum);
+    opacity: calc(0.45 + var(--glass-hover) * 0.4);
+    mix-blend-mode: screen;
+  }
+
+  /* Specular — warm light where the pointer is. */
+  .glass-surface__sheen,
+  .glass-surface__shade {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: var(--glass-hover);
+  }
+
+  .glass-surface__sheen {
+    background: radial-gradient(
+      circle 32rem at calc(var(--glass-x) * 100%) calc(var(--glass-y) * 100%),
+      oklch(0.80 0.11 72 / calc(var(--glass-light-alpha, 0.22) * 0.55)) 0%,
+      oklch(0.62 0.10 60 / calc(var(--glass-light-alpha, 0.22) * 0.18)) 30%,
+      transparent 65%
+    );
+    mix-blend-mode: screen;
+  }
+
+  .glass-surface__shade {
+    background: radial-gradient(
+      ellipse 140% 120% at calc((1 - var(--glass-x)) * 100%) calc((1 - var(--glass-y)) * 100%),
+      oklch(0.05 0.02 262 / var(--glass-shadow-alpha, 0.2)) 0%,
+      transparent 60%
+    );
+  }
+
+  .glass-surface__glow {
+    position: absolute;
+    z-index: 0;
+    border-radius: 9999px;
+    pointer-events: none;
+  }
+
+  /* Tilt — the pane leans away from the pointer, like pressing on glass. */
+  .glass-surface--tilt {
+    transform: perspective(1400px)
+      rotateX(calc((0.5 - var(--glass-y)) * var(--glass-tilt-max) * var(--glass-hover)))
+      rotateY(calc((var(--glass-x) - 0.5) * var(--glass-tilt-max) * var(--glass-hover)));
+    will-change: transform;
+  }
+
+  /* Reveal — frosting condenses onto a clear pane. */
+  .glass-surface--reveal[data-reveal='pending'] {
+    opacity: 0;
+  }
+
+  .glass-surface--reveal[data-reveal='in'] {
+    animation: glass-condense var(--dur-4) var(--ease-glass) both;
+  }
+
+  @keyframes glass-condense {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem) scale(0.985);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+    }
+    40% { opacity: 1; }
+  }
+
+  /* ── Pill ─────────────────────────────────────────────────────────────────── */
+
+  .glass-pill {
+    --pill-pad-y: 0.6rem;
+    --pill-pad-x: 1.2rem;
+    --pill-size: 0.875rem;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    padding: var(--pill-pad-y) var(--pill-pad-x);
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+    background: var(--color-surface-muted);
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: var(--pill-size);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    text-shadow: 0 1px 1px oklch(0 0 0 / 0.4);
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.07);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform var(--dur-3) var(--ease-spring),
+      background-color var(--dur-2) var(--ease-glass),
+      border-color var(--dur-2) var(--ease-glass),
+      color var(--dur-2) var(--ease-glass),
+      box-shadow var(--dur-2) var(--ease-glass);
+  }
+
+  /* A single glint crosses the pill when the pointer arrives. */
+  .glass-pill::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      oklch(0.97 0.05 85 / 0.24) 48%,
+      oklch(0.97 0.05 85 / 0.08) 56%,
+      transparent 70%
+    );
+    transform: translateX(-110%);
+  }
+
+  @media (hover: hover) {
+    .glass-pill:hover {
+      transform: translateY(-1px);
+      border-color: var(--color-border-strong);
+      background-color: var(--color-surface);
+      color: var(--color-text);
+    }
+
+    .glass-pill:hover::before {
+      animation: glass-glint var(--dur-4) var(--ease-glass);
+    }
+  }
+
+  .glass-pill:active {
+    transform: translateY(0) scale(0.96);
+    transition-duration: var(--dur-1);
+    transition-timing-function: ease-out;
+  }
+
+  .glass-pill:focus-visible {
+    outline: 2px solid var(--color-light);
+    outline-offset: 3px;
+  }
+
+  .glass-pill:disabled,
+  .glass-pill[aria-disabled='true'] {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  @keyframes glass-glint {
+    to { transform: translateX(110%); }
+  }
+
+  .glass-pill--xs { --pill-pad-y: 0.3rem;  --pill-pad-x: 0.7rem; --pill-size: 0.72rem; }
+  .glass-pill--sm { --pill-pad-y: 0.45rem; --pill-pad-x: 0.95rem; --pill-size: 0.8rem; }
+  .glass-pill--md { --pill-pad-y: 0.6rem;  --pill-pad-x: 1.2rem; --pill-size: 0.875rem; }
+  .glass-pill--lg { --pill-pad-y: 0.85rem; --pill-pad-x: 1.6rem; --pill-size: 0.95rem; }
+
+  .glass-pill--active {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-strong);
+    color: var(--color-text);
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.14), 0 4px 16px -6px oklch(0.05 0.02 262 / 0.6);
+  }
+
+  /* Warm-lit glass: the one place the light source becomes the surface. */
+  .glass-pill--accent {
+    border-color: oklch(0.86 0.12 78 / 0.5);
+    background: linear-gradient(180deg, oklch(0.86 0.12 78 / 0.24), oklch(0.72 0.14 62 / 0.10));
+    color: var(--color-light-bright);
+    box-shadow:
+      inset 0 1px 0 oklch(0.97 0.06 85 / 0.35),
+      0 0 28px -8px oklch(0.86 0.12 78 / 0.5);
+  }
+
+  @media (hover: hover) {
+    .glass-pill--accent:hover {
+      border-color: oklch(0.90 0.10 80 / 0.75);
+      background-color: transparent;
+      background: linear-gradient(180deg, oklch(0.86 0.12 78 / 0.34), oklch(0.72 0.14 62 / 0.16));
+      color: oklch(0.98 0.03 85);
+      box-shadow:
+        inset 0 1px 0 oklch(0.97 0.06 85 / 0.45),
+        0 0 36px -6px oklch(0.86 0.12 78 / 0.6);
+    }
+  }
+
+  /* ── Field ────────────────────────────────────────────────────────────────── */
+
+  .glass-field {
+    --field-radius: 1.1rem;
+    --field-blur: 16px;
+    position: relative;
+    border-radius: var(--field-radius);
+    border: 1px solid var(--color-border);
+    background: oklch(0.17 0.03 262 / calc(0.62 * var(--glass-opacity, 0.66)));
+    -webkit-backdrop-filter: blur(var(--field-blur));
+    backdrop-filter: blur(var(--field-blur));
+    box-shadow: inset 0 2px 6px oklch(0.05 0.02 262 / 0.28);
+    transition:
+      background-color var(--dur-3) var(--ease-glass),
+      border-color var(--dur-3) var(--ease-glass),
+      box-shadow var(--dur-3) var(--ease-glass);
+  }
+
+  .glass-field:hover {
+    border-color: oklch(0.62 0.06 255 / 0.42);
+  }
+
+  /* On focus a catch-light runs once around the rim, then rests top-right. */
+  .glass-field::before {
+    inset: -1px;
+    background: conic-gradient(
+      from var(--glass-angle),
+      var(--glass-rim-warm) 0deg,
+      oklch(0.86 0.12 78 / 0.25) 70deg,
+      transparent 140deg,
+      var(--glass-rim-cool) 200deg,
+      transparent 280deg,
+      var(--glass-rim-warm) 360deg
+    );
+    opacity: 0;
+    transition: opacity var(--dur-2) var(--ease-glass);
+  }
+
+  .glass-field[data-focused='true'] {
+    border-color: oklch(0.86 0.12 78 / 0.18);
+    background-color: oklch(0.21 0.035 260 / calc(0.8 * var(--glass-opacity, 0.66)));
+    box-shadow:
+      inset 0 2px 6px oklch(0.05 0.02 262 / 0.2),
+      0 0 0 4px var(--color-light-soft),
+      0 12px 36px -14px oklch(0.86 0.12 78 / 0.4);
+  }
+
+  .glass-field[data-focused='true']::before {
+    opacity: 1;
+    animation: glass-rim-sweep var(--dur-4) var(--ease-glass);
+  }
+
+  @keyframes glass-rim-sweep {
+    from { --glass-angle: -315deg; }
+    to   { --glass-angle: 45deg; }
+  }
+
+  .glass-field__shimmer {
+    position: absolute;
+    top: 0;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, oklch(0.92 0.06 80 / 0.22), transparent);
+  }
+
+  .glass-field__control {
+    display: block;
+    width: 100%;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0.95rem 1.2rem;
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.5;
+    caret-color: var(--color-light);
+    cursor: text;
+  }
+
+  .glass-field__control::placeholder {
+    color: var(--color-text-subtle);
+  }
+
+  .glass-field__control:focus {
+    outline: none;
+  }
+
+  textarea.glass-field__control {
+    resize: none;
+    line-height: 1.65;
+  }
+
+  /* ── Divider ──────────────────────────────────────────────────────────────── */
+
+  .glass-divider {
+    position: relative;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      oklch(0.62 0.05 255 / 0.34) 25%,
+      oklch(0.92 0.07 80 / 0.42) 50%,
+      oklch(0.62 0.05 255 / 0.34) 75%,
+      transparent
+    );
+  }
+
+  /* A faint split-light line under the rule, as if seen through a prism. */
+  .glass-divider::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 30%;
+    right: 30%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      oklch(0.72 0.20 25 / 0.28),
+      oklch(0.88 0.17 95 / 0.28),
+      oklch(0.82 0.17 155 / 0.28),
+      oklch(0.72 0.16 235 / 0.28),
+      oklch(0.62 0.22 300 / 0.28),
+      transparent
+    );
+  }
+
+  /* ── Toast ────────────────────────────────────────────────────────────────── */
+
+  .glass-toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    max-width: min(32rem, calc(100vw - 2rem));
+    padding: 0.65rem 1.2rem 0.65rem 0.7rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 9999px;
+    background: oklch(0.22 0.04 260 / 0.78);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    backdrop-filter: blur(20px) saturate(1.5);
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.12),
+      0 18px 48px -12px oklch(0.04 0.02 262 / 0.7);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    line-height: 1.35;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, calc(100% + 2rem)) scale(0.94);
+    transition:
+      transform var(--dur-3) var(--ease-in-glass),
+      opacity var(--dur-2) var(--ease-glass);
+  }
+
+  .glass-toast[data-open='true'] {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0) scale(1);
+    transition:
+      transform var(--dur-3) var(--ease-spring),
+      opacity var(--dur-2) var(--ease-glass);
+  }
+
+  .glass-toast__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 9999px;
+    color: var(--toast-tone);
+    background: color-mix(in oklch, var(--toast-tone) 18%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--toast-tone) 45%, transparent);
+  }
+
+  .glass-toast__icon path {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+  }
+
+  .glass-toast[data-open='true'] .glass-toast__icon path {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset var(--dur-3) var(--ease-glass) var(--dur-2);
+  }
+
+  .glass-toast--success { --toast-tone: var(--color-success); }
+  .glass-toast--error   { --toast-tone: var(--color-danger); }
+  .glass-toast--info    { --toast-tone: var(--color-light); }
+
+  /* ── Reduced motion ───────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    .glass-surface--tilt { transform: none; }
+    .glass-surface--reveal[data-reveal] { opacity: 1; animation: none; }
+    .glass-pill::before,
+    .glass-field[data-focused='true']::before { animation: none; }
+  }
+
+}
