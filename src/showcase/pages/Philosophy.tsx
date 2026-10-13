@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
-import { GlassPanel, GlassOrbs, GLASS_OPACITY, GLASS_BLUR } from 'glass-design-system';
+import { GlassPanel, GlassPill, GlassOrbs, GLASS_OPACITY, GLASS_BLUR } from 'glass-design-system';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // § Illustrations
@@ -51,13 +51,13 @@ const IllustrationLight: React.FC = () => {
             <div className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(ellipse 210% 190% at ${pos.x}% ${pos.y}%,oklch(0.28 0.06 215 / 0.22) 0%,transparent 52%)`, mixBlendMode: 'screen' }} />
             {/* Shadow on opposite side */}
             <div className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(ellipse 170% 140% at ${100 - pos.x}% ${100 - pos.y}%,oklch(0.04 0.01 255 / 0.18) 0%,transparent 55%)` }} />
-            <div className="absolute bottom-3 left-0 right-0 text-center text-[0.52rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">
+            <div className="absolute bottom-3 left-0 right-0 text-center text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
               Panel {i + 1}
             </div>
           </div>
         ))}
       </div>
-      <p className="mt-3 text-center text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">
+      <p className="mt-3 text-center text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
         Move cursor — one origin, three surfaces
       </p>
     </div>
@@ -91,14 +91,14 @@ const IllustrationBackground: React.FC = () => {
         >
           <div className="absolute inset-x-0 top-0 h-px" style={{ background: `linear-gradient(90deg,transparent,oklch(0.82 0.1 230 / ${rich ? '0.38' : '0.10'}),transparent)`, transition: 'all 0.7s' }} />
           <p className="text-xs font-semibold text-[var(--color-text)]">Glass panel</p>
-          <p className="mt-0.5 text-[0.62rem] text-[var(--color-text-subtle)]">
+          <p className="mt-0.5 text-[0.75rem] text-[var(--color-text-subtle)]">
             {rich ? 'Frosting a rich gradient below' : 'Nothing to frost — effect collapses'}
           </p>
         </div>
       </div>
       <button
         onClick={() => setRich(!rich)}
-        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-4 py-2.5 text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)]"
+        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-4 py-2.5 text-[0.75rem] font-semibold text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)]"
       >
         {rich ? 'Remove backdrop →' : '← Restore backdrop'}
       </button>
@@ -134,8 +134,8 @@ const IllustrationKnobs: React.FC = () => {
           }}
         >
           <div className="absolute inset-x-0 top-0 h-px" style={{ background: `linear-gradient(90deg,transparent,oklch(0.82 0.1 230 / ${shimmerAlpha}),transparent)` }} />
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Live surface</p>
-          <p className="mt-1 font-[var(--font-code)] text-[0.68rem] text-[var(--color-accent-bright)]">
+          <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Live surface</p>
+          <p className="mt-1 font-[var(--font-code)] text-[0.8125rem] text-[var(--color-accent-bright)]">
             opacity {opacity.toFixed(2)} · blur {blur}px
           </p>
         </div>
@@ -147,8 +147,8 @@ const IllustrationKnobs: React.FC = () => {
         ].map(({ label, value, min, max, step, set, fmt }) => (
           <div key={label}>
             <div className="mb-1.5 flex items-center justify-between">
-              <span className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">{label}</span>
-              <span className="font-[var(--font-code)] text-[0.68rem] text-[var(--color-accent-bright)]">{fmt(value)}</span>
+              <span className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">{label}</span>
+              <span className="font-[var(--font-code)] text-[0.8125rem] text-[var(--color-accent-bright)]">{fmt(value)}</span>
             </div>
             <div className="relative h-1.5 w-full overflow-hidden rounded-full" style={{ background: 'oklch(0.30 0.02 254 / 0.5)' }}>
               <div className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${((value - min) / (max - min)) * 100}%`, background: 'var(--color-accent-bright)' }} />
@@ -193,8 +193,8 @@ const IllustrationDepth: React.FC = () => {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[0.58rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">{tier.label}</p>
-              <p className="mt-0.5 text-[0.72rem] text-[var(--color-text-muted)]">{tier.role}</p>
+              <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">{tier.label}</p>
+              <p className="mt-0.5 text-[0.8125rem] text-[var(--color-text-muted)]">{tier.role}</p>
             </div>
             <div
               className="h-5 w-10 rounded-full border"
@@ -203,7 +203,7 @@ const IllustrationDepth: React.FC = () => {
           </div>
         </GlassPanel>
       ))}
-      <p className="pt-0.5 text-center text-[0.55rem] font-semibold uppercase tracking-[0.20em] text-[var(--color-text-subtle)]">
+      <p className="pt-0.5 text-center text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
         Tap a tier
       </p>
     </div>
@@ -238,13 +238,13 @@ const IllustrationColour: React.FC = () => {
             className="pointer-events-none absolute inset-0 rounded-[inherit]"
             style={{ background: active.color, mixBlendMode: 'screen', opacity: 0.18, transition: 'background 0.5s ease' }}
           />
-          <p className="relative z-10 text-[0.58rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)] transition-all duration-500">
+          <p className="relative z-10 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] transition-all duration-500">
             {active.name}
           </p>
           <p className="relative z-10 mt-1 font-[var(--font-display)] text-2xl font-[200] tracking-[-0.04em] text-[var(--color-text)]">
             hue {active.hue}
           </p>
-          <p className="relative z-10 mt-0.5 text-[0.60rem] text-[var(--color-text-subtle)]">
+          <p className="relative z-10 mt-0.5 text-[0.75rem] text-[var(--color-text-subtle)]">
             screen · opacity 0.18
           </p>
         </GlassPanel>
@@ -299,7 +299,7 @@ const IllustrationMotion: React.FC = () => {
         <div ref={panelRef}>
           <GlassPanel intensity="medium" topGlow rounded="rounded-[1.1rem]" className="px-8 py-5">
             <p className="text-xs font-semibold text-[var(--color-text)]">Glass surface</p>
-            <p className="mt-0.5 text-[0.60rem] text-[var(--color-text-subtle)]">Physical material</p>
+            <p className="mt-0.5 text-[0.75rem] text-[var(--color-text-subtle)]">Physical material</p>
           </GlassPanel>
         </div>
       </div>
@@ -309,7 +309,7 @@ const IllustrationMotion: React.FC = () => {
             key={m.label}
             onClick={() => run(m)}
             disabled={busy}
-            className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2.5 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-text-muted)] transition duration-200 hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)] disabled:opacity-35"
+            className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2.5 text-[0.75rem] font-semibold text-[var(--color-text-muted)] transition duration-200 hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)] disabled:opacity-35"
           >
             {m.label}
           </button>
@@ -457,7 +457,7 @@ const Philosophy: React.FC = () => {
           </div>
 
           <div className="relative z-10">
-            <p className="phil-enter mb-6 text-[0.72rem] font-semibold uppercase tracking-[0.44em] text-[var(--color-text-subtle)]">
+            <p className="phil-enter mb-6 text-[0.8125rem] font-semibold text-[var(--color-text-subtle)]">
               Glass Design System
             </p>
             <h1
@@ -470,27 +470,16 @@ const Philosophy: React.FC = () => {
             <p className="phil-enter mt-10 max-w-2xl text-[clamp(0.9rem,1.4vw,1.1rem)] leading-[1.85] text-[var(--color-text-muted)]">
               Six principles govern every surface in this interface — from cards to modals to navigation bars. Together they answer a single question: <em className="text-[var(--color-text)]">how does glass feel alive?</em>
             </p>
-            <div className="phil-enter mt-12 flex items-center gap-6">
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] transition duration-200 hover:text-[var(--color-text)]"
-              >
-                <i className="icon-home" style={{ fontSize: '0.8em' }} />
-                Archive
-              </Link>
-              <Link
-                to="/glass"
-                className="inline-flex items-center gap-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] transition duration-200 hover:text-[var(--color-text)]"
-              >
-                Glass showcase →
-              </Link>
+            <div className="phil-enter mt-12 glass-cluster [--cluster:var(--space-3)]">
+              <GlassPill as={Link} to="/surfaces" size="lg" variant="accent">See them on real surfaces</GlassPill>
+              <GlassPill as={Link} to="/foundations" size="lg">Read the foundations</GlassPill>
             </div>
           </div>
 
           {/* Scroll indicator */}
           <div className="phil-enter absolute bottom-8 right-0 flex flex-col items-center gap-3 opacity-40">
             <div className="h-12 w-px bg-gradient-to-b from-transparent to-[var(--color-text-subtle)]" />
-            <p className="text-[0.55rem] font-semibold uppercase tracking-[0.30em] text-[var(--color-text-subtle)]" style={{ writingMode: 'vertical-rl' }}>
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]" style={{ writingMode: 'vertical-rl' }}>
               Scroll
             </p>
           </div>
@@ -528,7 +517,7 @@ const Philosophy: React.FC = () => {
 
               {/* ── Text column ── */}
               <div className={`relative z-10 ${flip ? 'lg:order-2' : 'lg:order-1'}`}>
-                <p className="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.38em] text-[var(--color-text-subtle)]">
+                <p className="mb-4 text-[0.8125rem] font-semibold text-[var(--color-text-subtle)]">
                   Principle {p.n}
                 </p>
                 <h2
@@ -569,7 +558,7 @@ const Philosophy: React.FC = () => {
         <footer className="relative mb-[clamp(4rem,8vw,7rem)] flex flex-col items-center py-[clamp(4rem,8vw,7rem)] text-center">
           <div className="h-px w-full bg-gradient-to-r from-transparent via-[oklch(0.48_0.06_248_/_0.30)] to-transparent" />
           <div className="mt-20">
-            <p className="text-[0.65rem] font-semibold uppercase tracking-[0.42em] text-[var(--color-text-subtle)]">
+            <p className="text-[0.8125rem] font-semibold text-[var(--color-text-subtle)]">
               End of document
             </p>
             <p
@@ -579,22 +568,11 @@ const Philosophy: React.FC = () => {
               Glass in practice
             </p>
             <p className="mx-auto mt-6 max-w-lg text-sm leading-relaxed text-[var(--color-text-muted)]">
-              See every principle rendered live — intensities, tints, blur levels, nesting, navigation patterns — in the Glass showcase.
+              See every principle rendered live — intensities, tints, blur levels, nesting, navigation patterns — on the Surfaces page.
             </p>
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <Link
-                to="/glass"
-                className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface)] px-8 py-4 text-[0.70rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text)] transition duration-300 hover:-translate-y-0.5 hover:bg-[var(--color-surface-strong)]"
-              >
-                Glass showcase
-              </Link>
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-8 py-4 text-[0.70rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-muted)] transition duration-300 hover:-translate-y-0.5 hover:bg-[var(--color-surface)] hover:text-[var(--color-text)]"
-              >
-                <i className="icon-home" style={{ fontSize: '0.8em' }} />
-                Back to archive
-              </Link>
+            <div className="mt-10 flex flex-wrap justify-center gap-[var(--space-3)]">
+              <GlassPill as={Link} to="/surfaces" size="lg" variant="accent">Open Surfaces</GlassPill>
+              <GlassPill as={Link} to="/" size="lg">Back to the overview</GlassPill>
             </div>
           </div>
         </footer>

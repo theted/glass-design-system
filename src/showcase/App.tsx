@@ -1,10 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import { GlassPill } from 'glass-design-system';
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { GlassProvider } from 'glass-design-system';
 import { BackgroundProvider, useBackground } from './context/BackgroundContext';
-import BackgroundSwitcher from './components/BackgroundSwitcher';
+import SiteHeader from './components/SiteHeader';
+import SiteFooter from './components/SiteFooter';
+import Home from './pages/Home';
+import Foundations from './pages/Foundations';
+import Examples from './pages/Examples';
 import GlassShowcase from './pages/GlassShowcase';
-import MaterialShowcase from './pages/MaterialShowcase';
 import Philosophy from './pages/Philosophy';
 import TypeShowcase from './pages/TypeShowcase';
 import ColorShowcase from './pages/ColorShowcase';
@@ -13,21 +16,16 @@ import ComponentDocs from './pages/ComponentDocs';
 import LayoutShowcase from './pages/LayoutShowcase';
 import OrbShowcase from './pages/OrbShowcase';
 
-// Reset scroll position on every route change
+// Reset scroll position on every route change, unless it targets an anchor
 const ScrollToTop: React.FC = () => {
-  const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  const { pathname, hash } = useLocation();
+  useEffect(() => { if (!hash) window.scrollTo(0, 0); }, [pathname, hash]);
   return null;
 };
 
 // Inner component so it can consume the BackgroundContext
 const AppInner: React.FC = () => {
-  const { activeGradient, activePattern } = useBackground();
-  const [topBarVisible, setTopBarVisible] = useState(false);
-  const hideTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
-
-  const showBar = () => { clearTimeout(hideTimer.current); setTopBarVisible(true); };
-  const scheduleHide = () => { hideTimer.current = setTimeout(() => setTopBarVisible(false), 300); };
+  const { activeGradient, activePattern, glass } = useBackground();
 
   // Apply active gradient to body background; restore on unmount
   useEffect(() => {
@@ -45,80 +43,39 @@ const AppInner: React.FC = () => {
   }, [activeGradient]);
 
   return (
-    <div style={{ minHeight: '100vh' }}>
-      {/* Pattern texture overlay — sits above gradient, below all content */}
-      {activePattern.url && (
-        <div
-          aria-hidden="true"
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 9997,
-            pointerEvents: 'none',
-            backgroundImage: `url("${activePattern.url}")`,
-            backgroundSize: activePattern.size,
-            backgroundRepeat: 'repeat',
-            mixBlendMode: 'soft-light',
-            opacity: 0.22,
-          }}
-        />
-      )}
+    <GlassProvider {...glass}>
+      <div className="site">
+        {/* Pattern texture overlay — sits above gradient, below all content */}
+        {activePattern.url && (
+          <div
+            aria-hidden="true"
+            className="site-pattern"
+            style={{ backgroundImage: `url("${activePattern.url}")`, backgroundSize: activePattern.size }}
+          />
+        )}
 
-      {/* Invisible sentinel — catches hover in the top 100px */}
-      <div
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, height: '100px', zIndex: 199, pointerEvents: 'auto' }}
-        onMouseEnter={showBar}
-        onMouseLeave={scheduleHide}
-      />
+        <SiteHeader />
+        <ScrollToTop />
 
-      {/* Auto-hide top bar */}
-      <div
-        className={`topbar-inner${topBarVisible ? ' topbar-visible' : ''}`}
-        style={{ zIndex: 200 }}
-        onMouseEnter={showBar}
-        onMouseLeave={scheduleHide}
-      >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            padding: '1.5rem',
-            gap: '1rem',
-          }}
-        >
-          {/* Page nav */}
-          <nav style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-            <GlassPill as={Link} to="/" size="sm">Material</GlassPill>
-            <GlassPill as={Link} to="/surfaces" size="sm">Surfaces</GlassPill>
-            <GlassPill as={Link} to="/components" size="sm">Components</GlassPill>
-            <GlassPill as={Link} to="/philosophy" size="sm">Philosophy</GlassPill>
-            <GlassPill as={Link} to="/type" size="sm">Type</GlassPill>
-            <GlassPill as={Link} to="/colors" size="sm">Colors</GlassPill>
-            <GlassPill as={Link} to="/product" size="sm">Product</GlassPill>
-            <GlassPill as="a" href="https://sundbergsolutions.se" size="sm">Portfolio</GlassPill>
-            <GlassPill as={Link} to="/layouts" size="sm">Layouts</GlassPill>
-            <GlassPill as={Link} to="/orbs" size="sm">Orbs</GlassPill>
-          </nav>
+        <main className="site-main">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/foundations" element={<Foundations />} />
+            <Route path="/examples" element={<Examples />} />
+            <Route path="/surfaces" element={<GlassShowcase />} />
+            <Route path="/components" element={<ComponentDocs />} />
+            <Route path="/philosophy" element={<Philosophy />} />
+            <Route path="/type" element={<TypeShowcase />} />
+            <Route path="/colors" element={<ColorShowcase />} />
+            <Route path="/product" element={<ProductDemo />} />
+            <Route path="/layouts" element={<LayoutShowcase />} />
+            <Route path="/orbs" element={<OrbShowcase />} />
+          </Routes>
+        </main>
 
-          {/* Background / pattern controls */}
-          <BackgroundSwitcher />
-        </div>
+        <SiteFooter />
       </div>
-
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<MaterialShowcase />} />
-        <Route path="/surfaces" element={<GlassShowcase />} />
-        <Route path="/components" element={<ComponentDocs />} />
-        <Route path="/philosophy" element={<Philosophy />} />
-        <Route path="/type" element={<TypeShowcase />} />
-        <Route path="/colors" element={<ColorShowcase />} />
-        <Route path="/product" element={<ProductDemo />} />
-        <Route path="/layouts" element={<LayoutShowcase />} />
-        <Route path="/orbs" element={<OrbShowcase />} />
-      </Routes>
-    </div>
+    </GlassProvider>
   );
 };
 

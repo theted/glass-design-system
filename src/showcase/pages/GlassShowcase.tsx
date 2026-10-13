@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { GlassPanel, GlassOrbs, GLASS_BLUR, GLASS_OPACITY, getGlassStyles } from 'glass-design-system';
+import { PageHeader } from '../components/Page';
 import { useBackground } from '../context/BackgroundContext';
 
 // ── Inline tinted panel — wraps GlassPanel with a colour wash overlay ──────
@@ -22,7 +22,7 @@ const TintedPanel: React.FC<TintedPanelProps> = ({ label, sub, tint, rounded, cl
       className="pointer-events-none absolute inset-0 rounded-[inherit]"
       style={{ background: tint, mixBlendMode: 'screen', opacity: 0.18 }}
     />
-    <p className="relative z-10 text-[0.62rem] font-semibold uppercase tracking-[0.30em] text-[var(--color-text-subtle)] text-bevel">
+    <p className="relative z-10 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
       {label}
     </p>
     {sub && (
@@ -53,7 +53,7 @@ const BlurPanel: React.FC<BlurPanelProps> = ({ blur, label, sub }) => {
         className="pointer-events-none absolute right-[-4rem] top-[-12rem] h-[28rem] w-[58rem] rounded-full"
         style={glass.topRightGlow}
       />
-      <p className="relative z-10 text-[0.62rem] font-semibold uppercase tracking-[0.30em] text-[var(--color-text-subtle)] text-bevel">
+      <p className="relative z-10 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
         {label}
       </p>
       <p className="relative z-10 mt-1 font-[var(--font-display)] text-3xl font-[200] tracking-[-0.05em] text-[var(--color-text)] text-bevel-strong">
@@ -89,12 +89,12 @@ const TipShimmer: React.FC = () => {
             style={{ background: 'linear-gradient(90deg, transparent, oklch(0.82 0.1 230 / 0.50), transparent)' }} />
         )}
         <p className="text-xs font-semibold text-[var(--color-text)] text-bevel-strong">Glass panel</p>
-        <p className="mt-1 text-[0.62rem] text-[var(--color-text-muted)] text-bevel">
+        <p className="mt-1 text-[0.75rem] text-[var(--color-text-muted)] text-bevel">
           {on ? 'Shimmer line visible — glass rim catches the light' : 'No shimmer — panel looks flat, like painted metal'}
         </p>
       </div>
       <button onClick={() => setOn(!on)}
-        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)]">
+        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2 text-[0.75rem] font-semibold text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)]">
         {on ? 'Remove shimmer' : 'Restore shimmer'}
       </button>
     </div>
@@ -115,7 +115,7 @@ const TipTintRange: React.FC = () => {
         <div className="absolute inset-x-0 top-0 h-px"
           style={{ background: 'linear-gradient(90deg, transparent, oklch(0.82 0.1 230 / 0.40), transparent)' }} />
         <p className="relative z-10 text-xs font-semibold text-[var(--color-text)] text-bevel-strong">Violet tint</p>
-        <p className="relative z-10 mt-1 text-[0.62rem] text-[var(--color-text-muted)] text-bevel">
+        <p className="relative z-10 mt-1 text-[0.75rem] text-[var(--color-text-muted)] text-bevel">
           opacity {alpha.toFixed(2)} ·{' '}
           <span style={{ color: isPainted ? 'var(--color-danger)' : isSweet ? 'var(--color-success)' : 'var(--color-warning)' }}>
             {isPainted ? 'painted — texture lost' : isSweet ? 'sweet spot — tinted, not painted' : 'noticeable but acceptable'}
@@ -123,7 +123,7 @@ const TipTintRange: React.FC = () => {
         </p>
       </div>
       <div>
-        <div className="mb-1.5 flex justify-between text-[0.58rem] font-semibold uppercase tracking-[0.20em] text-[var(--color-text-subtle)]">
+        <div className="mb-1.5 flex justify-between text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
           <span>Tint opacity</span>
           <span style={{ color: isPainted ? 'var(--color-danger)' : 'var(--color-accent-bright)' }}>{alpha.toFixed(2)}</span>
         </div>
@@ -136,7 +136,7 @@ const TipTintRange: React.FC = () => {
         <input type="range" min={0} max={0.45} step={0.01} value={alpha}
           onChange={e => setAlpha(Number(e.target.value))}
           className="relative mt-[-0.55rem] w-full cursor-pointer opacity-0" style={{ height: '0.5rem' }} />
-        <div className="mt-1 flex justify-between text-[0.52rem] text-[var(--color-text-subtle)]">
+        <div className="mt-1 flex justify-between text-[0.75rem] text-[var(--color-text-subtle)]">
           <span>0</span><span className="text-[var(--color-success)]">sweet spot ↑</span><span>0.45</span>
         </div>
       </div>
@@ -153,7 +153,7 @@ const TipTextBevel: React.FC = () => {
         style={{ background: 'oklch(0.20 0.024 254 / 0.50)', backdropFilter: 'blur(28px)', border: '1px solid oklch(0.48 0.06 248 / 0.28)' }}>
         <div className="absolute inset-x-0 top-0 h-px"
           style={{ background: 'linear-gradient(90deg, transparent, oklch(0.82 0.1 230 / 0.42), transparent)' }} />
-        <p className={`text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] ${bevel ? 'text-bevel' : ''}`}>
+        <p className={`text-[0.75rem] font-semibold text-[var(--color-text-subtle)] ${bevel ? 'text-bevel' : ''}`}>
           Metadata label
         </p>
         <p className={`mt-1 font-[var(--font-display)] text-2xl font-[200] tracking-[-0.04em] text-[var(--color-text)] ${bevel ? 'text-bevel-strong' : ''}`}>
@@ -164,7 +164,7 @@ const TipTextBevel: React.FC = () => {
         </p>
       </div>
       <button onClick={() => setBevel(!bevel)}
-        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)]">
+        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2 text-[0.75rem] font-semibold text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)]">
         {bevel ? 'Remove text-bevel' : 'Restore text-bevel'}
       </button>
     </div>
@@ -184,12 +184,12 @@ const TipOverflow: React.FC = () => {
         <div aria-hidden className="pointer-events-none absolute right-[-4rem] top-[-12rem] h-[28rem] w-[58rem] rounded-full"
           style={{ background: 'radial-gradient(circle, oklch(0.52 0.24 238 / 0.14) 0%, transparent 70%)', filter: 'blur(120px)' }} />
         <p className="relative z-10 text-xs font-semibold text-[var(--color-text)] text-bevel-strong">Panel</p>
-        <p className="relative z-10 mt-1 text-[0.62rem] text-[var(--color-text-muted)] text-bevel">
+        <p className="relative z-10 mt-1 text-[0.75rem] text-[var(--color-text-muted)] text-bevel">
           {clipped ? 'Glow clipped — contained within border-radius' : 'Glow bleeding — spills into surrounding layout'}
         </p>
       </div>
       <button onClick={() => setClipped(!clipped)}
-        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)]">
+        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2 text-[0.75rem] font-semibold text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)]">
         {clipped ? 'Remove overflow:hidden' : 'Restore overflow:hidden'}
       </button>
     </div>
@@ -207,12 +207,12 @@ const TipBackdropBg: React.FC = () => {
           : 'oklch(0.22 0 0)' }}>
         <div className="relative overflow-hidden rounded-[1rem] px-5 py-3 transition-all duration-700"
           style={{ background: 'oklch(0.20 0.024 254 / 0.45)', backdropFilter: 'blur(24px)', border: `1px solid oklch(0.48 0.06 248 / ${hasBg ? '0.30' : '0.12'})` }}>
-          <p className="text-[0.62rem] font-semibold text-[var(--color-text)] text-bevel-strong">{hasBg ? 'backdrop-filter works' : 'Nothing to blur'}</p>
-          <p className="mt-0.5 text-[0.58rem] text-[var(--color-text-subtle)] text-bevel">{hasBg ? 'Gradient behind provides texture' : 'Flat background — effect is invisible'}</p>
+          <p className="text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel-strong">{hasBg ? 'backdrop-filter works' : 'Nothing to blur'}</p>
+          <p className="mt-0.5 text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">{hasBg ? 'Gradient behind provides texture' : 'Flat background — effect is invisible'}</p>
         </div>
       </div>
       <button onClick={() => setHasBg(!hasBg)}
-        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)]">
+        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2 text-[0.75rem] font-semibold text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface-strong)] hover:text-[var(--color-text)]">
         {hasBg ? 'Remove gradient backdrop' : 'Restore gradient backdrop'}
       </button>
     </div>
@@ -237,10 +237,10 @@ const TipCursorLight: React.FC = () => {
       {/* Shadow */}
       <div className="pointer-events-none absolute inset-0" style={{ background: `radial-gradient(ellipse 160% 130% at ${100 - pos.x}% ${100 - pos.y}%, oklch(0.04 0.01 255 / 0.20) 0%, transparent 55%)` }} />
       <p className="relative z-10 text-xs font-semibold text-[var(--color-text)] text-bevel-strong">Specular reflection</p>
-      <p className="relative z-10 mt-1 text-[0.62rem] leading-5 text-[var(--color-text-muted)] text-bevel">
+      <p className="relative z-10 mt-1 text-[0.75rem] leading-5 text-[var(--color-text-muted)] text-bevel">
         Light follows cursor via a screen-blended radial gradient. Shadow appears on the opposite side. Both use opacity transitions — instant on hover, no jank.
       </p>
-      <p className="relative z-10 mt-3 text-[0.56rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Move cursor over this panel ↑</p>
+      <p className="relative z-10 mt-3 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Move cursor over this panel ↑</p>
     </div>
   );
 };
@@ -250,7 +250,7 @@ const TipCursorLight: React.FC = () => {
 type DoDontCardProps = { ok: boolean; label: string; children: React.ReactNode };
 const DoDontCard: React.FC<DoDontCardProps> = ({ ok, label, children }) => (
   <div className="relative pt-4">
-    <div className={`absolute left-3 top-0 z-10 inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[0.52rem] font-bold uppercase tracking-[0.20em] ${
+    <div className={`absolute left-3 top-0 z-10 inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[0.75rem] font-bold ${
       ok
         ? 'border border-[oklch(0.76_0.16_160_/_0.45)] bg-[oklch(0.76_0.16_160_/_0.12)] text-[oklch(0.76_0.16_160)]'
         : 'border border-[oklch(0.65_0.19_25_/_0.45)] bg-[oklch(0.65_0.19_25_/_0.12)] text-[oklch(0.65_0.19_25)]'
@@ -272,49 +272,13 @@ const GlassShowcase: React.FC = () => {
     {/* Subtle orb background behind the whole page */}
     <GlassOrbs preset="silk" speed={12} opacity={0.4} />
 
-    <div
-      className="relative z-10 mx-auto px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,6vw,5rem)]"
-      style={{ maxWidth: '132rem', color: isDawn ? 'oklch(0.22 0.03 50)' : undefined }}
-    >
-
-      {/* ── Back nav ── */}
-      <Link
-        to="/"
-        className="mb-14 inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] transition duration-200"
-        style={{ color: isDawn ? 'oklch(0.38 0.05 50)' : 'var(--color-text-subtle)' }}
-      >
-        ← Back
-      </Link>
-
-      {/* ── Hero ── */}
-      <div className="mb-20">
-        <p
-          className="text-[0.72rem] font-semibold uppercase tracking-[0.42em]"
-          style={{ color: isDawn ? 'oklch(0.45 0.06 55)' : 'var(--color-text-subtle)' }}
-        >
-          Design system
-        </p>
-        <h1
-          className="mt-3 font-[var(--font-display)] text-[clamp(3.5rem,10vw,7rem)] font-[200] leading-[0.9] tracking-[-0.07em]"
-          style={{ color: isDawn ? 'oklch(0.18 0.04 45)' : 'var(--color-text)' }}
-        >
-          Glass
-        </h1>
-        <p
-          className="mt-5 max-w-xl text-sm leading-7"
-          style={{ color: isDawn ? 'oklch(0.36 0.04 50)' : 'var(--color-text-muted)' }}
-        >
-          All panels draw from two master knobs —{' '}
-          <code className="rounded px-1 font-[var(--font-code)] text-[0.8em] text-[var(--color-accent-bright)]">
-            GLASS_OPACITY&nbsp;{GLASS_OPACITY}
-          </code>{' '}
-          and{' '}
-          <code className="rounded px-1 font-[var(--font-code)] text-[0.8em] text-[var(--color-accent-bright)]">
-            GLASS_BLUR&nbsp;{GLASS_BLUR}px
-          </code>
-          . Adjust those two values to retheme every surface at once.
-        </p>
-      </div>
+    <div className="relative z-10" style={{ color: isDawn ? 'oklch(0.22 0.03 50)' : undefined }}>
+      <PageHeader
+        wide
+        title="Surfaces"
+        lede={<>Every way a pane can look: three thicknesses, tints, blur levels, glows, radii and nesting, plus common patterns built from them. All of it scales with the two master knobs, <code className="glass-code">opacity {GLASS_OPACITY}</code> and <code className="glass-code">blur {GLASS_BLUR}px</code>.</>}
+      />
+    <div className="glass-container glass-container--wide">
 
       {/* ══════════════════════════════════════════════════════════════
           § 0 — Design philosophy
@@ -362,7 +326,7 @@ const GlassShowcase: React.FC = () => {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
           {(['subtle', 'medium', 'strong'] as const).map((intensity) => (
             <GlassPanel key={intensity} intensity={intensity} topGlow bottomGlow rounded="rounded-[2rem]" className="p-7">
-              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.30em] text-[var(--color-text-subtle)] text-bevel">
+              <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
                 {intensity}
               </p>
               <p className="mt-3 font-[var(--font-display)] text-4xl font-[200] tracking-[-0.06em] text-[var(--color-text)] text-bevel-strong">
@@ -420,7 +384,7 @@ const GlassShowcase: React.FC = () => {
       {/* ══════════════════════════════════════════════════════════════
           § 4 — Glow combinations
       ══════════════════════════════════════════════════════════════ */}
-      <Section label="04 — Ambient glow" sub="Top-right (blue) and bottom-left (teal) corner glows can be toggled independently." light={isDawn}>
+      <Section label="04 — Ambient glow" sub="A warm glow in the top-right corner, where the light comes from, and a cobalt bounce light bottom-left. Toggle them independently." light={isDawn}>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <GlassPanel intensity="medium" topGlow={false} bottomGlow={false} rounded="rounded-[2rem]" className="p-7">
             <GlowLabel>No glow</GlowLabel>
@@ -444,7 +408,7 @@ const GlassShowcase: React.FC = () => {
       {/* ══════════════════════════════════════════════════════════════
           § 5 — Corner radius
       ══════════════════════════════════════════════════════════════ */}
-      <Section label="05 — Radius" sub="The rounded prop is a Tailwind class — any value works." light={isDawn}>
+      <Section label="05 — Radius" sub="Panels default to --radius-panel. Pass a rounded class, or set style.borderRadius, for anything else." light={isDawn}>
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {[
             { r: 'rounded-[0.5rem]', label: '8px', sub: 'Almost sharp' },
@@ -453,7 +417,7 @@ const GlassShowcase: React.FC = () => {
             { r: 'rounded-[3.5rem]', label: '56px', sub: 'Pill / blob' },
           ].map(({ r, label, sub }) => (
             <GlassPanel key={r} intensity="medium" topGlow rounded={r} className="p-7">
-              <p className="text-[0.62rem] font-semibold uppercase tracking-[0.30em] text-[var(--color-text-subtle)] text-bevel">
+              <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
                 {label}
               </p>
               <p className="mt-1 text-xs leading-5 text-[var(--color-text-muted)] text-bevel">{sub}</p>
@@ -470,11 +434,11 @@ const GlassShowcase: React.FC = () => {
 
           {/* Depth stack */}
           <GlassPanel intensity="subtle" topGlow bottomGlow rounded="rounded-[2rem]" className="p-6">
-            <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel mb-4">Depth stack</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel mb-4">Depth stack</p>
             <GlassPanel intensity="medium" topGlow rounded="rounded-[1.4rem]" className="p-5">
-              <p className="text-[0.60rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)] text-bevel mb-3">Layer 2</p>
+              <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel mb-3">Layer 2</p>
               <GlassPanel intensity="strong" rounded="rounded-[1rem]" className="p-4">
-                <p className="text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)] text-bevel">Layer 3 · strong</p>
+                <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Layer 3 · strong</p>
                 <p className="mt-1 text-xs text-[var(--color-text-muted)] text-bevel">Each layer adds opacity.</p>
               </GlassPanel>
             </GlassPanel>
@@ -490,8 +454,8 @@ const GlassShowcase: React.FC = () => {
                 borderBottom: '1px solid oklch(0.5 0.05 248 / 0.22)',
               }}
             >
-              <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Activity</p>
-              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[0.55rem] font-bold text-[var(--color-accent-bright)]">3</span>
+              <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Activity</p>
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[0.75rem] font-bold text-[var(--color-accent-bright)]">3</span>
             </div>
             {/* Body rows */}
             <div className="p-4 flex flex-col gap-2">
@@ -506,7 +470,7 @@ const GlassShowcase: React.FC = () => {
 
           {/* Modal-inside-panel illusion */}
           <GlassPanel intensity="subtle" rounded="rounded-[2rem]" className="relative p-6">
-            <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel mb-5">Background context</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel mb-5">Background context</p>
             <p className="text-xs leading-5 text-[var(--color-text-muted)] text-bevel mb-5">
               Content behind the dialog stays visible through the frosting — the user never loses their place.
             </p>
@@ -514,11 +478,11 @@ const GlassShowcase: React.FC = () => {
             <GlassPanel intensity="strong" topGlow rounded="rounded-[1.4rem]" className="p-5"
               style={{ boxShadow: '0 16px 56px oklch(0.05 0.015 250 / 0.64), inset 0 1px 0 oklch(0.8 0.1 230 / 0.22)' }}
             >
-              <p className="text-[0.60rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)] text-bevel">Confirm action</p>
+              <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Confirm action</p>
               <p className="mt-2 text-xs leading-5 text-[var(--color-text-muted)] text-bevel">This will permanently remove the item.</p>
               <div className="mt-4 flex gap-2">
-                <button className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-3 py-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-text-muted)]">Cancel</button>
-                <button className="rounded-full border border-[oklch(0.65_0.19_25_/_0.5)] bg-[oklch(0.65_0.19_25_/_0.18)] px-3 py-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.18em] text-[oklch(0.82_0.12_20)]">Delete</button>
+                <button className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-3 py-1.5 text-[0.75rem] font-semibold text-[var(--color-text-muted)]">Cancel</button>
+                <button className="rounded-full border border-[oklch(0.65_0.19_25_/_0.5)] bg-[oklch(0.65_0.19_25_/_0.18)] px-3 py-1.5 text-[0.75rem] font-semibold text-[oklch(0.82_0.12_20)]">Delete</button>
               </div>
             </GlassPanel>
           </GlassPanel>
@@ -543,10 +507,10 @@ const GlassShowcase: React.FC = () => {
               <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-[oklch(0.20_0.025_254)] bg-[oklch(0.76_0.16_160)]" />
             </div>
             <p className="font-[var(--font-display)] text-base font-[400] tracking-[-0.02em] text-[var(--color-text)] text-bevel-strong">Alex K.</p>
-            <p className="mt-0.5 text-[0.65rem] text-[var(--color-text-subtle)] text-bevel uppercase tracking-[0.18em]">Design Engineer</p>
+            <p className="mt-0.5 text-[0.8125rem] text-[var(--color-text-subtle)] text-bevel">Design Engineer</p>
             <div className="mt-4 flex gap-1.5">
               {['Follow', 'Message'].map((lbl, i) => (
-                <button key={lbl} className="rounded-full px-3.5 py-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.18em] transition duration-200"
+                <button key={lbl} className="rounded-full px-3.5 py-1.5 text-[0.75rem] font-semibold transition duration-200"
                   style={i === 0
                     ? { background: 'oklch(0.71 0.17 244 / 0.22)', border: '1px solid oklch(0.71 0.17 244 / 0.4)', color: 'oklch(0.82 0.10 230)' }
                     : { background: 'oklch(0.22 0.028 254 / 0.5)', border: '1px solid oklch(0.4 0.044 248 / 0.38)', color: 'var(--color-text-muted)' }}>
@@ -558,7 +522,7 @@ const GlassShowcase: React.FC = () => {
 
           {/* Metric cards */}
           <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-6 flex flex-col gap-4">
-            <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Dashboard</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Dashboard</p>
             {[
               { label: 'Snippets', value: '248', trend: '+12', up: true },
               { label: 'Views',    value: '18.4k', trend: '+8%', up: true },
@@ -566,24 +530,24 @@ const GlassShowcase: React.FC = () => {
             ].map(({ label, value, trend, up }) => (
               <div key={label} className="flex items-end justify-between">
                 <div>
-                  <p className="text-[0.60rem] text-[var(--color-text-subtle)] text-bevel uppercase tracking-[0.16em]">{label}</p>
+                  <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">{label}</p>
                   <p className="mt-0.5 font-[var(--font-display)] text-2xl font-[200] tracking-[-0.04em] text-[var(--color-text)] text-bevel-strong">{value}</p>
                 </div>
-                <span className="mb-0.5 text-[0.65rem] font-semibold" style={{ color: up ? 'oklch(0.76 0.16 160)' : 'oklch(0.65 0.19 25)' }}>{trend}</span>
+                <span className="mb-0.5 text-[0.8125rem] font-semibold" style={{ color: up ? 'oklch(0.76 0.16 160)' : 'oklch(0.65 0.19 25)' }}>{trend}</span>
               </div>
             ))}
           </GlassPanel>
 
           {/* Media / now-playing card */}
           <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-6">
-            <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel mb-4">Now playing</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel mb-4">Now playing</p>
             {/* Album art placeholder */}
             <div className="mx-auto mb-4 h-24 w-24 rounded-[1rem] flex items-center justify-center text-3xl"
               style={{ background: 'linear-gradient(135deg, oklch(0.32 0.14 250), oklch(0.24 0.10 280))', border: '1px solid oklch(0.4 0.08 252 / 0.4)' }}>
               ♪
             </div>
             <p className="text-center font-[var(--font-display)] text-base font-[300] tracking-[-0.02em] text-[var(--color-text)] text-bevel-strong">Glass Structures</p>
-            <p className="mt-0.5 text-center text-[0.65rem] text-[var(--color-text-subtle)] text-bevel">Ambient · 4:12</p>
+            <p className="mt-0.5 text-center text-[0.8125rem] text-[var(--color-text-subtle)] text-bevel">Ambient · 4:12</p>
             {/* Progress bar */}
             <div className="mt-4 h-1 w-full rounded-full bg-[var(--color-border)]">
               <div className="h-1 w-[38%] rounded-full bg-[var(--color-accent-bright)] opacity-70" />
@@ -610,7 +574,7 @@ const GlassShowcase: React.FC = () => {
                   style={{ background: `${color.replace(')', ' / 0.18)')}`, color }}>{icon}</span>
                 <div className="min-w-0">
                   <p className="text-xs font-semibold text-[var(--color-text)] text-bevel">{title}</p>
-                  <p className="mt-0.5 text-[0.65rem] text-[var(--color-text-subtle)] text-bevel truncate">{body}</p>
+                  <p className="mt-0.5 text-[0.8125rem] text-[var(--color-text-subtle)] text-bevel truncate">{body}</p>
                 </div>
               </GlassPanel>
             ))}
@@ -626,12 +590,12 @@ const GlassShowcase: React.FC = () => {
         <div className="flex flex-col gap-6">
 
           {/* Glass nav bar */}
-          <div className="flex items-center justify-between gap-4 rounded-[1.8rem] px-6 py-3.5"
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-[1.8rem] px-6 py-3.5"
             style={{ background: 'oklch(0.20 0.025 254 / 0.62)', backdropFilter: 'blur(32px)', border: '1px solid oklch(0.4 0.044 248 / 0.32)', boxShadow: '0 4px 32px oklch(0.05 0.015 250 / 0.36)' }}>
             <span className="font-[var(--font-display)] text-sm font-[300] tracking-[-0.03em] text-[var(--color-text)] text-bevel-strong">Snippets</span>
-            <div className="flex items-center gap-1">
+            <div className="flex flex-wrap items-center gap-1">
               {['Archive', 'Explore', 'Docs', 'Settings'].map((item, i) => (
-                <button key={item} className="rounded-full px-4 py-1.5 text-[0.62rem] font-semibold uppercase tracking-[0.18em] transition duration-200"
+                <button key={item} className="rounded-full px-4 py-1.5 text-[0.75rem] font-semibold transition duration-200"
                   style={i === 0
                     ? { background: 'oklch(0.28 0.04 252 / 0.7)', color: 'var(--color-text)' }
                     : { color: 'var(--color-text-subtle)' }}>
@@ -649,10 +613,10 @@ const GlassShowcase: React.FC = () => {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Segmented tabs */}
             <GlassPanel intensity="subtle" rounded="rounded-[1.8rem]" className="p-4">
-              <p className="mb-4 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Segmented control</p>
+              <p className="mb-4 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Segmented control</p>
               <div className="flex gap-1 rounded-[1.2rem] p-1" style={{ background: 'oklch(0.16 0.020 256 / 0.5)' }}>
                 {['All', 'Javascript', 'Python', 'Go'].map((tab, i) => (
-                  <button key={tab} className="flex-1 rounded-[0.9rem] px-3 py-2 text-[0.60rem] font-semibold uppercase tracking-[0.16em] transition duration-200"
+                  <button key={tab} className="flex-1 rounded-[0.9rem] px-3 py-2 text-[0.75rem] font-semibold transition duration-200"
                     style={i === 0
                       ? { background: 'oklch(0.27 0.038 253 / 0.9)', color: 'var(--color-text)', boxShadow: '0 2px 8px oklch(0.05 0.015 250 / 0.36)' }
                       : { color: 'var(--color-text-subtle)' }}>
@@ -665,19 +629,19 @@ const GlassShowcase: React.FC = () => {
             {/* Breadcrumb + pill tags */}
             <GlassPanel intensity="subtle" rounded="rounded-[1.8rem]" className="p-4 flex flex-col gap-4">
               <div>
-                <p className="mb-2.5 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Breadcrumb</p>
+                <p className="mb-2.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Breadcrumb</p>
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {['Archive', 'Javascript', 'fetch-utils.ts'].map((crumb, i, arr) => (
                     <React.Fragment key={crumb}>
-                      <span className="text-[0.65rem] text-[i < arr.length - 1 ? 'var(--color-text-subtle)' : 'var(--color-text)'] text-bevel"
+                      <span className="text-[0.8125rem] text-[i < arr.length - 1 ? 'var(--color-text-subtle)' : 'var(--color-text)'] text-bevel"
                         style={{ color: i < arr.length - 1 ? 'var(--color-text-subtle)' : 'var(--color-text)' }}>{crumb}</span>
-                      {i < arr.length - 1 && <span className="text-[0.60rem] text-[var(--color-text-subtle)]">/</span>}
+                      {i < arr.length - 1 && <span className="text-[0.75rem] text-[var(--color-text-subtle)]">/</span>}
                     </React.Fragment>
                   ))}
                 </div>
               </div>
               <div>
-                <p className="mb-2.5 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Tags</p>
+                <p className="mb-2.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Tags</p>
                 <div className="flex flex-wrap gap-1.5">
                   {[
                     { label: 'typescript', color: 'oklch(0.71 0.17 244)' },
@@ -685,7 +649,7 @@ const GlassShowcase: React.FC = () => {
                     { label: 'http',       color: 'oklch(0.72 0.18 290)' },
                     { label: 'utility',    color: 'oklch(0.80 0.13 88)' },
                   ].map(({ label, color }) => (
-                    <span key={label} className="inline-flex items-center rounded-full px-2.5 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.16em]"
+                    <span key={label} className="inline-flex items-center rounded-full px-2.5 py-1 text-[0.75rem] font-semibold"
                       style={{ background: `${color.replace(')', ' / 0.14)')}`, border: `1px solid ${color.replace(')', ' / 0.32)')}`, color }}>
                       {label}
                     </span>
@@ -709,11 +673,11 @@ const GlassShowcase: React.FC = () => {
 
           {/* Left: annotated field anatomy */}
           <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-7 flex flex-col gap-6">
-            <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Field anatomy</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Field anatomy</p>
 
             {/* Text input */}
             <div className="flex flex-col gap-2">
-              <label className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)] text-bevel">Title</label>
+              <label className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Title</label>
               <div className="relative">
                 <input
                   readOnly
@@ -728,12 +692,12 @@ const GlassShowcase: React.FC = () => {
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-px rounded-t-[0.9rem]"
                   style={{ background: 'linear-gradient(90deg, transparent, oklch(0.82 0.1 230 / 0.18), transparent)' }} />
               </div>
-              <p className="text-[0.60rem] text-[var(--color-text-subtle)] text-bevel">Same background base as panels — slightly darker, no blur needed inside a glass surface.</p>
+              <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">Same background base as panels — slightly darker, no blur needed inside a glass surface.</p>
             </div>
 
             {/* Textarea */}
             <div className="flex flex-col gap-2">
-              <label className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)] text-bevel">Description</label>
+              <label className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Description</label>
               <textarea
                 readOnly
                 value={"A system built around a single\nlight source. Every surface\nresponds to the same field."}
@@ -749,7 +713,7 @@ const GlassShowcase: React.FC = () => {
 
             {/* Select / dropdown */}
             <div className="flex flex-col gap-2">
-              <label className="text-[0.62rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)] text-bevel">Language</label>
+              <label className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Language</label>
               <div className="relative">
                 <select
                   className="w-full appearance-none rounded-[0.9rem] px-4 py-3 text-sm text-[var(--color-text)] outline-none"
@@ -764,7 +728,7 @@ const GlassShowcase: React.FC = () => {
                   <option value="python">Python</option>
                   <option value="go">Go</option>
                 </select>
-                <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[0.60rem] text-[var(--color-text-subtle)]">▾</span>
+                <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[0.75rem] text-[var(--color-text-subtle)]">▾</span>
               </div>
             </div>
           </GlassPanel>
@@ -774,7 +738,7 @@ const GlassShowcase: React.FC = () => {
 
             {/* Toggle switches */}
             <GlassPanel intensity="subtle" rounded="rounded-[2rem]" className="p-6 flex flex-col gap-5">
-              <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Toggles &amp; controls</p>
+              <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Toggles &amp; controls</p>
               {([
                 { label: 'Line numbers', on: true },
                 { label: 'Auto-size cards', on: false },
@@ -796,20 +760,20 @@ const GlassShowcase: React.FC = () => {
                   </div>
                 </div>
               ))}
-              <p className="text-[0.60rem] text-[var(--color-text-subtle)] text-bevel mt-1">Track uses the accent hue at low opacity — the thumb brightens when active to simulate light catching it.</p>
+              <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel mt-1">Track uses the accent hue at low opacity — the thumb brightens when active to simulate light catching it.</p>
             </GlassPanel>
 
             {/* Range sliders */}
             <GlassPanel intensity="subtle" rounded="rounded-[2rem]" className="p-6 flex flex-col gap-5">
-              <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Range sliders</p>
+              <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Range sliders</p>
               {([
                 { label: 'Opacity', value: 66, unit: '%', color: 'oklch(0.62 0.17 240)' },
                 { label: 'Blur',    value: 40, unit: 'px', color: 'oklch(0.65 0.14 210)' },
               ] as { label: string; value: number; unit: string; color: string }[]).map(({ label, value, unit, color }) => (
                 <div key={label} className="flex flex-col gap-2">
                   <div className="flex justify-between">
-                    <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)] text-bevel">{label}</span>
-                    <span className="font-[var(--font-code)] text-[0.62rem]" style={{ color }}>{value}{unit}</span>
+                    <span className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">{label}</span>
+                    <span className="font-[var(--font-code)] text-[0.75rem]" style={{ color }}>{value}{unit}</span>
                   </div>
                   <div className="relative h-1.5 w-full rounded-full" style={{ background: 'oklch(0.22 0.025 254 / 0.7)' }}>
                     <div className="absolute left-0 top-0 h-1.5 rounded-full" style={{ width: `${value}%`, background: `${color.replace(')', ' / 0.7)')}` }} />
@@ -818,7 +782,7 @@ const GlassShowcase: React.FC = () => {
                   </div>
                 </div>
               ))}
-              <p className="text-[0.60rem] text-[var(--color-text-subtle)] text-bevel mt-1">Track fill and thumb glow use the same hue as the value it controls — opacity knob is blue, blur knob is teal. Colour carries meaning.</p>
+              <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel mt-1">Track fill and thumb glow use the same hue as the value it controls — opacity knob is blue, blur knob is teal. Colour carries meaning.</p>
             </GlassPanel>
 
           </div>
@@ -845,10 +809,10 @@ const GlassShowcase: React.FC = () => {
                   <div key={c} className="h-2.5 w-2.5 rounded-full" style={{ background: c, opacity: 0.7 }} />
                 ))}
               </div>
-              <span className="flex-1 text-center font-[var(--font-code)] text-[0.60rem] text-[var(--color-text-subtle)]">~/snippets</span>
+              <span className="flex-1 text-center font-[var(--font-code)] text-[0.75rem] text-[var(--color-text-subtle)]">~/snippets</span>
             </div>
             {/* Content */}
-            <div className="p-6 font-[var(--font-code)] text-[0.72rem] leading-6 space-y-1.5">
+            <div className="p-6 font-[var(--font-code)] text-[0.8125rem] leading-6 space-y-1.5">
               {[
                 { prompt: true,  text: 'npm run build',                                   color: 'var(--color-text)' },
                 { prompt: false, text: '  vite v5.4.2 building for production…',          color: 'var(--color-text-muted)' },
@@ -880,13 +844,13 @@ const GlassShowcase: React.FC = () => {
             {/* Inline code block */}
             <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-6 flex flex-col gap-4">
               <div className="flex items-center justify-between">
-                <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Code block</p>
-                <span className="rounded-full px-2.5 py-1 text-[0.58rem] font-semibold uppercase tracking-[0.16em]"
+                <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Code block</p>
+                <span className="rounded-full px-2.5 py-1 text-[0.75rem] font-semibold"
                   style={{ background: 'oklch(0.62 0.17 240 / 0.14)', border: '1px solid oklch(0.62 0.17 240 / 0.30)', color: 'oklch(0.71 0.14 232)' }}>
                   TypeScript
                 </span>
               </div>
-              <div className="rounded-[1.2rem] p-4 font-[var(--font-code)] text-[0.72rem] leading-6 overflow-hidden"
+              <div className="rounded-[1.2rem] p-4 font-[var(--font-code)] text-[0.8125rem] leading-6 overflow-hidden"
                 style={{ background: 'oklch(0.12 0.018 255 / 0.7)', border: '1px solid oklch(0.36 0.044 250 / 0.28)' }}>
                 <div><span style={{ color: 'oklch(0.74 0.14 290)' }}>export function </span><span style={{ color: 'oklch(0.78 0.16 200)' }}>getGlassStyles</span><span style={{ color: 'var(--color-text-muted)' }}>(</span></div>
                 <div><span style={{ color: 'oklch(0.80 0.10 60)' }}>  intensity</span><span style={{ color: 'var(--color-text-muted)' }}>: </span><span style={{ color: 'oklch(0.72 0.16 38)' }}>GlassIntensity </span><span style={{ color: 'var(--color-text-muted)' }}>= </span><span style={{ color: 'oklch(0.72 0.18 160)' }}>'medium'</span></div>
@@ -897,13 +861,13 @@ const GlassShowcase: React.FC = () => {
                 <div><span style={{ color: 'var(--color-text-muted)' }}>  {'}'};</span></div>
                 <div><span style={{ color: 'var(--color-text-muted)' }}>{'}'}</span></div>
               </div>
-              <p className="text-[0.60rem] text-[var(--color-text-subtle)] text-bevel">The code panel sits on a darker base than the card behind it — two glass layers, each with its own depth. The gap between them reads as distance.</p>
+              <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">The code panel sits on a darker base than the card behind it — two glass layers, each with its own depth. The gap between them reads as distance.</p>
             </GlassPanel>
 
             {/* Diff / patch view */}
             <GlassPanel intensity="subtle" rounded="rounded-[2rem]" className="p-6 flex flex-col gap-3">
-              <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Diff view — coloured glass rows</p>
-              <div className="rounded-[1.2rem] overflow-hidden font-[var(--font-code)] text-[0.72rem] leading-6"
+              <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Diff view — coloured glass rows</p>
+              <div className="rounded-[1.2rem] overflow-hidden font-[var(--font-code)] text-[0.8125rem] leading-6"
                 style={{ border: '1px solid oklch(0.36 0.044 250 / 0.28)' }}>
                 {([
                   { type: 'ctx', text: '  const blur  = GLASS_BLUR;' },
@@ -921,7 +885,7 @@ const GlassShowcase: React.FC = () => {
                   </div>
                 ))}
               </div>
-              <p className="text-[0.60rem] text-[var(--color-text-subtle)] text-bevel">Diff rows use very low-opacity colour fills — green/red at ~10% — with a 2px left accent. The glass surface beneath shows through, keeping context rows readable.</p>
+              <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">Diff rows use very low-opacity colour fills — green/red at ~10% — with a 2px left accent. The glass surface beneath shows through, keeping context rows readable.</p>
             </GlassPanel>
 
           </div>
@@ -935,67 +899,67 @@ const GlassShowcase: React.FC = () => {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
 
           <GlassPanel intensity="subtle" rounded="rounded-[1.8rem]" className="p-6">
-            <p className="mb-1 font-[var(--font-code)] text-[0.58rem] text-[var(--color-accent-bright)]">tip 01</p>
+            <p className="mb-1 font-[var(--font-code)] text-[0.75rem] text-[var(--color-accent-bright)]">tip 01</p>
             <p className="mb-4 font-[var(--font-display)] text-sm font-[300] tracking-[-0.02em] text-[var(--color-text)] text-bevel-strong">
               The 1 px shimmer line
             </p>
             <TipShimmer />
-            <p className="mt-4 text-[0.60rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
+            <p className="mt-4 text-[0.75rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
               A single-pixel gradient at <code className="text-[var(--color-accent-bright)]">top: 0</code> simulates light catching the glass rim. Without it, the panel reads as a flat rectangle. Always use <code className="text-[var(--color-accent-bright)]">linear-gradient(90deg, transparent, shimmerColor, transparent)</code> so the ends fade away naturally.
             </p>
           </GlassPanel>
 
           <GlassPanel intensity="subtle" rounded="rounded-[1.8rem]" className="p-6">
-            <p className="mb-1 font-[var(--font-code)] text-[0.58rem] text-[var(--color-accent-bright)]">tip 02</p>
+            <p className="mb-1 font-[var(--font-code)] text-[0.75rem] text-[var(--color-accent-bright)]">tip 02</p>
             <p className="mb-4 font-[var(--font-display)] text-sm font-[300] tracking-[-0.02em] text-[var(--color-text)] text-bevel-strong">
               Tint opacity sweet spot
             </p>
             <TipTintRange />
-            <p className="mt-4 text-[0.60rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
+            <p className="mt-4 text-[0.75rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
               Keep screen-blend tints between <code className="text-[var(--color-accent-bright)]">0.14–0.22</code>. The green band on the track marks the range. Below it the tint is invisible; above it the texture is lost and the panel looks painted.
             </p>
           </GlassPanel>
 
           <GlassPanel intensity="subtle" rounded="rounded-[1.8rem]" className="p-6">
-            <p className="mb-1 font-[var(--font-code)] text-[0.58rem] text-[var(--color-accent-bright)]">tip 03</p>
+            <p className="mb-1 font-[var(--font-code)] text-[0.75rem] text-[var(--color-accent-bright)]">tip 03</p>
             <p className="mb-4 font-[var(--font-display)] text-sm font-[300] tracking-[-0.02em] text-[var(--color-text)] text-bevel-strong">
               text-bevel on all glass text
             </p>
             <TipTextBevel />
-            <p className="mt-4 text-[0.60rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
+            <p className="mt-4 text-[0.75rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
               <code className="text-[var(--color-accent-bright)]">text-bevel</code> adds a 1 px drop-shadow below and a subtle white counter-shadow above. On frosted surfaces the difference is significant — especially for small labels. Use <code className="text-[var(--color-accent-bright)]">text-bevel-strong</code> on headings.
             </p>
           </GlassPanel>
 
           <GlassPanel intensity="subtle" rounded="rounded-[1.8rem]" className="p-6">
-            <p className="mb-1 font-[var(--font-code)] text-[0.58rem] text-[var(--color-accent-bright)]">tip 04</p>
+            <p className="mb-1 font-[var(--font-code)] text-[0.75rem] text-[var(--color-accent-bright)]">tip 04</p>
             <p className="mb-4 font-[var(--font-display)] text-sm font-[300] tracking-[-0.02em] text-[var(--color-text)] text-bevel-strong">
               overflow:hidden is not optional
             </p>
             <TipOverflow />
-            <p className="mt-4 text-[0.60rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
+            <p className="mt-4 text-[0.75rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
               Corner glow divs are intentionally oversized — the top-right glow is <code className="text-[var(--color-accent-bright)]">28rem × 58rem</code>. Without <code className="text-[var(--color-accent-bright)]">overflow:hidden</code> they bleed into surrounding layout. GlassPanel adds it automatically; the manual pattern requires it explicitly.
             </p>
           </GlassPanel>
 
           <GlassPanel intensity="subtle" rounded="rounded-[1.8rem]" className="p-6">
-            <p className="mb-1 font-[var(--font-code)] text-[0.58rem] text-[var(--color-accent-bright)]">tip 05</p>
+            <p className="mb-1 font-[var(--font-code)] text-[0.75rem] text-[var(--color-accent-bright)]">tip 05</p>
             <p className="mb-4 font-[var(--font-display)] text-sm font-[300] tracking-[-0.02em] text-[var(--color-text)] text-bevel-strong">
               backdrop-filter needs a backdrop
             </p>
             <TipBackdropBg />
-            <p className="mt-4 text-[0.60rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
+            <p className="mt-4 text-[0.75rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
               <code className="text-[var(--color-accent-bright)]">backdrop-filter: blur()</code> blurs what exists <em>behind</em> the element. On a flat solid background there is nothing to blur. The effect requires a rich gradient or image behind it — this is why <code className="text-[var(--color-accent-bright)]">background-attachment: fixed</code> on the body is essential.
             </p>
           </GlassPanel>
 
           <GlassPanel intensity="subtle" rounded="rounded-[1.8rem]" className="p-6">
-            <p className="mb-1 font-[var(--font-code)] text-[0.58rem] text-[var(--color-accent-bright)]">tip 06</p>
+            <p className="mb-1 font-[var(--font-code)] text-[0.75rem] text-[var(--color-accent-bright)]">tip 06</p>
             <p className="mb-4 font-[var(--font-display)] text-sm font-[300] tracking-[-0.02em] text-[var(--color-text)] text-bevel-strong">
               Specular reflection via cursor tracking
             </p>
             <TipCursorLight />
-            <p className="mt-4 text-[0.60rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
+            <p className="mt-4 text-[0.75rem] leading-5 text-[var(--color-text-subtle)] text-bevel">
               Track cursor position as a percentage of the panel's bounding rect. Feed it into a <code className="text-[var(--color-accent-bright)]">radial-gradient(at X% Y%)</code> with <code className="text-[var(--color-accent-bright)]">mix-blend-mode: screen</code>. Invert the coordinates for the shadow. Both are <code className="text-[var(--color-accent-bright)]">opacity: 0</code> at rest, fading in on hover — no jump when the cursor first enters.
             </p>
           </GlassPanel>
@@ -1011,7 +975,7 @@ const GlassShowcase: React.FC = () => {
 
           {/* 1 — Background */}
           <div>
-            <p className="mb-4 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Background</p>
+            <p className="mb-4 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Background</p>
             <div className="grid grid-cols-2 gap-3">
               <DoDontCard ok label="Rich gradient">
                 <div className="relative flex h-28 items-center justify-center overflow-hidden rounded-[1.4rem]"
@@ -1019,7 +983,7 @@ const GlassShowcase: React.FC = () => {
                   <div className="relative overflow-hidden rounded-[0.8rem] px-3 py-2"
                     style={{ background: 'oklch(0.20 0.024 254 / 0.45)', backdropFilter: 'blur(20px)', border: '1px solid oklch(0.48 0.06 248 / 0.28)' }}>
                     <div className="absolute inset-x-0 top-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, oklch(0.82 0.1 230 / 0.45), transparent)' }} />
-                    <p className="text-[0.58rem] text-[var(--color-text)] text-bevel-strong">Glass panel</p>
+                    <p className="text-[0.75rem] text-[var(--color-text)] text-bevel-strong">Glass panel</p>
                   </div>
                 </div>
               </DoDontCard>
@@ -1027,7 +991,7 @@ const GlassShowcase: React.FC = () => {
                 <div className="relative flex h-28 items-center justify-center overflow-hidden rounded-[1.4rem]" style={{ background: 'oklch(0.24 0 0)' }}>
                   <div className="relative overflow-hidden rounded-[0.8rem] px-3 py-2"
                     style={{ background: 'oklch(0.20 0.024 254 / 0.45)', backdropFilter: 'blur(20px)', border: '1px solid oklch(0.48 0.06 248 / 0.10)' }}>
-                    <p className="text-[0.58rem] text-[var(--color-text-subtle)] text-bevel">Invisible effect</p>
+                    <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">Invisible effect</p>
                   </div>
                 </div>
               </DoDontCard>
@@ -1036,14 +1000,14 @@ const GlassShowcase: React.FC = () => {
 
           {/* 2 — Tint opacity */}
           <div>
-            <p className="mb-4 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Tint opacity</p>
+            <p className="mb-4 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Tint opacity</p>
             <div className="grid grid-cols-2 gap-3">
               <DoDontCard ok label="0.18 screen blend">
                 <GlassPanel intensity="medium" rounded="rounded-[1.4rem]" className="relative h-28 overflow-hidden">
                   <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'oklch(0.58 0.26 290)', mixBlendMode: 'screen', opacity: 0.18 }} />
                   <div className="flex h-full flex-col justify-end p-4">
-                    <p className="text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel-strong">Tinted glass</p>
-                    <p className="text-[0.55rem] text-[var(--color-text-subtle)] text-bevel">Texture intact</p>
+                    <p className="text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel-strong">Tinted glass</p>
+                    <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">Texture intact</p>
                   </div>
                 </GlassPanel>
               </DoDontCard>
@@ -1051,8 +1015,8 @@ const GlassShowcase: React.FC = () => {
                 <GlassPanel intensity="medium" rounded="rounded-[1.4rem]" className="relative h-28 overflow-hidden">
                   <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'oklch(0.58 0.26 290)', mixBlendMode: 'screen', opacity: 0.55 }} />
                   <div className="flex h-full flex-col justify-end p-4">
-                    <p className="text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel-strong">Over-tinted</p>
-                    <p className="text-[0.55rem] text-[var(--color-text-subtle)] text-bevel">Texture is gone</p>
+                    <p className="text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel-strong">Over-tinted</p>
+                    <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">Texture is gone</p>
                   </div>
                 </GlassPanel>
               </DoDontCard>
@@ -1061,13 +1025,13 @@ const GlassShowcase: React.FC = () => {
 
           {/* 3 — Nesting order */}
           <div>
-            <p className="mb-4 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Nesting intensity</p>
+            <p className="mb-4 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Nesting intensity</p>
             <div className="grid grid-cols-2 gap-3">
               <DoDontCard ok label="Step up: subtle→strong">
                 <GlassPanel intensity="subtle" rounded="rounded-[1.4rem]" className="h-28 p-3">
                   <GlassPanel intensity="medium" rounded="rounded-[1rem]" className="h-full p-2.5">
                     <GlassPanel intensity="strong" rounded="rounded-[0.7rem]" className="h-full flex items-center justify-center">
-                      <p className="text-[0.55rem] text-[var(--color-text-subtle)] text-bevel">Deepest</p>
+                      <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">Deepest</p>
                     </GlassPanel>
                   </GlassPanel>
                 </GlassPanel>
@@ -1076,7 +1040,7 @@ const GlassShowcase: React.FC = () => {
                 <GlassPanel intensity="strong" rounded="rounded-[1.4rem]" className="h-28 p-3">
                   <GlassPanel intensity="strong" rounded="rounded-[1rem]" className="h-full p-2.5">
                     <GlassPanel intensity="strong" rounded="rounded-[0.7rem]" className="h-full flex items-center justify-center">
-                      <p className="text-[0.55rem] text-[var(--color-text-subtle)] text-bevel">No depth</p>
+                      <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">No depth</p>
                     </GlassPanel>
                   </GlassPanel>
                 </GlassPanel>
@@ -1086,20 +1050,20 @@ const GlassShowcase: React.FC = () => {
 
           {/* 4 — text-bevel */}
           <div>
-            <p className="mb-4 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Text legibility</p>
+            <p className="mb-4 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Text legibility</p>
             <div className="grid grid-cols-2 gap-3">
               <DoDontCard ok label="text-bevel applied">
                 <GlassPanel intensity="medium" rounded="rounded-[1.4rem]" className="h-28 p-4 flex flex-col justify-center gap-1">
-                  <p className="text-[0.55rem] uppercase tracking-[0.24em] text-[var(--color-text-subtle)] text-bevel">Label</p>
+                  <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">Label</p>
                   <p className="font-[var(--font-display)] text-lg font-[200] text-[var(--color-text)] text-bevel-strong">Heading</p>
-                  <p className="text-[0.62rem] text-[var(--color-text-muted)] text-bevel">Body copy here</p>
+                  <p className="text-[0.75rem] text-[var(--color-text-muted)] text-bevel">Body copy here</p>
                 </GlassPanel>
               </DoDontCard>
               <DoDontCard ok={false} label="No bevel — flat text">
                 <GlassPanel intensity="medium" rounded="rounded-[1.4rem]" className="h-28 p-4 flex flex-col justify-center gap-1">
-                  <p className="text-[0.55rem] uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">Label</p>
+                  <p className="text-[0.75rem] text-[var(--color-text-subtle)]">Label</p>
                   <p className="font-[var(--font-display)] text-lg font-[200] text-[var(--color-text)]">Heading</p>
-                  <p className="text-[0.62rem] text-[var(--color-text-muted)]">Body copy here</p>
+                  <p className="text-[0.75rem] text-[var(--color-text-muted)]">Body copy here</p>
                 </GlassPanel>
               </DoDontCard>
             </div>
@@ -1107,19 +1071,19 @@ const GlassShowcase: React.FC = () => {
 
           {/* 5 — Border-radius consistency */}
           <div>
-            <p className="mb-4 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Nested border-radius</p>
+            <p className="mb-4 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Nested border-radius</p>
             <div className="grid grid-cols-2 gap-3">
               <DoDontCard ok label="Smaller radius inward">
                 <GlassPanel intensity="subtle" rounded="rounded-[1.6rem]" className="h-28 p-3">
                   <GlassPanel intensity="medium" rounded="rounded-[1.1rem]" className="h-full flex items-center justify-center">
-                    <p className="text-[0.58rem] text-[var(--color-text-subtle)] text-bevel">Inner panel</p>
+                    <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">Inner panel</p>
                   </GlassPanel>
                 </GlassPanel>
               </DoDontCard>
               <DoDontCard ok={false} label="Same or larger radius">
                 <GlassPanel intensity="subtle" rounded="rounded-[1.6rem]" className="h-28 p-3">
                   <GlassPanel intensity="medium" rounded="rounded-[1.8rem]" className="h-full flex items-center justify-center">
-                    <p className="text-[0.58rem] text-[var(--color-text-subtle)] text-bevel">Corners escape</p>
+                    <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">Corners escape</p>
                   </GlassPanel>
                 </GlassPanel>
               </DoDontCard>
@@ -1128,18 +1092,18 @@ const GlassShowcase: React.FC = () => {
 
           {/* 6 — Tint blend mode */}
           <div>
-            <p className="mb-4 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Colour blend mode</p>
+            <p className="mb-4 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Colour blend mode</p>
             <div className="grid grid-cols-2 gap-3">
               <DoDontCard ok label="screen — tinted glass">
                 <GlassPanel intensity="medium" rounded="rounded-[1.4rem]" className="relative h-28 overflow-hidden flex items-center justify-center">
                   <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'oklch(0.65 0.22 160)', mixBlendMode: 'screen', opacity: 0.18 }} />
-                  <p className="relative z-10 text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel-strong">Translucent tint</p>
+                  <p className="relative z-10 text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel-strong">Translucent tint</p>
                 </GlassPanel>
               </DoDontCard>
               <DoDontCard ok={false} label="normal — painted">
                 <GlassPanel intensity="medium" rounded="rounded-[1.4rem]" className="relative h-28 overflow-hidden flex items-center justify-center">
                   <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'oklch(0.65 0.22 160 / 0.55)' }} />
-                  <p className="relative z-10 text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel-strong">Opaque fill</p>
+                  <p className="relative z-10 text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel-strong">Opaque fill</p>
                 </GlassPanel>
               </DoDontCard>
             </div>
@@ -1156,7 +1120,7 @@ const GlassShowcase: React.FC = () => {
 
           {/* Master knobs */}
           <GlassPanel intensity="subtle" rounded="rounded-[1.8rem]" className="p-6">
-            <p className="mb-4 text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Master knobs · glass.ts</p>
+            <p className="mb-4 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Master knobs · glass.ts</p>
             <div className="space-y-2.5">
               {[
                 { k: 'GLASS_OPACITY', v: '0.66', note: 'background alpha multiplier' },
@@ -1166,10 +1130,10 @@ const GlassShowcase: React.FC = () => {
               ].map(({ k, v, note }) => (
                 <div key={k} className="flex items-start justify-between gap-3 border-b border-[var(--color-border)] pb-2.5 last:border-0 last:pb-0">
                   <div>
-                    <p className="font-[var(--font-code)] text-[0.68rem] text-[var(--color-accent-bright)]">{k}</p>
-                    <p className="text-[0.58rem] text-[var(--color-text-subtle)] text-bevel">{note}</p>
+                    <p className="font-[var(--font-code)] text-[0.8125rem] text-[var(--color-accent-bright)]">{k}</p>
+                    <p className="text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">{note}</p>
                   </div>
-                  <span className="shrink-0 font-[var(--font-code)] text-[0.68rem] text-[var(--color-text-muted)]">{v}</span>
+                  <span className="shrink-0 font-[var(--font-code)] text-[0.8125rem] text-[var(--color-text-muted)]">{v}</span>
                 </div>
               ))}
             </div>
@@ -1177,7 +1141,7 @@ const GlassShowcase: React.FC = () => {
 
           {/* Intensity alphas */}
           <GlassPanel intensity="subtle" rounded="rounded-[1.8rem]" className="p-6">
-            <p className="mb-4 text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Intensity base alphas</p>
+            <p className="mb-4 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Intensity base alphas</p>
             <div className="space-y-2">
               {[
                 { label: 'subtle',  bg: '0.17', border: '0.20', shimmer: '0.24' },
@@ -1186,16 +1150,16 @@ const GlassShowcase: React.FC = () => {
               ].map(({ label, bg, border, shimmer }) => (
                 <div key={label} className="rounded-[0.8rem] border border-[var(--color-border)] px-3.5 py-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)] text-bevel">{label}</span>
+                    <span className="text-[0.75rem] font-semibold text-[var(--color-text-muted)] text-bevel">{label}</span>
                   </div>
-                  <div className="mt-1.5 flex gap-3 text-[0.56rem] text-[var(--color-text-subtle)] text-bevel">
+                  <div className="mt-1.5 flex gap-3 text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">
                     <span>bg <code className="font-[var(--font-code)] text-[var(--color-accent-bright)]">{bg}</code></span>
                     <span>border <code className="font-[var(--font-code)] text-[var(--color-accent-bright)]">{border}</code></span>
                     <span>shimmer <code className="font-[var(--font-code)] text-[var(--color-accent-bright)]">{shimmer}</code></span>
                   </div>
                 </div>
               ))}
-              <p className="pt-1 text-[0.56rem] leading-4 text-[var(--color-text-subtle)] text-bevel">
+              <p className="pt-1 text-[0.75rem] leading-4 text-[var(--color-text-subtle)] text-bevel">
                 All multiplied by <code className="font-[var(--font-code)] text-[var(--color-accent-bright)]">GLASS_OPACITY</code> at runtime.
               </p>
             </div>
@@ -1203,7 +1167,7 @@ const GlassShowcase: React.FC = () => {
 
           {/* Rules & colour tokens */}
           <GlassPanel intensity="subtle" rounded="rounded-[1.8rem]" className="p-6">
-            <p className="mb-4 text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Rules to live by</p>
+            <p className="mb-4 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Rules to live by</p>
             <ul className="space-y-2.5">
               {[
                 { rule: 'overflow:hidden on every panel', why: 'Glow divs are oversized by design' },
@@ -1214,8 +1178,8 @@ const GlassShowcase: React.FC = () => {
                 { rule: 'backdrop-filter + background together', why: 'BD-filter needs something behind it' },
               ].map(({ rule, why }) => (
                 <li key={rule} className="border-b border-[var(--color-border)] pb-2.5 last:border-0 last:pb-0">
-                  <p className="text-[0.62rem] font-semibold text-[var(--color-text)] text-bevel">{rule}</p>
-                  <p className="mt-0.5 text-[0.56rem] text-[var(--color-text-subtle)] text-bevel">{why}</p>
+                  <p className="text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel">{rule}</p>
+                  <p className="mt-0.5 text-[0.75rem] text-[var(--color-text-subtle)] text-bevel">{why}</p>
                 </li>
               ))}
             </ul>
@@ -1224,6 +1188,7 @@ const GlassShowcase: React.FC = () => {
         </div>
       </Section>
 
+      </div>
     </div>
   </div>
   );
@@ -1231,28 +1196,18 @@ const GlassShowcase: React.FC = () => {
 
 // ── Small layout helpers ──────────────────────────────────────────────────────
 
-const Section: React.FC<React.PropsWithChildren<{ label: string; sub: string; light?: boolean }>> = ({ label, sub, light, children }) => (
-  <section className="mb-20">
-    <div className="mb-7">
-      <p
-        className="text-[0.68rem] font-semibold uppercase tracking-[0.34em]"
-        style={{ color: light ? 'oklch(0.45 0.06 55)' : 'var(--color-text-subtle)' }}
-      >
-        {label}
-      </p>
-      <p
-        className="mt-1 text-sm"
-        style={{ color: light ? 'oklch(0.36 0.04 50)' : 'var(--color-text-muted)' }}
-      >
-        {sub}
-      </p>
+const Section: React.FC<React.PropsWithChildren<{ label: string; sub: string; light?: boolean }>> = ({ label, sub, children }) => (
+  <section className="docs-section">
+    <div className="mb-[var(--space-8)]">
+      <h2 className="glass-h2">{label.replace(/^\d+\s*—\s*/, '')}</h2>
+      {sub && <p className="glass-lede mt-[var(--space-3)]">{sub}</p>}
     </div>
     {children}
   </section>
 );
 
 const GlowLabel: React.FC<React.PropsWithChildren> = ({ children }) => (
-  <p className="text-[0.62rem] font-semibold uppercase tracking-[0.30em] text-[var(--color-text-subtle)] text-bevel">
+  <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
     {children}
   </p>
 );

@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { GlassPanel, GLASS_BLUR } from 'glass-design-system';
+import { PageHeader } from '../components/Page';
 
 // ── Layout helpers ────────────────────────────────────────────────────────────
 
 const Section: React.FC<React.PropsWithChildren<{ label: string; sub?: string }>> = ({ label, sub, children }) => (
-  <section className="mb-24">
-    <div className="mb-8">
-      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] text-[var(--color-text-subtle)] text-bevel">
-        {label}
-      </p>
-      {sub && <p className="mt-1 text-sm leading-6 text-[var(--color-text-muted)] text-bevel">{sub}</p>}
+  <section className="docs-section">
+    <div className="mb-[var(--space-8)]">
+      <h2 className="glass-h2">{label.replace(/^\d+\s*—\s*/, '')}</h2>
+      {sub && <p className="glass-lede mt-[var(--space-3)]">{sub}</p>}
     </div>
     {children}
   </section>
@@ -22,7 +20,7 @@ const Rule: React.FC = () => (
 
 const Mono: React.FC<React.PropsWithChildren> = ({ children }) => (
   <code
-    className="text-[0.62rem] text-[var(--color-accent-bright)]"
+    className="text-[0.75rem] text-[var(--color-accent-bright)]"
     style={{ fontFamily: 'var(--font-code)' }}
   >
     {children}
@@ -125,7 +123,7 @@ const HueChip: React.FC<{
         >
           {label}
         </p>
-        <p className="relative z-10 mt-1 font-[var(--font-code)] text-[0.58rem]" style={{ color: `${vivid.replace(')', ' / 0.80)')}` }}>
+        <p className="relative z-10 mt-1 font-[var(--font-code)] text-[0.75rem]" style={{ color: `${vivid.replace(')', ' / 0.80)')}` }}>
           {hue}°
         </p>
       </div>
@@ -157,7 +155,7 @@ const GlassOnColor: React.FC<{
     <div className="relative z-10 p-5">
       {/* Stage label */}
       <p
-        className="mb-4 text-[0.60rem] font-semibold uppercase tracking-[0.30em] text-bevel"
+        className="mb-4 text-[0.75rem] font-semibold text-bevel"
         style={{ color: accent }}
       >
         {label}
@@ -185,7 +183,7 @@ const GlassOnColor: React.FC<{
                 className="pointer-events-none absolute inset-x-0 top-0 h-px"
                 style={{ background: `linear-gradient(90deg, transparent, oklch(0.82 0.1 230 / ${borderAlpha[intensity] * 0.80}), transparent)` }}
               />
-              <p className="relative z-10 text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-bevel" style={{ color: 'oklch(0.82 0.025 255)' }}>
+              <p className="relative z-10 text-[0.75rem] font-semibold text-bevel" style={{ color: 'oklch(0.82 0.025 255)' }}>
                 {intensity}
               </p>
               <p className="relative z-10 mt-1.5 font-[var(--font-display)] text-lg font-[300] tracking-[-0.03em] text-bevel-strong" style={{ color: 'oklch(0.97 0.006 255)' }}>
@@ -264,36 +262,12 @@ const ColorShowcase: React.FC = () => {
 
   return (
     <div className="relative min-h-screen">
-      <div
-        className="mx-auto px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,6vw,5rem)]"
-        style={{ maxWidth: '132rem' }}
-      >
-
-        {/* Back nav */}
-        <Link
-          to="/"
-          className="mb-14 inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] transition duration-200 hover:text-[var(--color-text-muted)]"
-        >
-          ← Back
-        </Link>
-
-        {/* Hero */}
-        <div className="mb-24">
-          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.42em] text-[var(--color-text-subtle)]">
-            Design system
-          </p>
-          <h1 className="mt-3 font-[var(--font-display)] text-[clamp(3.5rem,10vw,7rem)] font-[200] leading-[0.9] tracking-[-0.07em] text-[var(--color-text)] text-bevel-strong">
-            Colour &amp; Glass
-          </h1>
-          <p className="mt-6 max-w-2xl text-sm leading-7 text-[var(--color-text-muted)]">
-            How the frosted-glass material interacts with colour. Every section places
-            glass panels directly on saturated backgrounds so you can observe how{' '}
-            <code className="font-[var(--font-code)] text-[0.85em] text-[var(--color-accent-bright)]">
-              backdrop-filter: blur()
-            </code>{' '}
-            samples, averages, and transforms the colour beneath it.
-          </p>
-        </div>
+      <PageHeader
+        wide
+        title="Colour on glass"
+        lede={<>How the frosted material treats colour. Each panel sits straight on a saturated backdrop, so you can see how <code className="glass-code">backdrop-filter: blur()</code> samples, averages and softens what is underneath.</>}
+      />
+      <div className="glass-container glass-container--wide">
 
         {/* ══════════════════════════════════════════════════════════════
             § 00 — Hue spectrum
@@ -356,12 +330,12 @@ const ColorShowcase: React.FC = () => {
                 opacity: 0.6,
               }}
             />
-            <p className="relative z-10 mb-8 text-[0.68rem] font-semibold uppercase tracking-[0.36em] text-bevel" style={{ color: 'oklch(0.75 0.14 225)' }}>
+            <p className="relative z-10 mb-8 text-[0.8125rem] font-semibold text-bevel" style={{ color: 'oklch(0.75 0.14 225)' }}>
               Tricolour mix · Blue + Violet + Teal
             </p>
             <div className="relative z-10 grid grid-cols-1 gap-5 sm:grid-cols-3">
               <GlassPanel intensity="subtle" topGlow rounded="rounded-[1.8rem]" className="p-6">
-                <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Subtle</p>
+                <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Subtle</p>
                 <p className="mt-3 font-[var(--font-display)] text-2xl font-[250] tracking-[-0.04em] text-[var(--color-text)] text-bevel-strong">
                   Airy glass
                 </p>
@@ -370,7 +344,7 @@ const ColorShowcase: React.FC = () => {
                 </p>
               </GlassPanel>
               <GlassPanel intensity="medium" topGlow bottomGlow rounded="rounded-[1.8rem]" className="p-6">
-                <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Medium</p>
+                <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Medium</p>
                 <p className="mt-3 font-[var(--font-display)] text-2xl font-[250] tracking-[-0.04em] text-[var(--color-text)] text-bevel-strong">
                   Balanced glass
                 </p>
@@ -379,7 +353,7 @@ const ColorShowcase: React.FC = () => {
                 </p>
               </GlassPanel>
               <GlassPanel intensity="strong" topGlow rounded="rounded-[1.8rem]" className="p-6">
-                <p className="text-[0.60rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">Strong</p>
+                <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Strong</p>
                 <p className="mt-3 font-[var(--font-display)] text-2xl font-[250] tracking-[-0.04em] text-[var(--color-text)] text-bevel-strong">
                   Dense glass
                 </p>
@@ -405,7 +379,7 @@ const ColorShowcase: React.FC = () => {
                 key={hue}
                 type="button"
                 onClick={() => setActiveHue(hue)}
-                className="relative overflow-hidden rounded-full px-4 py-2 text-[0.60rem] font-semibold uppercase tracking-[0.20em] transition duration-200"
+                className="relative overflow-hidden rounded-full px-4 py-2 text-[0.75rem] font-semibold transition duration-200"
                 style={{
                   background: activeHue === hue
                     ? `oklch(${L} ${C} ${hue} / 0.28)`
@@ -431,7 +405,7 @@ const ColorShowcase: React.FC = () => {
 
             {/* Chroma scale */}
             <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8">
-              <p className="mb-2 text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">
+              <p className="mb-2 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
                 Chroma (saturation)
               </p>
               <p className="mb-6 text-xs text-[var(--color-text-muted)] text-bevel">
@@ -448,7 +422,7 @@ const ColorShowcase: React.FC = () => {
 
             {/* Lightness scale */}
             <GlassPanel intensity="medium" topGlow bottomGlow rounded="rounded-[2rem]" className="p-8">
-              <p className="mb-2 text-[0.62rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">
+              <p className="mb-2 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
                 Lightness
               </p>
               <p className="mb-6 text-xs text-[var(--color-text-muted)] text-bevel">
@@ -526,7 +500,7 @@ const ColorShowcase: React.FC = () => {
                 />
                 <div className="relative z-10 p-5">
                   <GlassPanel intensity="medium" topGlow rounded="rounded-[1.4rem]" className="p-5">
-                    <p className="text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">
+                    <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
                       {name}
                     </p>
                     <p
@@ -537,10 +511,10 @@ const ColorShowcase: React.FC = () => {
                     </p>
                     <Mono>{value}</Mono>
                     <Rule />
-                    <p className="text-[0.60rem] leading-5 text-[var(--color-text-muted)] text-bevel">
+                    <p className="text-[0.75rem] leading-5 text-[var(--color-text-muted)] text-bevel">
                       {role}
                     </p>
-                    <p className="mt-3 font-[var(--font-code)] text-[0.58rem] text-[var(--color-text-subtle)]">
+                    <p className="mt-3 font-[var(--font-code)] text-[0.75rem] text-[var(--color-text-subtle)]">
                       var({token})
                     </p>
                   </GlassPanel>

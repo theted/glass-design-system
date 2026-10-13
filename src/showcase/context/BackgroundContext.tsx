@@ -1,11 +1,15 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useMemo,
   useState,
   type PropsWithChildren,
 } from 'react';
-import { PATTERNS, type PatternId, BG_PRESETS, makeHueGradient, type BgId } from 'glass-design-system';
+import {
+  PATTERNS, type PatternId, BG_PRESETS, makeHueGradient, type BgId,
+  GLASS_DEFAULTS, type GlassConfig,
+} from 'glass-design-system';
 
 export { PATTERNS, type PatternId, BG_PRESETS, makeHueGradient, type BgId };
 
@@ -23,6 +27,10 @@ interface BackgroundState {
   activeGradient: string;
   activePattern: (typeof PATTERNS)[number];
   isDawn: boolean;
+  /** The site-wide material knobs, fed to the GlassProvider around every page. */
+  glass: GlassConfig;
+  setGlass: (patch: Partial<GlassConfig>) => void;
+  resetGlass: () => void;
   setBgId: (id: BgId) => void;
   setCustomHue: (hue: number | null) => void;
   setBackdropIntensity: (v: number) => void;
@@ -40,6 +48,9 @@ export function BackgroundProvider({ children }: PropsWithChildren) {
   const [patternId, setPatternId] = useState<PatternId>('none');
   const [showCustom, setShowCustom] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [glass, setGlassState] = useState<GlassConfig>(GLASS_DEFAULTS);
+  const setGlass = useCallback((patch: Partial<GlassConfig>) => setGlassState((g) => ({ ...g, ...patch })), []);
+  const resetGlass = useCallback(() => setGlassState(GLASS_DEFAULTS), []);
 
   const activeGradient = useMemo(
     () => (customHue !== null
@@ -70,6 +81,9 @@ export function BackgroundProvider({ children }: PropsWithChildren) {
     activeGradient,
     activePattern,
     isDawn: bgId === 'dawn' && customHue === null,
+    glass,
+    setGlass,
+    resetGlass,
     setBgId,
     setCustomHue,
     setBackdropIntensity,
@@ -77,7 +91,7 @@ export function BackgroundProvider({ children }: PropsWithChildren) {
     setShowCustom,
     handleCopy,
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [bgId, customHue, backdropIntensity, patternId, showCustom, copied, activeGradient, activePattern]);
+  }), [bgId, customHue, backdropIntensity, patternId, showCustom, copied, activeGradient, activePattern, glass, setGlass, resetGlass]);
 
   return (
     <BackgroundContext.Provider value={value}>
