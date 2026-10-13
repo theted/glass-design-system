@@ -8,45 +8,44 @@ import {
   GlassInput,
   GlassInputWrap,
   GlassTextarea,
+  GlassSwitch,
+  GlassSlider,
+  GlassSegmented,
+  GlassToast,
+  GlassOrbs,
   useGlass,
   getGlassStyles,
   GLASS_DEFAULTS,
   type GlassIntensity,
   type GlassPillSize,
   type GlassPillVariant,
+  type GlassToastTone,
 } from 'glass-design-system';
+import { PageHeader, JumpLinks, CodeBlock } from '../components/Page';
 import { useBackground } from '../context/BackgroundContext';
 
 // ── Shared layout atoms ───────────────────────────────────────────────────────
 
 const PageSection: React.FC<React.PropsWithChildren<{ id: string }>> = ({ id, children }) => (
-  <section id={id} className="mb-32 scroll-mt-24">
+  <section id={id} className="docs-section">
     {children}
   </section>
 );
 
 const SectionLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <p className="mb-3 text-[0.68rem] font-semibold uppercase tracking-[0.38em] text-[var(--color-text-subtle)] text-bevel">
-    {children}
-  </p>
+  <p className="glass-small mb-[var(--space-2)]">{children}</p>
 );
 
 const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <h2 className="font-[var(--font-display)] text-[clamp(2rem,5vw,3.5rem)] font-[200] leading-[1.05] tracking-[-0.05em] text-[var(--color-text)] text-bevel-strong">
-    {children}
-  </h2>
+  <h2 className="glass-h2">{children}</h2>
 );
 
 const SectionSub: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--color-text-muted)] text-bevel">
-    {children}
-  </p>
+  <p className="glass-lede mt-[var(--space-4)]">{children}</p>
 );
 
 const DemoLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <p className="mb-5 text-[0.62rem] font-semibold uppercase tracking-[0.30em] text-[var(--color-text-subtle)] text-bevel">
-    {children}
-  </p>
+  <h3 className="glass-h4 mb-[var(--space-6)]">{children}</h3>
 );
 
 // Code token
@@ -84,7 +83,7 @@ const PropsTable: React.FC<{ rows: PropRow[] }> = ({ rows }) => (
         <thead>
           <tr className="border-b border-[var(--color-border)]">
             {['Prop', 'Type', 'Default', 'Description'].map((h) => (
-              <th key={h} className="px-5 py-3.5 text-[0.60rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">
+              <th key={h} className="px-5 py-3.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
                 {h}
               </th>
             ))}
@@ -118,10 +117,10 @@ const DoDont: React.FC<{
   do: { label: string; children: React.ReactNode };
   dont: { label: string; children: React.ReactNode };
 }> = ({ do: doItem, dont: dontItem }) => (
-  <div className="grid gap-4 sm:grid-cols-2">
+  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
     {/* Do */}
     <div className="relative pt-4">
-      <div className="absolute left-3 top-0 z-10 inline-flex items-center gap-1.5 rounded-full border border-[oklch(0.76_0.16_160_/_0.45)] bg-[oklch(0.76_0.16_160_/_0.10)] px-2.5 py-0.5 text-[0.52rem] font-bold uppercase tracking-[0.20em] text-[oklch(0.76_0.16_160)]">
+      <div className="absolute left-3 top-0 z-10 inline-flex items-center gap-1.5 rounded-full border border-[oklch(0.76_0.16_160_/_0.45)] bg-[oklch(0.76_0.16_160_/_0.10)] px-2.5 py-0.5 text-[0.75rem] font-bold text-[oklch(0.76_0.16_160)]">
         ✓ {doItem.label}
       </div>
       <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-6 pt-8">
@@ -130,7 +129,7 @@ const DoDont: React.FC<{
     </div>
     {/* Don't */}
     <div className="relative pt-4">
-      <div className="absolute left-3 top-0 z-10 inline-flex items-center gap-1.5 rounded-full border border-[oklch(0.65_0.19_25_/_0.45)] bg-[oklch(0.65_0.19_25_/_0.10)] px-2.5 py-0.5 text-[0.52rem] font-bold uppercase tracking-[0.20em] text-[oklch(0.65_0.19_25)]">
+      <div className="absolute left-3 top-0 z-10 inline-flex items-center gap-1.5 rounded-full border border-[oklch(0.65_0.19_25_/_0.45)] bg-[oklch(0.65_0.19_25_/_0.10)] px-2.5 py-0.5 text-[0.75rem] font-bold text-[oklch(0.65_0.19_25)]">
         ✗ {dontItem.label}
       </div>
       <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-6 pt-8">
@@ -149,11 +148,11 @@ const GlassFormFieldsDemo: React.FC = () => {
   const [blur, setBlur] = useState(16);
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
       {/* Left: interactive form */}
       <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8 flex flex-col gap-6">
         <div>
-          <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">Title</p>
+          <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Title</p>
           <GlassInput
             type="text"
             placeholder="My awesome snippet…"
@@ -163,7 +162,7 @@ const GlassFormFieldsDemo: React.FC = () => {
           />
         </div>
         <div>
-          <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">Description</p>
+          <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Description</p>
           <GlassTextarea
             placeholder="What does this snippet do?"
             rows={4}
@@ -173,7 +172,7 @@ const GlassFormFieldsDemo: React.FC = () => {
           />
         </div>
         <div>
-          <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">Language</p>
+          <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Language</p>
           <GlassInputWrap fieldBlur={blur}>
             <select
               value={lang}
@@ -192,7 +191,7 @@ const GlassFormFieldsDemo: React.FC = () => {
       <div className="flex flex-col gap-6">
         {/* Blur knob */}
         <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-5">
-          <p className="mb-3 text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">
+          <p className="mb-3 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             Field blur — <span className="text-[var(--color-accent-bright)]">{blur}px</span>
           </p>
           <input
@@ -200,25 +199,25 @@ const GlassFormFieldsDemo: React.FC = () => {
             onChange={(e) => setBlur(Number(e.target.value))}
             className="w-full accent-[var(--color-accent)]"
           />
-          <p className="mt-2 text-[0.62rem] leading-5 text-[var(--color-text-muted)]">
+          <p className="mt-2 text-[0.75rem] leading-5 text-[var(--color-text-muted)]">
             Drag to see how <Code>fieldBlur</Code> scales the backdrop blur from sharp (0) to frosted (40).
           </p>
         </GlassPanel>
 
         {/* State reference */}
         <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-5 flex flex-col gap-4">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Field states</p>
+          <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Field states</p>
           <div className="flex flex-col gap-3">
             {/* idle */}
             <div>
-              <p className="mb-1 text-[0.58rem] text-[var(--color-text-subtle)]">Idle</p>
+              <p className="mb-1 text-[0.75rem] text-[var(--color-text-subtle)]">Idle</p>
               <GlassInputWrap focused={false} fieldBlur={blur}>
                 <input readOnly value="" placeholder="Idle — no interaction" className="block w-full appearance-none bg-transparent px-4 py-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-subtle)] focus:outline-none" />
               </GlassInputWrap>
             </div>
             {/* focused */}
             <div>
-              <p className="mb-1 text-[0.58rem] text-[var(--color-text-subtle)]">Focused (simulated)</p>
+              <p className="mb-1 text-[0.75rem] text-[var(--color-text-subtle)]">Focused (simulated)</p>
               <GlassInputWrap focused={true} fieldBlur={blur}>
                 <input readOnly value="" placeholder="Active — focus glow + bright border" className="block w-full appearance-none bg-transparent px-4 py-3 text-sm text-[var(--color-text)] placeholder:text-[var(--color-text-subtle)] focus:outline-none" />
               </GlassInputWrap>
@@ -228,22 +227,22 @@ const GlassFormFieldsDemo: React.FC = () => {
 
         {/* Input types */}
         <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-5 flex flex-col gap-3">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Input types</p>
+          <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Input types</p>
           <div className="flex flex-col gap-3">
             <div>
-              <p className="mb-1 text-[0.58rem] text-[var(--color-text-subtle)]">Search</p>
+              <p className="mb-1 text-[0.75rem] text-[var(--color-text-subtle)]">Search</p>
               <GlassInput type="search" placeholder="Search snippets…" fieldBlur={blur} />
             </div>
             <div>
-              <p className="mb-1 text-[0.58rem] text-[var(--color-text-subtle)]">Email</p>
+              <p className="mb-1 text-[0.75rem] text-[var(--color-text-subtle)]">Email</p>
               <GlassInput type="email" placeholder="user@example.com" fieldBlur={blur} />
             </div>
             <div>
-              <p className="mb-1 text-[0.58rem] text-[var(--color-text-subtle)]">Password</p>
+              <p className="mb-1 text-[0.75rem] text-[var(--color-text-subtle)]">Password</p>
               <GlassInput type="password" placeholder="Enter password" fieldBlur={blur} />
             </div>
             <div>
-              <p className="mb-1 text-[0.58rem] text-[var(--color-text-subtle)]">Number</p>
+              <p className="mb-1 text-[0.75rem] text-[var(--color-text-subtle)]">Number</p>
               <GlassInput type="number" placeholder="0" fieldBlur={blur} />
             </div>
           </div>
@@ -269,7 +268,7 @@ const IntensityCard: React.FC<{ intensity: GlassIntensity; active: boolean; onCl
     style={{ outline: active ? '2px solid oklch(0.71 0.17 244 / 0.6)' : undefined }}
     onClick={onClick}
   >
-    <p className="text-[0.58rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">
+    <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
       intensity
     </p>
     <p className="mt-1.5 font-[var(--font-display)] text-2xl font-[200] tracking-[-0.04em] text-[var(--color-text)] text-bevel-strong">
@@ -305,13 +304,13 @@ const OverflowDemo: React.FC = () => {
         <p className="relative z-10 text-xs font-semibold text-[var(--color-text)] text-bevel-strong">
           {clipped ? 'overflow: hidden — glow contained' : 'overflow: visible — glow bleeds into layout'}
         </p>
-        <p className="relative z-10 mt-1 text-[0.62rem] leading-5 text-[var(--color-text-muted)] text-bevel">
+        <p className="relative z-10 mt-1 text-[0.75rem] leading-5 text-[var(--color-text-muted)] text-bevel">
           The top-right corner glow div is intentionally oversized. Without <Code>overflow-hidden</Code>, it spills into surrounding content.
         </p>
       </div>
       <button
         onClick={() => setClipped((v) => !v)}
-        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface)] hover:text-[var(--color-text)]"
+        className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] py-2 text-[0.75rem] font-semibold text-[var(--color-text-muted)] transition duration-200 hover:bg-[var(--color-surface)] hover:text-[var(--color-text)]"
       >
         {clipped ? 'Remove overflow: hidden' : 'Restore overflow: hidden'}
       </button>
@@ -326,13 +325,13 @@ const ConfigReadout: React.FC = () => {
   const config = useGlass();
   return (
     <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-5">
-      <p className="mb-3 text-[0.58rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">
+      <p className="mb-3 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
         Inherited config from <Code>useGlass()</Code>
       </p>
       <div className="grid grid-cols-2 gap-x-6 gap-y-2">
         {(Object.entries(config) as [string, number][]).map(([k, v]) => (
           <div key={k} className="flex items-baseline justify-between border-b border-[var(--color-border)] pb-1.5">
-            <span className="font-[var(--font-code)] text-[0.65rem] text-[var(--color-accent-bright)]">{k}</span>
+            <span className="font-[var(--font-code)] text-[0.8125rem] text-[var(--color-accent-bright)]">{k}</span>
             <span className="font-[var(--font-display)] text-sm font-[300] text-[var(--color-text)]">{v}</span>
           </div>
         ))}
@@ -356,10 +355,10 @@ const ProviderDemo: React.FC = () => {
 
   return (
     <GlassProvider blur={blur} opacity={opacity} lightAlpha={lightAlpha} shadowAlpha={shadowAlpha}>
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Sliders */}
         <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.8rem]" className="p-6">
-          <p className="mb-5 text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+          <p className="mb-5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             GlassProvider config
           </p>
           <div className="space-y-5">
@@ -383,7 +382,7 @@ const ProviderDemo: React.FC = () => {
               </div>
             ))}
           </div>
-          <p className="mt-5 text-[0.60rem] leading-5 text-[var(--color-text-subtle)]">
+          <p className="mt-5 text-[0.75rem] leading-5 text-[var(--color-text-subtle)]">
             These props cascade to all <Code>GlassPanel</Code> children via React context.
           </p>
         </GlassPanel>
@@ -391,7 +390,7 @@ const ProviderDemo: React.FC = () => {
         {/* Live preview */}
         <div className="space-y-4">
           <GlassPanel intensity="medium" topGlow rounded="rounded-[1.8rem]" className="p-6">
-            <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
               medium — hover me
             </p>
             <p className="mt-2 font-[var(--font-display)] text-xl font-[200] tracking-[-0.03em] text-[var(--color-text)] text-bevel-strong">
@@ -402,7 +401,7 @@ const ProviderDemo: React.FC = () => {
             </p>
           </GlassPanel>
           <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.8rem]" className="p-5">
-            <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
               subtle — same provider
             </p>
             <p className="mt-1.5 text-xs leading-5 text-[var(--color-text-muted)] text-bevel">
@@ -419,7 +418,7 @@ const ProviderDemo: React.FC = () => {
 // Nested provider demo
 const NestedProviderDemo: React.FC = () => (
   <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8">
-    <p className="mb-1 text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">
+    <p className="mb-1 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
       Outer scope — default config
     </p>
     <p className="mb-6 text-xs text-[var(--color-text-muted)] text-bevel">
@@ -427,7 +426,7 @@ const NestedProviderDemo: React.FC = () => (
     </p>
     <GlassProvider blur={24} opacity={0.45}>
       <GlassPanel intensity="medium" topGlow={false} rounded="rounded-[1.4rem]" className="p-6">
-        <p className="mb-1 text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[oklch(0.75_0.16_244)] text-bevel">
+        <p className="mb-1 text-[0.75rem] font-semibold text-[oklch(0.75_0.16_244)] text-bevel">
           Inner scope — <Code>{'<GlassProvider blur={24} opacity={0.45}>'}</Code>
         </p>
         <p className="text-xs text-[var(--color-text-muted)] text-bevel">
@@ -446,9 +445,122 @@ const NestedProviderDemo: React.FC = () => (
 // ── § GlassPill demos ─────────────────────────────────────────────────────────
 
 const SIZES: GlassPillSize[] = ['xs', 'sm', 'md', 'lg'];
-const VARIANTS: GlassPillVariant[] = ['default', 'active', 'accent'];
+const VARIANTS: GlassPillVariant[] = ['default', 'active', 'accent', 'ghost'];
 
 // ── Page ──────────────────────────────────────────────────────────────────────
+
+// ── New component demos ──────────────────────────────────────────────────────
+
+const SwitchDemo: React.FC = () => {
+  const [a, setA] = useState(true);
+  const [b, setB] = useState(false);
+  return (
+    <div className="grid grid-cols-1 gap-[var(--space-grid)] lg:grid-cols-2">
+      <GlassPanel intensity="medium" padding="md" topGlow={false}>
+        <div className="glass-stack [--stack:var(--space-4)]">
+          <GlassSwitch checked={a} onChange={setA} wrapperClassName="justify-between w-full">Email me when someone replies</GlassSwitch>
+          <GlassSwitch checked={b} onChange={setB} wrapperClassName="justify-between w-full">Show line numbers</GlassSwitch>
+          <GlassSwitch size="sm" defaultChecked wrapperClassName="justify-between w-full">Small, uncontrolled</GlassSwitch>
+          <GlassSwitch disabled wrapperClassName="justify-between w-full">Disabled</GlassSwitch>
+        </div>
+      </GlassPanel>
+      <CodeBlock>{`const [notify, setNotify] = useState(true);
+
+<GlassSwitch checked={notify} onChange={setNotify}>
+  Email me when someone replies
+</GlassSwitch>
+
+// Label elsewhere? Name it directly.
+<GlassSwitch aria-label="Line numbers" defaultChecked />`}</CodeBlock>
+    </div>
+  );
+};
+
+const SliderDemo: React.FC = () => {
+  const [blur, setBlur] = useState(40);
+  const [vol, setVol] = useState(64);
+  return (
+    <div className="grid grid-cols-1 gap-[var(--space-grid)] lg:grid-cols-2">
+      <GlassPanel intensity="medium" padding="md" topGlow={false}>
+        <div className="glass-stack [--stack:var(--space-8)]">
+          <GlassSlider label="Blur" min={0} max={80} value={blur} onChange={setBlur} format={(v) => `${v}px`} />
+          <GlassSlider label="Volume" value={vol} onChange={setVol} format={(v) => `${v}%`} />
+          <GlassSlider aria-label="Unlabelled" defaultValue={30} />
+        </div>
+      </GlassPanel>
+      <CodeBlock>{`const [blur, setBlur] = useState(40);
+
+<GlassSlider
+  label="Blur"
+  min={0}
+  max={80}
+  value={blur}
+  onChange={setBlur}
+  format={(v) => \`\${v}px\`}
+/>`}</CodeBlock>
+    </div>
+  );
+};
+
+const SegmentedDemo: React.FC = () => {
+  const [view, setView] = useState('Grid');
+  const [range, setRange] = useState('7d');
+  return (
+    <div className="grid grid-cols-1 gap-[var(--space-grid)] lg:grid-cols-2">
+      <GlassPanel intensity="medium" padding="md" topGlow={false}>
+        <div className="glass-stack [--stack:var(--space-6)] items-start">
+          <GlassSegmented aria-label="Layout" options={['Grid', 'List', 'Stream']} value={view} onChange={setView} />
+          <GlassSegmented
+            aria-label="Range"
+            size="sm"
+            options={[{ value: '24h', label: '24 hours' }, { value: '7d', label: '7 days' }, { value: '30d', label: '30 days' }]}
+            value={range}
+            onChange={setRange}
+          />
+          <div className="w-full"><GlassSegmented aria-label="Layout, full width" block options={['Grid', 'List', 'Stream']} value={view} onChange={setView} /></div>
+        </div>
+      </GlassPanel>
+      <CodeBlock>{`const [view, setView] = useState('Grid');
+
+<GlassSegmented
+  aria-label="Layout"
+  options={['Grid', 'List', 'Stream']}
+  value={view}
+  onChange={setView}
+/>`}</CodeBlock>
+    </div>
+  );
+};
+
+const ToastDemo: React.FC = () => {
+  const [tone, setTone] = useState<GlassToastTone | null>(null);
+  const [last, setLast] = useState<GlassToastTone>('success');
+  const copy: Record<GlassToastTone, string> = {
+    success: 'Snippet published.',
+    error: "Couldn't publish. Check your connection and try again.",
+    info: 'A new version of this snippet is available.',
+  };
+  const show = (t: GlassToastTone) => { setLast(t); setTone(t); };
+  return (
+    <div className="grid grid-cols-1 gap-[var(--space-grid)] lg:grid-cols-2">
+      <GlassPanel intensity="medium" padding="md" topGlow={false}>
+        <div className="glass-cluster">
+          <GlassPill onClick={() => show('success')}>Publish</GlassPill>
+          <GlassPill onClick={() => show('error')}>Fail to publish</GlassPill>
+          <GlassPill onClick={() => show('info')}>New version</GlassPill>
+        </div>
+      </GlassPanel>
+      <CodeBlock>{`const [published, setPublished] = useState(false);
+
+<GlassToast open={published} onClose={() => setPublished(false)}>
+  Snippet published.
+</GlassToast>`}</CodeBlock>
+      <GlassToast open={tone !== null} tone={tone ?? last} onClose={() => setTone(null)}>
+        {copy[tone ?? last]}
+      </GlassToast>
+    </div>
+  );
+};
 
 const ComponentDocs: React.FC = () => {
   const { isDawn } = useBackground();
@@ -457,51 +569,30 @@ const ComponentDocs: React.FC = () => {
   const textColor = isDawn ? 'oklch(0.22 0.03 50)' : undefined;
 
   return (
-    <div className="relative min-h-screen" style={{ color: textColor }}>
-      <div className="mx-auto px-[clamp(1.25rem,4vw,4rem)] py-[clamp(2rem,6vw,5rem)]" style={{ maxWidth: '96rem' }}>
-
-        {/* Back nav */}
-        <Link
-          to="/"
-          className="mb-16 inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] transition duration-200"
-          style={{ color: isDawn ? 'oklch(0.38 0.05 50)' : 'var(--color-text-subtle)' }}
-        >
-          ← Back
-        </Link>
-
-        {/* Hero */}
-        <div className="mb-20">
-          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.42em]" style={{ color: isDawn ? 'oklch(0.45 0.06 55)' : 'var(--color-text-subtle)' }}>
-            Glass Design System
-          </p>
-          <h1
-            className="mt-3 font-[var(--font-display)] text-[clamp(3rem,9vw,6rem)] font-[200] leading-[0.92] tracking-[-0.07em]"
-            style={{ color: isDawn ? 'oklch(0.18 0.04 45)' : 'var(--color-text)' }}
-          >
-            Components
-          </h1>
-          <p className="mt-5 max-w-2xl text-sm leading-7" style={{ color: isDawn ? 'oklch(0.36 0.04 50)' : 'var(--color-text-muted)' }}>
-            The full API reference for every component in the system —
-            props, intensities, variants, live examples, and rules for correct use.
-            This page is itself built with the design system.
-          </p>
-
-          {/* Quick nav */}
-          <div className="mt-8 flex flex-wrap gap-2">
-            {[
-              { label: 'GlassPanel', id: 'glass-panel' },
-              { label: 'GlassPill', id: 'glass-pill' },
-              { label: 'GlassDivider', id: 'glass-divider' },
-              { label: 'GlassProvider', id: 'glass-provider' },
-              { label: 'getGlassStyles', id: 'get-glass-styles' },
-              { label: 'Glass Form Fields', id: 'form-fields' },
-            ].map(({ label, id }) => (
-              <GlassPill key={id} size="sm" as="a" href={`#${id}`}>
-                {label}
-              </GlassPill>
-            ))}
-          </div>
-        </div>
+    <div className="relative" style={{ color: textColor }}>
+      <GlassOrbs preset="kiln" speed={10} opacity={0.45} fixed />
+      <div className="relative z-10">
+      <PageHeader
+        wide
+        title="Components"
+        lede="Props, variants, live examples and rules for every part of the system. This page is built with the parts it documents."
+      >
+        <JumpLinks
+          items={[
+            { label: 'GlassPanel', id: 'glass-panel' },
+            { label: 'GlassPill', id: 'glass-pill' },
+            { label: 'GlassSwitch', id: 'glass-switch' },
+            { label: 'GlassSlider', id: 'glass-slider' },
+            { label: 'GlassSegmented', id: 'glass-segmented' },
+            { label: 'GlassToast', id: 'glass-toast' },
+            { label: 'GlassDivider', id: 'glass-divider' },
+            { label: 'GlassProvider', id: 'glass-provider' },
+            { label: 'getGlassStyles', id: 'get-glass-styles' },
+            { label: 'Form fields', id: 'form-fields' },
+          ]}
+        />
+      </PageHeader>
+      <div className="glass-container glass-container--wide">
 
         {/* ══════════════════════════════════════════════════════ GlassPanel */}
         <PageSection id="glass-panel">
@@ -514,11 +605,11 @@ const ComponentDocs: React.FC = () => {
             <Code>{'<GlassProvider>'}</Code>.
           </SectionSub>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Intensity live demo */}
           <DemoLabel>Intensity — click to select</DemoLabel>
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {INTENSITIES.map((int) => (
               <IntensityCard
                 key={int}
@@ -531,7 +622,7 @@ const ComponentDocs: React.FC = () => {
 
           {/* Selected intensity code snippet */}
           <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.2rem]" className="mt-4 p-4">
-            <p className="font-[var(--font-code)] text-[0.72rem] text-[var(--color-text-muted)]">
+            <p className="font-[var(--font-code)] text-[0.8125rem] text-[var(--color-text-muted)]">
               <span className="text-[oklch(0.75_0.12_290)]">{'<GlassPanel'}</span>
               {' '}
               <span className="text-[var(--color-accent-bright)]">intensity</span>
@@ -554,22 +645,26 @@ const ComponentDocs: React.FC = () => {
             </p>
           </GlassPanel>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Props */}
           <DemoLabel>Props</DemoLabel>
           <PropsTable rows={[
             { name: 'intensity', type: "'subtle' | 'medium' | 'strong'", default: "'medium'", description: 'Surface opacity/blur depth. Scales proportionally against the GlassProvider config.' },
-            { name: 'topGlow', type: 'boolean', default: 'true', description: 'Renders a large soft radial glow in the top-right corner (deep blue ambient light).' },
-            { name: 'bottomGlow', type: 'boolean', default: 'false', description: 'Renders a softer counter-glow in the bottom-left corner (teal). Use on strong panels to add depth.' },
-            { name: 'rounded', type: 'string', default: "'rounded-[2.2rem]'", description: 'Tailwind border-radius class. The overflow:hidden on the wrapper clips all glows to this radius.' },
+            { name: 'padding', type: "'none' | 'sm' | 'md' | 'lg'", default: "'none'", description: 'Inner padding from the spacing scale: sm 24px, md fluid 20→40px (--space-panel), lg fluid 28→64px.' },
+            { name: 'topGlow', type: 'boolean', default: 'true', description: 'A soft warm glow in the top-right corner, where the light comes from.' },
+            { name: 'bottomGlow', type: 'boolean', default: 'false', description: 'A cobalt bounce light in the bottom-left corner. Adds depth to large or strong panes.' },
+            { name: 'tilt', type: 'boolean', default: 'false', description: 'The pane leans up to 3° away from the pointer. Off under reduced motion.' },
+            { name: 'reveal', type: 'boolean', default: 'false', description: 'Frost condenses onto the pane the first time it scrolls into view.' },
+            { name: 'spectrum', type: 'boolean', default: 'true', description: 'The faint spectral fringe just past the catch-light on the rim.' },
+            { name: 'rounded', type: 'string', default: 'none', description: 'A border-radius class. Without it the panel uses var(--radius-panel), 28px.' },
             { name: 'as', type: 'React.ElementType', default: "'div'", description: "Render as a different element — e.g. as='section', as='form', as='article'." },
-            { name: 'className', type: 'string', default: "''", description: 'Additional Tailwind classes. Padding, grid layout, and spacing all go here.' },
+            { name: 'className', type: 'string', default: "''", description: 'Additional classes for layout. Utilities override the component defaults.' },
             { name: 'style', type: 'React.CSSProperties', default: '—', description: 'Inline styles merged into the wrapper. Useful for dynamic width/height values.' },
             { name: '...rest', type: 'unknown', default: '—', description: 'All other props are spread onto the root element (onClick, data-*, aria-*, etc.).' },
           ]} />
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Do's and Don'ts */}
           <DemoLabel>Do's & Don'ts</DemoLabel>
@@ -580,15 +675,15 @@ const ComponentDocs: React.FC = () => {
                 children: (
                   <div className="space-y-2">
                     <GlassPanel intensity="strong" rounded="rounded-xl" className="p-4">
-                      <p className="text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel-strong">strong — modal / hero</p>
+                      <p className="text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel-strong">strong — modal / hero</p>
                     </GlassPanel>
                     <GlassPanel intensity="medium" rounded="rounded-xl" className="p-4">
-                      <p className="text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel">medium — card</p>
+                      <p className="text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel">medium — card</p>
                     </GlassPanel>
                     <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-xl" className="p-4">
-                      <p className="text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel">subtle — row / inline</p>
+                      <p className="text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel">subtle — row / inline</p>
                     </GlassPanel>
-                    <p className="mt-2 text-[0.60rem] leading-5 text-[var(--color-text-muted)]">Use strong for focus, medium for content, subtle for density.</p>
+                    <p className="mt-2 text-[0.75rem] leading-5 text-[var(--color-text-muted)]">Use strong for focus, medium for content, subtle for density.</p>
                   </div>
                 ),
               }}
@@ -597,8 +692,8 @@ const ComponentDocs: React.FC = () => {
                 children: (
                   <GlassPanel intensity="strong" bottomGlow rounded="rounded-xl" className="p-4">
                     <GlassPanel intensity="strong" rounded="rounded-lg" className="p-3">
-                      <p className="text-[0.60rem] font-semibold text-[var(--color-text)]">strong inside strong</p>
-                      <p className="mt-1 text-[0.58rem] text-[var(--color-text-muted)]">Compounding opacity makes everything opaque — the glass effect is lost.</p>
+                      <p className="text-[0.75rem] font-semibold text-[var(--color-text)]">strong inside strong</p>
+                      <p className="mt-1 text-[0.75rem] text-[var(--color-text-muted)]">Compounding opacity makes everything opaque — the glass effect is lost.</p>
                     </GlassPanel>
                   </GlassPanel>
                 ),
@@ -606,12 +701,12 @@ const ComponentDocs: React.FC = () => {
             />
             <DoDont
               do={{
-                label: 'Always put content in relative z-10',
+                label: 'Put content straight inside',
                 children: (
                   <div className="space-y-2">
                     <GlassPanel intensity="medium" rounded="rounded-xl" className="p-4">
-                      <p className="relative z-10 text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel-strong">Content</p>
-                      <p className="relative z-10 mt-1 text-[0.58rem] text-[var(--color-text-muted)] text-bevel">The glow divs are absolute-positioned. Give your content z-10 so it renders on top.</p>
+                      <p className="text-[0.8125rem] font-semibold text-[var(--color-text)] text-bevel-strong">Content</p>
+                      <p className="mt-1 text-[0.75rem] text-[var(--color-text-muted)] text-bevel">Glows and the specular sit beneath your content, so it needs no wrapper. Older relative z-10 wrappers still work.</p>
                     </GlassPanel>
                   </div>
                 ),
@@ -630,7 +725,7 @@ const ComponentDocs: React.FC = () => {
                 label: 'Use text-bevel for legibility',
                 children: (
                   <GlassPanel intensity="medium" rounded="rounded-xl" className="p-5">
-                    <p className="text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)] text-bevel">Label</p>
+                    <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Label</p>
                     <p className="mt-1 font-[var(--font-display)] text-2xl font-[200] tracking-[-0.04em] text-[var(--color-text)] text-bevel-strong">Title</p>
                     <p className="mt-1.5 text-xs text-[var(--color-text-muted)] text-bevel">Body copy with text-bevel.</p>
                   </GlassPanel>
@@ -640,7 +735,7 @@ const ComponentDocs: React.FC = () => {
                 label: "Don't use flat white on glass",
                 children: (
                   <GlassPanel intensity="medium" rounded="rounded-xl" className="p-5">
-                    <p className="text-[0.60rem] font-semibold uppercase tracking-[0.22em]" style={{ color: 'rgb(200, 200, 200)' }}>Label</p>
+                    <p className="text-[0.75rem] font-semibold" style={{ color: 'rgb(200, 200, 200)' }}>Label</p>
                     <p className="mt-1 font-[var(--font-display)] text-2xl font-[200] tracking-[-0.04em]" style={{ color: 'white' }}>Title</p>
                     <p className="mt-1.5 text-xs" style={{ color: 'rgb(180, 180, 180)' }}>Body copy without text-bevel — flat against the frosted surface.</p>
                   </GlassPanel>
@@ -650,7 +745,7 @@ const ComponentDocs: React.FC = () => {
           </div>
         </PageSection>
 
-        <GlassDivider className="mb-32" />
+        <GlassDivider className="mb-[calc(var(--space-section)/2)]" />
 
         {/* ══════════════════════════════════════════════════════ GlassPill */}
         <PageSection id="glass-pill">
@@ -663,7 +758,7 @@ const ComponentDocs: React.FC = () => {
             or a router <Code>Link</Code> via the <Code>as</Code> prop.
           </SectionSub>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Size demo */}
           <DemoLabel>Sizes</DemoLabel>
@@ -672,7 +767,7 @@ const ComponentDocs: React.FC = () => {
               {SIZES.map((size) => (
                 <div key={size} className="flex flex-col items-center gap-2">
                   <GlassPill size={size}>{size}</GlassPill>
-                  <p className="text-[0.52rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-text-subtle)]">
+                  <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
                     {size === 'xs' && '0.60rem'}
                     {size === 'sm' && '0.68rem'}
                     {size === 'md' && '0.68rem'}
@@ -681,7 +776,7 @@ const ComponentDocs: React.FC = () => {
                 </div>
               ))}
             </div>
-            <p className="mt-5 text-[0.62rem] leading-5 text-[var(--color-text-muted)]">
+            <p className="mt-5 text-[0.75rem] leading-5 text-[var(--color-text-muted)]">
               <Code>xs</Code> — layout toggles, tiny controls &ensp;·&ensp;
               <Code>sm</Code> — card controls, compact nav &ensp;·&ensp;
               <Code>md</Code> — standard nav (more padding than sm) &ensp;·&ensp;
@@ -689,7 +784,7 @@ const ComponentDocs: React.FC = () => {
             </p>
           </GlassPanel>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Variant demo */}
           <DemoLabel>Variants</DemoLabel>
@@ -700,23 +795,27 @@ const ComponentDocs: React.FC = () => {
               ))}
             </div>
             <GlassDivider className="my-5" />
-            <div className="grid gap-4 text-[0.62rem] leading-5 text-[var(--color-text-muted)] sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 text-[0.75rem] leading-5 text-[var(--color-text-muted)] sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <p className="mb-1 font-semibold text-[var(--color-text-subtle)]">default</p>
-                <p>Muted surface. Lifts to <Code>surface</Code> on hover. Use for inactive controls, secondary navigation, and tag lists.</p>
+                <p>Clear glass that frosts over on hover. Secondary actions, filters, tags.</p>
               </div>
               <div>
                 <p className="mb-1 font-semibold text-[var(--color-text-subtle)]">active</p>
-                <p>Already-selected state. Permanently elevated surface, no hover shift. Use to reflect current route or filter.</p>
+                <p>The selected state: denser, brighter glass. Also applied by <Code>aria-current="page"</Code>, so NavLinks light up on their own.</p>
               </div>
               <div>
                 <p className="mb-1 font-semibold text-[var(--color-text-subtle)]">accent</p>
-                <p>Sapphire-tinted. Use for the primary action in a group, active filters, or highlighted links.</p>
+                <p>The warm light as a solid surface with dark ink. The one primary action on a screen.</p>
+              </div>
+              <div>
+                <p className="mb-1 font-semibold text-[var(--color-text-subtle)]">ghost</p>
+                <p>No glass until you reach for it. Navigation bars, toolbars, cancel buttons.</p>
               </div>
             </div>
           </GlassPanel>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Polymorphic as= */}
           <DemoLabel>Polymorphic — the <Code>as</Code> prop</DemoLabel>
@@ -726,26 +825,26 @@ const ComponentDocs: React.FC = () => {
               <GlassPill size="sm" as="a" href="#glass-pill">as="a"</GlassPill>
               <GlassPill size="sm" as={Link} to="/product">as={'{Link}'} to="/product"</GlassPill>
             </div>
-            <p className="mt-5 text-[0.62rem] leading-5 text-[var(--color-text-muted)]">
+            <p className="mt-5 text-[0.75rem] leading-5 text-[var(--color-text-muted)]">
               The underlying element changes with <Code>as</Code> — styles are identical, but
               semantics, keyboard role, and routing behaviour follow the element type.
               All extra props (<Code>href</Code>, <Code>to</Code>, <Code>onClick</Code>) are forwarded.
             </p>
           </GlassPanel>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Props */}
           <DemoLabel>Props</DemoLabel>
           <PropsTable rows={[
             { name: 'size', type: "'xs' | 'sm' | 'md' | 'lg'", default: "'md'", description: 'Sets padding, font size, and letter-spacing tier.' },
-            { name: 'variant', type: "'default' | 'active' | 'accent'", default: "'default'", description: 'Controls border, background, and text colour treatment.' },
+            { name: 'variant', type: "'default' | 'active' | 'accent' | 'ghost'", default: "'default'", description: 'Surface treatment. See Variants above.' },
             { name: 'as', type: 'React.ElementType', default: "'button'", description: "Polymorphic root element. Pass a React Router Link for internal navigation." },
             { name: 'className', type: 'string', default: "''", description: 'Additional Tailwind classes merged with the base styles.' },
             { name: '...rest', type: 'unknown', default: '—', description: 'All other props forwarded to the root element (href, to, onClick, disabled, etc.).' },
           ]} />
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Do's and Don'ts */}
           <DemoLabel>Do's & Don'ts</DemoLabel>
@@ -759,7 +858,7 @@ const ComponentDocs: React.FC = () => {
                       <GlassPill size="sm" as={Link} to="/product" variant="accent">Product</GlassPill>
                       <GlassPill size="sm" as={Link} to="/philosophy">Philosophy</GlassPill>
                     </div>
-                    <p className="text-[0.60rem] leading-5 text-[var(--color-text-muted)]">Renders a proper <Code>{'<a>'}</Code> with correct keyboard and screen-reader semantics.</p>
+                    <p className="text-[0.75rem] leading-5 text-[var(--color-text-muted)]">Renders a proper <Code>{'<a>'}</Code> with correct keyboard and screen-reader semantics.</p>
                   </div>
                 ),
               }}
@@ -767,10 +866,10 @@ const ComponentDocs: React.FC = () => {
                 label: "Don't wrap in a plain <button>",
                 children: (
                   <div className="space-y-3">
-                    <button className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-muted)]">
+                    <button className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-muted)] px-4 py-2 text-[0.8125rem] font-semibold text-[var(--color-text-muted)]">
                       Looks like a GlassPill
                     </button>
-                    <p className="text-[0.60rem] leading-5 text-[var(--color-text-muted)]">No backdrop-blur, no text-bevel, no hover lift, no focus ring — reimplementing what GlassPill already provides.</p>
+                    <p className="text-[0.75rem] leading-5 text-[var(--color-text-muted)]">No backdrop-blur, no text-bevel, no hover lift, no focus ring — reimplementing what GlassPill already provides.</p>
                   </div>
                 ),
               }}
@@ -785,7 +884,7 @@ const ComponentDocs: React.FC = () => {
                       <GlassPill size="xs">List</GlassPill>
                       <GlassPill size="xs">Table</GlassPill>
                     </div>
-                    <p className="text-[0.60rem] leading-5 text-[var(--color-text-muted)]">The selected control uses <Code>variant="active"</Code> — no custom CSS needed.</p>
+                    <p className="text-[0.75rem] leading-5 text-[var(--color-text-muted)]">The selected control uses <Code>variant="active"</Code> — no custom CSS needed.</p>
                   </div>
                 ),
               }}
@@ -794,7 +893,7 @@ const ComponentDocs: React.FC = () => {
                 children: (
                   <div className="space-y-2">
                     <GlassPill size="sm">This label is way too long for a pill button</GlassPill>
-                    <p className="text-[0.60rem] leading-5 text-[var(--color-text-muted)]">GlassPill is designed for short identifiers (1–3 words). Long text stretches the pill unnaturally.</p>
+                    <p className="text-[0.75rem] leading-5 text-[var(--color-text-muted)]">GlassPill is designed for short identifiers (1–3 words). Long text stretches the pill unnaturally.</p>
                   </div>
                 ),
               }}
@@ -802,7 +901,99 @@ const ComponentDocs: React.FC = () => {
           </div>
         </PageSection>
 
-        <GlassDivider className="mb-32" />
+        <GlassDivider className="mb-[calc(var(--space-section)/2)]" />
+
+        {/* ══════════════════════════════════════════════════════ GlassSwitch */}
+        <PageSection id="glass-switch">
+          <SectionLabel>Component</SectionLabel>
+          <SectionTitle>GlassSwitch</SectionTitle>
+          <SectionSub>
+            An on/off toggle. The recessed track fills with the warm light when on and the thumb springs
+            across. It is a <Code>{'<button role="switch">'}</Code>; pass a visible label as children, or{' '}
+            <Code>aria-label</Code> when the label lives elsewhere.
+          </SectionSub>
+          <GlassDivider className="my-[var(--space-12)]" />
+          <SwitchDemo />
+          <div className="mt-[var(--space-12)]">
+            <DemoLabel>Props</DemoLabel>
+            <PropsTable rows={[
+              { name: 'checked', type: 'boolean', default: '—', description: 'Controlled state. Leave out and use defaultChecked for uncontrolled.' },
+              { name: 'defaultChecked', type: 'boolean', default: 'false', description: 'Initial state when uncontrolled.' },
+              { name: 'onChange', type: '(checked: boolean) => void', default: '—', description: 'Called with the new state.' },
+              { name: 'children', type: 'ReactNode', default: '—', description: 'Visible label, rendered before the switch inside a <label>.' },
+              { name: 'size', type: "'sm' | 'md'", default: "'md'", description: 'Track size: 36×22 or 44×26px.' },
+              { name: '...rest', type: 'button props', default: '—', description: 'disabled, aria-label, id and the rest go to the <button>.' },
+            ]} />
+          </div>
+        </PageSection>
+
+        {/* ══════════════════════════════════════════════════════ GlassSlider */}
+        <PageSection id="glass-slider">
+          <SectionLabel>Component</SectionLabel>
+          <SectionTitle>GlassSlider</SectionTitle>
+          <SectionSub>
+            A native range input on a recessed track. The filled part is the warm light, the thumb a bead of
+            frosted glass. Keyboard, touch and screen readers work as they do for any range input.
+          </SectionSub>
+          <GlassDivider className="my-[var(--space-12)]" />
+          <SliderDemo />
+          <div className="mt-[var(--space-12)]">
+            <DemoLabel>Props</DemoLabel>
+            <PropsTable rows={[
+              { name: 'value', type: 'number', default: '—', description: 'Controlled value. Leave out and use defaultValue for uncontrolled.' },
+              { name: 'onChange', type: '(value: number) => void', default: '—', description: 'Called with the new value as a number.' },
+              { name: 'min / max / step', type: 'number', default: '0 / 100 / 1', description: 'Range and granularity.' },
+              { name: 'label', type: 'ReactNode', default: '—', description: 'Visible label above the track. Without it, pass aria-label.' },
+              { name: 'showValue', type: 'boolean', default: 'true with label', description: 'Show the current value opposite the label.' },
+              { name: 'format', type: '(value: number) => string', default: 'String', description: 'Format the shown value, e.g. v => `${v}px`.' },
+            ]} />
+          </div>
+        </PageSection>
+
+        {/* ══════════════════════════════════════════════════════ GlassSegmented */}
+        <PageSection id="glass-segmented">
+          <SectionLabel>Component</SectionLabel>
+          <SectionTitle>GlassSegmented</SectionTitle>
+          <SectionSub>
+            Pick one of two to five options. The selection is a pane of glass that springs across the tray.
+            Underneath it is a radio group: arrow keys move the selection and Tab leaves the group.
+          </SectionSub>
+          <GlassDivider className="my-[var(--space-12)]" />
+          <SegmentedDemo />
+          <div className="mt-[var(--space-12)]">
+            <DemoLabel>Props</DemoLabel>
+            <PropsTable rows={[
+              { name: 'options', type: 'T[] | { value: T; label: ReactNode }[]', default: '—', description: 'Plain strings, or values with custom labels (icons, counts).' },
+              { name: 'value', type: 'T', default: '—', description: 'The selected value. Always controlled.' },
+              { name: 'onChange', type: '(value: T) => void', default: '—', description: 'Called with the picked value.' },
+              { name: 'size', type: "'sm' | 'md'", default: "'md'", description: 'Option padding and type size.' },
+              { name: 'block', type: 'boolean', default: 'false', description: 'Fill the container width, options sharing it equally.' },
+              { name: 'aria-label', type: 'string', default: '—', description: 'Accessible name for the group.' },
+            ]} />
+          </div>
+        </PageSection>
+
+        {/* ══════════════════════════════════════════════════════ GlassToast */}
+        <PageSection id="glass-toast">
+          <SectionLabel>Component</SectionLabel>
+          <SectionTitle>GlassToast</SectionTitle>
+          <SectionSub>
+            A pill of glass that springs up from the bottom edge to confirm something happened. The icon draws
+            itself in once the pill lands. Errors are announced assertively, everything else politely.
+          </SectionSub>
+          <GlassDivider className="my-[var(--space-12)]" />
+          <ToastDemo />
+          <div className="mt-[var(--space-12)]">
+            <DemoLabel>Props</DemoLabel>
+            <PropsTable rows={[
+              { name: 'open', type: 'boolean', default: '—', description: 'Whether the toast is showing.' },
+              { name: 'onClose', type: '() => void', default: '—', description: 'Called when the toast should close, after duration.' },
+              { name: 'duration', type: 'number', default: '4500', description: 'Auto-close after this many ms. 0 keeps it open.' },
+              { name: 'tone', type: "'success' | 'error' | 'info'", default: "'success'", description: 'Icon and tint.' },
+              { name: 'children', type: 'ReactNode', default: '—', description: 'The message. Name what happened, in the words of the action: "Published", not "Success".' },
+            ]} />
+          </div>
+        </PageSection>
 
         {/* ══════════════════════════════════════════════════════ GlassDivider */}
         <PageSection id="glass-divider">
@@ -814,22 +1005,22 @@ const ComponentDocs: React.FC = () => {
             rather than cutting through it.
           </SectionSub>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Live demo */}
           <DemoLabel>Live example</DemoLabel>
           <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8">
-            <p className="text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Section A</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Section A</p>
             <p className="mt-2 text-xs leading-5 text-[var(--color-text-muted)] text-bevel">Content before the divider. The rule fades out at both edges, never touching the panel border.</p>
             <GlassDivider className="my-6" />
-            <p className="text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Section B</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Section B</p>
             <p className="mt-2 text-xs leading-5 text-[var(--color-text-muted)] text-bevel">Content after the divider. Use vertical spacing via <Code>className="my-6"</Code> etc.</p>
             <GlassDivider className="my-6" />
-            <p className="text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">Section C</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">Section C</p>
             <p className="mt-2 text-xs leading-5 text-[var(--color-text-muted)] text-bevel">A third section. Consistent rhythm through the panel.</p>
           </GlassPanel>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Props */}
           <DemoLabel>Props</DemoLabel>
@@ -837,7 +1028,7 @@ const ComponentDocs: React.FC = () => {
             { name: 'className', type: 'string', default: "''", description: 'Tailwind classes for vertical spacing (my-6, my-10, etc.) and width constraints.' },
           ]} />
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           <DemoLabel>Do's & Don'ts</DemoLabel>
           <div className="space-y-4">
@@ -846,11 +1037,11 @@ const ComponentDocs: React.FC = () => {
                 label: 'Use inside panels for section rhythm',
                 children: (
                   <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-xl" className="p-5">
-                    <p className="text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel-strong">Metadata</p>
+                    <p className="text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel-strong">Metadata</p>
                     <GlassDivider className="my-3" />
-                    <p className="text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel-strong">Content</p>
+                    <p className="text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel-strong">Content</p>
                     <GlassDivider className="my-3" />
-                    <p className="text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel-strong">Actions</p>
+                    <p className="text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel-strong">Actions</p>
                   </GlassPanel>
                 ),
               }}
@@ -860,8 +1051,8 @@ const ComponentDocs: React.FC = () => {
                   <GlassPanel intensity="medium" topGlow={false} rounded="rounded-xl" className="overflow-hidden">
                     <GlassDivider />
                     <div className="p-5">
-                      <p className="text-[0.60rem] font-semibold text-[var(--color-text)] text-bevel-strong">Content</p>
-                      <p className="mt-1 text-[0.58rem] text-[var(--color-text-muted)] text-bevel">The divider flush with the top edge creates a double-line that competes with the panel border.</p>
+                      <p className="text-[0.75rem] font-semibold text-[var(--color-text)] text-bevel-strong">Content</p>
+                      <p className="mt-1 text-[0.75rem] text-[var(--color-text-muted)] text-bevel">The divider flush with the top edge creates a double-line that competes with the panel border.</p>
                     </div>
                   </GlassPanel>
                 ),
@@ -870,7 +1061,7 @@ const ComponentDocs: React.FC = () => {
           </div>
         </PageSection>
 
-        <GlassDivider className="mb-32" />
+        <GlassDivider className="mb-[calc(var(--space-section)/2)]" />
 
         {/* ══════════════════════════════════════════════════════ GlassProvider */}
         <PageSection id="glass-provider">
@@ -883,19 +1074,19 @@ const ComponentDocs: React.FC = () => {
             nested — inner values override the inherited ones while leaving the rest intact.
           </SectionSub>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Live slider demo */}
           <DemoLabel>Live config — drag sliders</DemoLabel>
           <ProviderDemo />
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Nested demo */}
           <DemoLabel>Nested providers</DemoLabel>
           <NestedProviderDemo />
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Props */}
           <DemoLabel>Props (all optional)</DemoLabel>
@@ -907,7 +1098,7 @@ const ComponentDocs: React.FC = () => {
             { name: 'children', type: 'React.ReactNode', default: '—', description: 'All descendants. GlassPanel anywhere in the tree reads the nearest provider.' },
           ]} />
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           <DemoLabel>Do's & Don'ts</DemoLabel>
           <div className="space-y-4">
@@ -916,12 +1107,12 @@ const ComponentDocs: React.FC = () => {
                 label: 'One root provider near the app root',
                 children: (
                   <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-xl" className="p-5">
-                    <p className="font-[var(--font-code)] text-[0.65rem] leading-6 text-[var(--color-text-muted)]">
+                    <p className="font-[var(--font-code)] text-[0.8125rem] leading-6 text-[var(--color-text-muted)]">
                       <span className="text-[oklch(0.75_0.12_290)]">{'<GlassProvider>'}</span><br />
                       {'  '}<span className="text-[oklch(0.75_0.12_290)]">{'<App />'}</span><br />
                       <span className="text-[oklch(0.75_0.12_290)]">{'</GlassProvider>'}</span>
                     </p>
-                    <p className="mt-3 text-[0.60rem] leading-5 text-[var(--color-text-muted)]">One provider gives the entire app a consistent glass theme without prop drilling.</p>
+                    <p className="mt-3 text-[0.75rem] leading-5 text-[var(--color-text-muted)]">One provider gives the entire app a consistent glass theme without prop drilling.</p>
                   </GlassPanel>
                 ),
               }}
@@ -929,13 +1120,13 @@ const ComponentDocs: React.FC = () => {
                 label: "Don't add providers inside every component",
                 children: (
                   <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-xl" className="p-5">
-                    <p className="font-[var(--font-code)] text-[0.65rem] leading-6 text-[oklch(0.65_0.19_25)]">
+                    <p className="font-[var(--font-code)] text-[0.8125rem] leading-6 text-[oklch(0.65_0.19_25)]">
                       {'// Every Card wraps itself — spreads configs everywhere'}<br />
                       <span className="text-[oklch(0.75_0.12_290)]">{'<GlassProvider blur={30}>'}</span><br />
                       {'  '}<span className="text-[oklch(0.75_0.12_290)]">{'<GlassPanel> ... </GlassPanel>'}</span><br />
                       <span className="text-[oklch(0.75_0.12_290)]">{'</GlassProvider>'}</span>
                     </p>
-                    <p className="mt-3 text-[0.60rem] leading-5 text-[var(--color-text-muted)]">Results in unpredictable cascades and makes global rethemes impossible.</p>
+                    <p className="mt-3 text-[0.75rem] leading-5 text-[var(--color-text-muted)]">Results in unpredictable cascades and makes global rethemes impossible.</p>
                   </GlassPanel>
                 ),
               }}
@@ -945,7 +1136,7 @@ const ComponentDocs: React.FC = () => {
                 label: 'Nest to adjust a specific section',
                 children: (
                   <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-xl" className="p-5">
-                    <p className="font-[var(--font-code)] text-[0.65rem] leading-6 text-[var(--color-text-muted)]">
+                    <p className="font-[var(--font-code)] text-[0.8125rem] leading-6 text-[var(--color-text-muted)]">
                       <span className="text-[oklch(0.75_0.12_290)]">{'<GlassProvider>'}</span>{' '}
                       <span className="text-[var(--color-text-subtle)]">{'// app root'}</span><br />
                       {'  '}<span className="text-[oklch(0.75_0.12_290)]">{'<GlassProvider blur={24} opacity={0.45}>'}</span><br />
@@ -953,7 +1144,7 @@ const ComponentDocs: React.FC = () => {
                       {'  '}<span className="text-[oklch(0.75_0.12_290)]">{'</GlassProvider>'}</span><br />
                       <span className="text-[oklch(0.75_0.12_290)]">{'</GlassProvider>'}</span>
                     </p>
-                    <p className="mt-3 text-[0.60rem] leading-5 text-[var(--color-text-muted)]">Purposeful nesting for a section that needs lighter, less blurry panels.</p>
+                    <p className="mt-3 text-[0.75rem] leading-5 text-[var(--color-text-muted)]">Purposeful nesting for a section that needs lighter, less blurry panels.</p>
                   </GlassPanel>
                 ),
               }}
@@ -961,11 +1152,11 @@ const ComponentDocs: React.FC = () => {
                 label: "Don't set opacity > 1",
                 children: (
                   <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-xl" className="p-5">
-                    <p className="font-[var(--font-code)] text-[0.65rem] text-[oklch(0.65_0.19_25)]">
+                    <p className="font-[var(--font-code)] text-[0.8125rem] text-[oklch(0.65_0.19_25)]">
                       {'<GlassProvider opacity={1.5}>'}<br />
                       {'  // alphas exceed 1.0 → panels look solid'}
                     </p>
-                    <p className="mt-3 text-[0.60rem] leading-5 text-[var(--color-text-muted)]">No clamping is applied. Values above 1 push alpha channels beyond 100% and remove the glass translucency.</p>
+                    <p className="mt-3 text-[0.75rem] leading-5 text-[var(--color-text-muted)]">No clamping is applied. Values above 1 push alpha channels beyond 100% and remove the glass translucency.</p>
                   </GlassPanel>
                 ),
               }}
@@ -973,7 +1164,7 @@ const ComponentDocs: React.FC = () => {
           </div>
         </PageSection>
 
-        <GlassDivider className="mb-32" />
+        <GlassDivider className="mb-[calc(var(--space-section)/2)]" />
 
         {/* ══════════════════════════════════════════════════════ getGlassStyles */}
         <PageSection id="get-glass-styles">
@@ -986,12 +1177,12 @@ const ComponentDocs: React.FC = () => {
             or when you're integrating with non-React rendering.
           </SectionSub>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Signature */}
           <DemoLabel>Signature</DemoLabel>
           <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-6">
-            <pre className="overflow-x-auto font-[var(--font-code)] text-[0.72rem] leading-6 text-[var(--color-text-muted)]">
+            <pre className="overflow-x-auto font-[var(--font-code)] text-[0.8125rem] leading-6 text-[var(--color-text-muted)]">
               <code>
                 <span className="text-[var(--color-accent-bright)]">function</span>
                 {' '}
@@ -1013,7 +1204,7 @@ const ComponentDocs: React.FC = () => {
             </pre>
           </GlassPanel>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Return shape */}
           <DemoLabel>Return value — GlassStyles</DemoLabel>
@@ -1024,26 +1215,26 @@ const ComponentDocs: React.FC = () => {
             { name: 'bottomLeftGlow', type: 'CSSProperties', default: '—', description: 'background + filter for the optional bottom-left counter-glow div.' },
           ]} />
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Usage example */}
           <DemoLabel>When to use raw vs component</DemoLabel>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-5">
-              <p className="mb-3 text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[oklch(0.76_0.16_160)] text-bevel">
+              <p className="mb-3 text-[0.75rem] font-semibold text-[oklch(0.76_0.16_160)] text-bevel">
                 Use GlassPanel (preferred)
               </p>
-              <p className="text-[0.62rem] leading-5 text-[var(--color-text-muted)]">
+              <p className="text-[0.75rem] leading-5 text-[var(--color-text-muted)]">
                 You get hover-reactive light/shadow, shimmer line, glows, and
                 correct <Code>overflow-hidden</Code> for free. Always prefer the
                 component unless you have a specific reason not to.
               </p>
             </GlassPanel>
             <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-5">
-              <p className="mb-3 text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)] text-bevel">
+              <p className="mb-3 text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
                 Use getGlassStyles when…
               </p>
-              <ul className="space-y-1.5 text-[0.62rem] leading-5 text-[var(--color-text-muted)]">
+              <ul className="space-y-1.5 text-[0.75rem] leading-5 text-[var(--color-text-muted)]">
                 <li>· Applying glass to non-div elements (like an SVG <Code>{'<foreignObject>'}</Code>)</li>
                 <li>· Building a custom interactive widget that already manages its own mouse tracking</li>
                 <li>· Integrating with a non-React renderer or CSS-in-JS solution</li>
@@ -1054,8 +1245,8 @@ const ComponentDocs: React.FC = () => {
 
           {/* Raw usage example */}
           <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="mt-4 p-5">
-            <p className="mb-3 text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Example — manual glass button</p>
-            <pre className="overflow-x-auto font-[var(--font-code)] text-[0.70rem] leading-6 text-[var(--color-text-muted)]">
+            <p className="mb-3 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Example — manual glass button</p>
+            <pre className="overflow-x-auto font-[var(--font-code)] text-[0.8125rem] leading-6 text-[var(--color-text-muted)]">
               <code>
                 {`const config = useGlass();\nconst glass  = getGlassStyles('medium', config);\n\n`}
                 <span className="text-[oklch(0.75_0.12_290)]">{'<button'}</span>
@@ -1075,19 +1266,19 @@ const ComponentDocs: React.FC = () => {
         {/* ── § Glass Form Fields ──────────────────────────────────────────────── */}
         <PageSection id="form-fields">
           <SectionLabel>Components</SectionLabel>
-          <SectionTitle>Glass Form Fields</SectionTitle>
+          <SectionTitle>Form fields</SectionTitle>
           <SectionSub>
             Frosted-glass inputs inherit the same depth language as panels — translucent background,
             top-edge shimmer, and a glowing focus ring that echoes the ambient accent colour.
           </SectionSub>
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* Live demo */}
           <DemoLabel>Live demo — interact with the fields</DemoLabel>
           <GlassFormFieldsDemo />
 
-          <GlassDivider className="my-10" />
+          <GlassDivider className="my-[var(--space-12)]" />
 
           {/* GlassInput API */}
           <DemoLabel>GlassInput — props</DemoLabel>
@@ -1098,13 +1289,13 @@ const ComponentDocs: React.FC = () => {
             { name: 'wrapperStyle',     type: 'CSSProperties', default: '—', description: 'Inline styles merged into the wrapper div (e.g. custom border-radius).' },
           ]} />
 
-          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+          <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
             {/* Usage snippet — GlassInput */}
             <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-5">
-              <p className="mb-3 text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">
+              <p className="mb-3 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
                 <Code>GlassInput</Code> — basic usage
               </p>
-              <pre className="overflow-x-auto font-[var(--font-code)] text-[0.68rem] leading-6 text-[var(--color-text-muted)]"><code>{`import { GlassInput, GlassTextarea } from 'glass-design-system';
+              <pre className="overflow-x-auto font-[var(--font-code)] text-[0.8125rem] leading-6 text-[var(--color-text-muted)]"><code>{`import { GlassInput, GlassTextarea } from 'glass-design-system';
 
 // Single-line input
 <GlassInput
@@ -1125,17 +1316,16 @@ const ComponentDocs: React.FC = () => {
 
             {/* Usage snippet — GlassInputWrap */}
             <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-5">
-              <p className="mb-3 text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">
+              <p className="mb-3 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
                 <Code>GlassInputWrap</Code> — custom elements
               </p>
-              <pre className="overflow-x-auto font-[var(--font-code)] text-[0.68rem] leading-6 text-[var(--color-text-muted)]"><code>{`import { GlassInputWrap } from 'glass-design-system';
+              <pre className="overflow-x-auto font-[var(--font-code)] text-[0.8125rem] leading-6 text-[var(--color-text-muted)]"><code>{`import { GlassInputWrap } from 'glass-design-system';
 
 // Wrap any element — <select>, custom inputs, etc.
 // The wrapper listens to focus/blur on its children
 // automatically via onFocus/onBlur bubbling.
 <GlassInputWrap>
-  <select className="block w-full bg-transparent
-      px-5 py-4 focus:outline-none">
+  <select className="block w-full bg-transparent px-5 py-4 focus:outline-none">
     <option>JavaScript</option>
     <option>TypeScript</option>
   </select>
@@ -1143,8 +1333,7 @@ const ComponentDocs: React.FC = () => {
 
 // Pass radius for non-standard shapes
 <GlassInputWrap radius="9999px">
-  <input className="block w-full bg-transparent
-      px-6 py-3 focus:outline-none" />
+  <input className="block w-full bg-transparent px-6 py-3 focus:outline-none" />
 </GlassInputWrap>`}</code></pre>
             </GlassPanel>
           </div>
@@ -1155,7 +1344,7 @@ const ComponentDocs: React.FC = () => {
               do={{
                 label: 'transparent bg on the element',
                 children: (
-                  <div className="space-y-2 text-[0.70rem] leading-5 text-[var(--color-text-muted)]">
+                  <div className="space-y-2 text-[0.8125rem] leading-5 text-[var(--color-text-muted)]">
                     <p>Set <Code>bg-transparent</Code> (or <Code>background: transparent</Code>) on the inner <Code>{'<input>'}</Code> so the wrapper's <Code>backdrop-filter</Code> shows through.</p>
                     <p className="text-[var(--color-success)]">The glass blur is on the wrapper — the input is a clear window into it.</p>
                   </div>
@@ -1164,7 +1353,7 @@ const ComponentDocs: React.FC = () => {
               dont={{
                 label: 'opaque bg on the element',
                 children: (
-                  <div className="space-y-2 text-[0.70rem] leading-5 text-[var(--color-text-muted)]">
+                  <div className="space-y-2 text-[0.8125rem] leading-5 text-[var(--color-text-muted)]">
                     <p>Using a solid background on the input (<Code>bg-[var(--color-glass-field)]</Code>) blocks the blur from showing through, defeating the glassmorphic effect.</p>
                     <p className="text-[var(--color-danger)]">You get a flat, opaque field instead of a frosted one.</p>
                   </div>
@@ -1174,18 +1363,7 @@ const ComponentDocs: React.FC = () => {
           </div>
         </PageSection>
 
-        {/* Footer */}
-        <GlassDivider className="mb-16" />
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-16">
-          <p className="text-[0.62rem] text-[var(--color-text-subtle)]">
-            Glass Design System — built with itself
-          </p>
-          <div className="flex gap-2">
-            <GlassPill size="xs" as={Link} to="/">Showcase</GlassPill>
-            <GlassPill size="xs" as={Link} to="/product">Product demo</GlassPill>
-          </div>
-        </div>
-
+      </div>
       </div>
     </div>
   );

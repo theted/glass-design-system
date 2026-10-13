@@ -13,7 +13,7 @@ type SharedProps = {
 type WrapProps = React.PropsWithChildren<SharedProps & {
     /** Controlled focus state — useful when wrapping <select> or custom elements. */
     focused?: boolean;
-    /** Border-radius CSS value. Default: '1.1rem' */
+    /** Border-radius CSS value. Default: var(--radius-field) */
     radius?: string;
 }>;
 export declare const GlassInputWrap: React.FC<WrapProps>;

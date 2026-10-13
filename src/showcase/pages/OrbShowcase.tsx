@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { GlassPanel, GlassPill, GlassDivider, GlassOrbs, type OrbPreset, type OrbBlendMode } from 'glass-design-system';
+import { GlassPanel, GlassPill, GlassDivider, GlassOrbs, GlassSlider, GlassSegmented, type OrbPreset, type OrbBlendMode } from 'glass-design-system';
+import { PageHeader, Section } from '../components/Page';
 import { useBackground } from '../context/BackgroundContext';
 
 // ── Preset catalogue ─────────────────────────────────────────────────────────
@@ -91,62 +92,13 @@ const OrbControls: React.FC<{
   blendMode: OrbBlendMode;
   onBlendMode: (v: OrbBlendMode) => void;
 }> = ({ speed, onSpeed, opacity, onOpacity, blendMode, onBlendMode }) => (
-  <div className="flex flex-wrap items-center gap-6">
-    <label className="flex items-center gap-3 text-sm" style={{ color: 'var(--color-text-muted)' }}>
-      <span className="w-16 shrink-0">Speed</span>
-      <input
-        type="range"
-        min={1}
-        max={16}
-        step={0.5}
-        value={speed}
-        onChange={(e) => onSpeed(Number(e.target.value))}
-        style={{ accentColor: 'var(--color-accent)' }}
-      />
-      <code
-        className="w-10 text-right font-[var(--font-code)] text-[0.72em]"
-        style={{ color: 'var(--color-accent-bright)' }}
-      >
-        {speed}s
-      </code>
-    </label>
-
-    <label className="flex items-center gap-3 text-sm" style={{ color: 'var(--color-text-muted)' }}>
-      <span className="w-16 shrink-0">Opacity</span>
-      <input
-        type="range"
-        min={0.1}
-        max={1}
-        step={0.05}
-        value={opacity}
-        onChange={(e) => onOpacity(Number(e.target.value))}
-        style={{ accentColor: 'var(--color-accent)' }}
-      />
-      <code
-        className="w-10 text-right font-[var(--font-code)] text-[0.72em]"
-        style={{ color: 'var(--color-accent-bright)' }}
-      >
-        {opacity.toFixed(2)}
-      </code>
-    </label>
-
-    <label className="flex items-center gap-3 text-sm" style={{ color: 'var(--color-text-muted)' }}>
-      <span className="w-16 shrink-0">Blend</span>
-      <select
-        value={blendMode}
-        onChange={(e) => onBlendMode(e.target.value as OrbBlendMode)}
-        className="rounded-lg px-2 py-1 text-sm backdrop-blur-md"
-        style={{
-          background: 'var(--color-glass-field)',
-          color: 'var(--color-text)',
-          border: '1px solid var(--color-border)',
-        }}
-      >
-        {BLEND_MODES.map((m) => (
-          <option key={m} value={m}>{m}</option>
-        ))}
-      </select>
-    </label>
+  <div className="grid grid-cols-1 items-end gap-[var(--space-6)] md:grid-cols-[1fr_1fr_auto]">
+    <GlassSlider label="Speed" min={1} max={16} step={0.5} value={speed} onChange={onSpeed} format={(v) => `${v}s`} />
+    <GlassSlider label="Opacity" min={0.1} max={1} step={0.05} value={opacity} onChange={onOpacity} format={(v) => v.toFixed(2)} />
+    <div className="glass-stack min-w-0 [--stack:var(--space-2)]">
+      <span className="glass-slider-field__head">Blend</span>
+      <GlassSegmented size="sm" aria-label="Blend mode" options={BLEND_MODES} value={blendMode} onChange={onBlendMode} />
+    </div>
   </div>
 );
 
@@ -304,32 +256,14 @@ const OrbShowcase: React.FC = () => {
   const [blendMode, setBlendMode] = useState<OrbBlendMode>('screen');
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-24">
-      {/* Header */}
-      <section className="mb-16">
-        <p
-          className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] text-bevel"
-          style={{ color: 'var(--color-text-subtle)' }}
-        >
-          Background Animations
-        </p>
-        <h1
-          className="mt-3 font-[var(--font-display)] text-[clamp(2.5rem,7vw,5rem)] font-[200] leading-[0.9] tracking-[-0.06em] text-bevel-strong"
-          style={{ color: 'var(--color-text)' }}
-        >
-          Glass Orbs
-        </h1>
-        <p className="mt-6 max-w-2xl text-base leading-7" style={{ color: 'var(--color-text-muted)' }}>
-          Animated gradient orbs that create rich, living backgrounds. Six presets
-          ship out of the box — each designed to complement glass panels with zero
-          performance overhead. Only transforms are animated (GPU compositor), and
-          softness comes from radial-gradient falloff, not blur filters.
-        </p>
-      </section>
+    <div>
+      <PageHeader
+        title="Orbs"
+        lede="Animated backgrounds made of soft gradient light. Twelve presets, each tuned to sit behind glass. Only transforms and opacity animate, and reduced motion stops them."
+      />
 
-      {/* Preset selector */}
-      <section className="mb-8">
-        <nav className="flex flex-wrap gap-2">
+      <div className="glass-container glass-stack [--stack:var(--space-6)]">
+        <nav aria-label="Presets" className="glass-cluster">
           {PRESETS.map((p) => (
             <GlassPill
               key={p.id}
@@ -341,48 +275,23 @@ const OrbShowcase: React.FC = () => {
             </GlassPill>
           ))}
         </nav>
-      </section>
 
-      {/* Controls */}
-      <section className="mb-6">
-        <GlassPanel intensity="subtle" className="p-6">
-          <div className="relative z-10">
-            <OrbControls speed={speed} onSpeed={setSpeed} opacity={opacity} onOpacity={setOpacity} blendMode={blendMode} onBlendMode={setBlendMode} />
-          </div>
+        <GlassPanel intensity="subtle" padding="sm" topGlow={false}>
+          <OrbControls speed={speed} onSpeed={setSpeed} opacity={opacity} onOpacity={setOpacity} blendMode={blendMode} onBlendMode={setBlendMode} />
         </GlassPanel>
-      </section>
 
-      {/* Live preview */}
-      <section className="mb-6">
         <PreviewPane preset={activePreset} speed={speed} opacity={opacity} blendMode={blendMode} />
-      </section>
 
-      {/* Code snippet + full-page button */}
-      <section className="mb-16 flex flex-wrap items-start gap-4">
-        <div className="flex-1">
-          <UsageSnippet preset={activePreset} speed={speed} opacity={opacity} blendMode={blendMode} />
+        <div className="flex flex-wrap items-start gap-[var(--space-4)]">
+          <div className="min-w-0 flex-1">
+            <UsageSnippet preset={activePreset} speed={speed} opacity={opacity} blendMode={blendMode} />
+          </div>
+          <FullPageDemo preset={activePreset} speed={speed} opacity={opacity} blendMode={blendMode} />
         </div>
-        <FullPageDemo preset={activePreset} speed={speed} opacity={opacity} blendMode={blendMode} />
-      </section>
+      </div>
 
-      <GlassDivider className="my-16" />
-
-      {/* Gallery: all presets side by side */}
-      <section className="mb-16">
-        <p
-          className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] text-bevel"
-          style={{ color: 'var(--color-text-subtle)' }}
-        >
-          All presets
-        </p>
-        <h2
-          className="mt-3 mb-10 font-[var(--font-display)] text-[clamp(1.8rem,4vw,3rem)] font-[250] tracking-[-0.05em] text-bevel-strong"
-          style={{ color: 'var(--color-text)' }}
-        >
-          At a glance
-        </h2>
-
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <Section title="All presets" lede="Pick one to load it into the preview above.">
+        <div className="grid grid-cols-1 gap-[var(--space-grid)] sm:grid-cols-2 lg:grid-cols-3">
           {PRESETS.map((p) => (
             <button
               key={p.id}
@@ -412,34 +321,18 @@ const OrbShowcase: React.FC = () => {
             </button>
           ))}
         </div>
-      </section>
+      </Section>
 
-      <GlassDivider className="my-16" />
-
-      {/* API reference */}
-      <section className="mb-16">
-        <p
-          className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] text-bevel"
-          style={{ color: 'var(--color-text-subtle)' }}
-        >
-          API
-        </p>
-        <h2
-          className="mt-3 mb-10 font-[var(--font-display)] text-[clamp(1.8rem,4vw,3rem)] font-[250] tracking-[-0.05em] text-bevel-strong"
-          style={{ color: 'var(--color-text)' }}
-        >
-          Props
-        </h2>
-
+      <Section title="Props">
         <GlassPanel intensity="subtle" className="overflow-hidden">
-          <div className="relative z-10">
-            <table className="w-full text-sm" style={{ color: 'var(--color-text-muted)' }}>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[40rem] text-sm" style={{ color: 'var(--color-text-muted)' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
                   {['Prop', 'Type', 'Default', 'Description'].map((h) => (
                     <th
                       key={h}
-                      className="px-5 py-3 text-left text-[0.68rem] font-semibold uppercase tracking-[0.2em]"
+                      className="px-5 py-3 text-left text-[0.8125rem] font-semibold"
                       style={{ color: 'var(--color-text-subtle)' }}
                     >
                       {h}
@@ -508,24 +401,10 @@ const OrbShowcase: React.FC = () => {
             </table>
           </div>
         </GlassPanel>
-      </section>
+      </Section>
 
-      {/* Tips */}
-      <section>
-        <p
-          className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] text-bevel"
-          style={{ color: 'var(--color-text-subtle)' }}
-        >
-          Tips
-        </p>
-        <h2
-          className="mt-3 mb-10 font-[var(--font-display)] text-[clamp(1.8rem,4vw,3rem)] font-[250] tracking-[-0.05em] text-bevel-strong"
-          style={{ color: 'var(--color-text)' }}
-        >
-          Usage notes
-        </h2>
-
-        <div className="grid gap-4 md:grid-cols-2">
+      <Section title="Usage notes">
+        <div className="grid grid-cols-1 gap-[var(--space-grid)] md:grid-cols-2">
           {[
             {
               title: 'Full-page background',
@@ -559,7 +438,7 @@ const OrbShowcase: React.FC = () => {
             </GlassPanel>
           ))}
         </div>
-      </section>
+      </Section>
     </div>
   );
 };

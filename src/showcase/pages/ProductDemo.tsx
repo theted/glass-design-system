@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { GlassPanel, GlassPill, GlassDivider, GlassProvider, GlassOrbs } from 'glass-design-system';
 
 // ── Hero ─────────────────────────────────────────────────────────────────────
@@ -13,7 +12,7 @@ const Hero: React.FC = () => (
 
     <div className="relative z-10 mx-auto max-w-4xl">
       <p
-        className="text-[0.72rem] font-semibold uppercase tracking-[0.44em] text-bevel"
+        className="text-[0.8125rem] font-semibold text-bevel"
         style={{ color: 'var(--color-accent-bright)' }}
       >
         Glass Design System
@@ -82,7 +81,7 @@ const Features: React.FC = () => (
   <section className="mx-auto max-w-6xl px-6 py-24">
     <div className="mb-14">
       <p
-        className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] text-bevel"
+        className="text-[0.8125rem] font-semibold text-bevel"
         style={{ color: 'var(--color-text-subtle)' }}
       >
         Capabilities
@@ -95,7 +94,7 @@ const Features: React.FC = () => (
       </h2>
     </div>
 
-    <div className="grid gap-6 md:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
       {FEATURES.map((f) => (
         <GlassPanel key={f.title} intensity="subtle" topGlow className="p-8">
           <div className="relative z-10">
@@ -148,7 +147,7 @@ const Plan: React.FC<PlanProps> = ({ name, tagline, price, period, features, cta
         </div>
       )}
       <p
-        className="text-[0.62rem] font-semibold uppercase tracking-[0.32em] text-bevel"
+        className="text-[0.75rem] font-semibold text-bevel"
         style={{ color: 'var(--color-text-subtle)' }}
       >
         {name}
@@ -225,7 +224,7 @@ const Pricing: React.FC = () => (
   <section className="mx-auto max-w-6xl px-6 py-24">
     <div className="mb-14">
       <p
-        className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] text-bevel"
+        className="text-[0.8125rem] font-semibold text-bevel"
         style={{ color: 'var(--color-text-subtle)' }}
       >
         Pricing
@@ -240,7 +239,7 @@ const Pricing: React.FC = () => (
 
     {/* Nested GlassProvider — tighter blur on this section to demonstrate nested config */}
     <GlassProvider blur={32} opacity={0.58}>
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {PLANS.map((plan) => (
           <Plan key={plan.name} {...plan} />
         ))}
@@ -267,19 +266,19 @@ const TESTIMONIALS = [
     initials: 'AK',
     quote: 'The glass system is the first design system that actually makes me excited to build UI.',
     name: 'Alex K.',
-    role: 'Lead Designer @ Vercel',
+    role: 'Lead designer, Northwind Studio',
   },
   {
     initials: 'ML',
     quote: 'Two knobs. Infinite expressiveness. It just works.',
     name: 'Maria L.',
-    role: 'Frontend Engineer @ Linear',
+    role: 'Frontend engineer, Halcyon',
   },
   {
     initials: 'ST',
     quote: 'We redesigned our entire dashboard in a weekend.',
     name: 'Sam T.',
-    role: 'CTO @ Raycast',
+    role: 'CTO, Fjord Labs',
   },
 ];
 
@@ -287,7 +286,7 @@ const Testimonials: React.FC = () => (
   <section className="mx-auto max-w-6xl px-6 py-24">
     <div className="mb-14">
       <p
-        className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] text-bevel"
+        className="text-[0.8125rem] font-semibold text-bevel"
         style={{ color: 'var(--color-text-subtle)' }}
       >
         Social proof
@@ -300,7 +299,7 @@ const Testimonials: React.FC = () => (
       </h2>
     </div>
 
-    <div className="grid gap-6 md:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
       {TESTIMONIALS.map((t) => (
         <GlassPanel key={t.name} intensity="subtle" className="p-7">
           <div className="relative z-10">
@@ -314,13 +313,13 @@ const Testimonials: React.FC = () => (
             </p>
             <div className="mt-5">
               <p
-                className="text-[0.72rem] font-semibold text-bevel"
+                className="text-[0.8125rem] font-semibold text-bevel"
                 style={{ color: 'var(--color-text)' }}
               >
                 {t.name}
               </p>
               <p
-                className="text-[0.68rem]"
+                className="text-[0.8125rem]"
                 style={{ color: 'var(--color-text-subtle)' }}
               >
                 {t.role}
@@ -401,7 +400,7 @@ const FAQ: React.FC = () => (
   <section className="mx-auto max-w-3xl px-6 py-24">
     <div className="mb-14">
       <p
-        className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] text-bevel"
+        className="text-[0.8125rem] font-semibold text-bevel"
         style={{ color: 'var(--color-text-subtle)' }}
       >
         Questions
@@ -424,25 +423,6 @@ const FAQ: React.FC = () => (
 
 // ── Footer ────────────────────────────────────────────────────────────────────
 
-const Footer: React.FC = () => (
-  <footer className="mx-auto max-w-6xl px-6 pb-12">
-    <GlassDivider className="mb-8" />
-    <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-      <p
-        className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-bevel"
-        style={{ color: 'var(--color-text-subtle)' }}
-      >
-        Glass Design System © {new Date().getFullYear()}
-      </p>
-      <div className="flex items-center gap-2">
-        <GlassPill size="xs" as="a" href="#" rel="noopener noreferrer">GitHub</GlassPill>
-        <GlassPill size="xs" as="a" href="#" rel="noopener noreferrer">Twitter</GlassPill>
-        <GlassPill size="xs" as="a" href="#" rel="noopener noreferrer">Discord</GlassPill>
-      </div>
-    </div>
-  </footer>
-);
-
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 const ProductDemo: React.FC = () => (
@@ -452,7 +432,6 @@ const ProductDemo: React.FC = () => (
     <Pricing />
     <Testimonials />
     <FAQ />
-    <Footer />
   </div>
 );
 

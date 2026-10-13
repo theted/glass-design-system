@@ -29,7 +29,7 @@ type WrapProps = React.PropsWithChildren<
     SharedProps & {
         /** Controlled focus state — useful when wrapping <select> or custom elements. */
         focused?: boolean;
-        /** Border-radius CSS value. Default: '1.1rem' */
+        /** Border-radius CSS value. Default: var(--radius-field) */
         radius?: string;
     }
 >;
@@ -38,7 +38,7 @@ export const GlassInputWrap: React.FC<WrapProps> = ({
     children,
     focused: controlledFocused,
     fieldBlur = 16,
-    radius = '1.1rem',
+    radius,
     wrapperClassName = '',
     wrapperStyle,
     shimmer = true,
@@ -48,7 +48,7 @@ export const GlassInputWrap: React.FC<WrapProps> = ({
     const { opacity } = useGlass();
 
     const vars = {
-        '--field-radius': radius,
+        ...(radius && { '--field-radius': radius }),
         '--field-blur': `${fieldBlur}px`,
         '--glass-opacity': opacity,
     } as React.CSSProperties;
@@ -118,7 +118,6 @@ export const GlassTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps
             <GlassInputWrap
                 focused={focused}
                 fieldBlur={fieldBlur}
-                radius="1.3rem"
                 wrapperClassName={wrapperClassName}
                 wrapperStyle={wrapperStyle}
                 shimmer={shimmer}

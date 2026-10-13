@@ -10,6 +10,9 @@
 
    Because they're registered with @property, the browser interpolates
    them: the light glides after the cursor instead of snapping to it.
+
+   Everything here is plain CSS: components render correctly whether or not
+   the consuming app's Tailwind scans this package.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* Same order Tailwind v4 declares. Declaring it here first means that when
@@ -24,13 +27,18 @@
 
 @layer components {
 
-  /* ── Surface ──────────────────────────────────────────────────────────────── */
+  /* ── Surface ──────────────────────────────────────────────────────────────
+     Decorative layers sit at z-index −1 inside the isolated surface: above
+     the glass body, below your content. Content needs no wrapper. The rim
+     and spectrum are 1px edge masks and sit on top, so they light the edge
+     of images that run to the border too. */
 
   .glass-surface {
-    --glass-tilt-max: 5deg;
+    --glass-tilt-max: 3deg;
     position: relative;
     overflow: hidden;
     isolation: isolate;
+    border-radius: var(--radius-panel);
     transition:
       --glass-x var(--dur-3) var(--ease-glass),
       --glass-y var(--dur-3) var(--ease-glass),
@@ -38,6 +46,10 @@
       --glass-hover var(--dur-3) var(--ease-glass),
       border-color var(--dur-3) var(--ease-glass);
   }
+
+  .glass-surface--pad-sm { padding: var(--space-6); }
+  .glass-surface--pad-md { padding: var(--space-panel); }
+  .glass-surface--pad-lg { padding: clamp(1.75rem, 1rem + 3.3vw, 4rem); }
 
   /* Shared recipe for anything drawn only on the 1px edge. */
   .glass-surface__rim,
@@ -59,6 +71,16 @@
       linear-gradient(#000 0 0);
   }
 
+  /* Light catching the upper lip of the pane. */
+  .glass-surface__lip {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 1;
+    height: 1px;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent 5%, var(--glass-lip, oklch(0.93 0.07 80 / 0.25)) 70%, transparent);
+  }
+
   /* Catch-light on the lit side, a cool reflection opposite, dim between. */
   .glass-surface__rim {
     background: conic-gradient(
@@ -73,55 +95,65 @@
       var(--glass-rim-warm) 346deg,
       var(--glass-rim-hot) 360deg
     );
-    opacity: calc(0.7 + var(--glass-hover) * 0.3);
+    opacity: calc(0.72 + var(--glass-hover) * 0.28);
   }
 
   /* Dispersion: thick glass splits the light just past the catch-light. */
   .glass-surface__spectrum {
     background: var(--glass-spectrum);
-    opacity: calc(0.45 + var(--glass-hover) * 0.4);
+    opacity: calc(0.4 + var(--glass-hover) * 0.15);
     mix-blend-mode: screen;
   }
 
-  /* Specular — warm light where the pointer is. */
+  .glass-surface__sheen,
+  .glass-surface__shade,
+  .glass-surface__glow {
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+  }
+
   .glass-surface__sheen,
   .glass-surface__shade {
-    position: absolute;
     inset: 0;
-    z-index: 0;
     border-radius: inherit;
-    pointer-events: none;
     opacity: var(--glass-hover);
   }
 
+  /* Specular — a wide, faint pool of warm light under the pointer. It is
+     sized to the pane, so on a small card it reads as the whole pane
+     brightening a touch, and on a big panel as a soft spot that drifts
+     after you. (Chrome rejects mixed length + percentage gradient sizes,
+     so this stays in percentages.) */
   .glass-surface__sheen {
     background: radial-gradient(
-      circle 32rem at calc(var(--glass-x) * 100%) calc(var(--glass-y) * 100%),
-      oklch(0.80 0.11 72 / calc(var(--glass-light-alpha, 0.22) * 0.55)) 0%,
-      oklch(0.62 0.10 60 / calc(var(--glass-light-alpha, 0.22) * 0.18)) 30%,
-      transparent 65%
+      ellipse 130% 130% at calc(var(--glass-x) * 100%) calc(var(--glass-y) * 100%),
+      oklch(0.95 0.05 84 / calc(var(--glass-light-alpha, 0.22) * 0.36)) 0%,
+      oklch(0.90 0.06 80 / calc(var(--glass-light-alpha, 0.22) * 0.17)) 22%,
+      oklch(0.84 0.06 74 / calc(var(--glass-light-alpha, 0.22) * 0.05)) 45%,
+      transparent 70%
     );
     mix-blend-mode: screen;
   }
 
   .glass-surface__shade {
     background: radial-gradient(
-      ellipse 140% 120% at calc((1 - var(--glass-x)) * 100%) calc((1 - var(--glass-y)) * 100%),
-      oklch(0.05 0.02 262 / var(--glass-shadow-alpha, 0.2)) 0%,
-      transparent 60%
+      ellipse 150% 150% at calc((1 - var(--glass-x)) * 100%) calc((1 - var(--glass-y)) * 100%),
+      oklch(0.05 0.02 262 / calc(var(--glass-shadow-alpha, 0.2) * 0.6)) 0%,
+      transparent 55%
     );
   }
 
   .glass-surface__glow {
-    position: absolute;
-    z-index: 0;
     border-radius: 9999px;
-    pointer-events: none;
   }
+
+  .glass-surface__glow--tr { right: -10rem; top: -14rem; width: 44rem; height: 28rem; }
+  .glass-surface__glow--bl { left: -10rem; bottom: -10rem; width: 28rem; height: 24rem; }
 
   /* Tilt — the pane leans away from the pointer, like pressing on glass. */
   .glass-surface--tilt {
-    transform: perspective(1400px)
+    transform: perspective(1600px)
       rotateX(calc((0.5 - var(--glass-y)) * var(--glass-tilt-max) * var(--glass-hover)))
       rotateY(calc((var(--glass-x) - 0.5) * var(--glass-tilt-max) * var(--glass-hover)));
     will-change: transform;
@@ -146,11 +178,13 @@
     40% { opacity: 1; }
   }
 
-  /* ── Pill ─────────────────────────────────────────────────────────────────── */
+  /* ── Pill ─────────────────────────────────────────────────────────────────
+     Clear glass that frosts over as you approach it. The accent pill is the
+     light itself: a solid warm surface with dark ink, one per screen. */
 
   .glass-pill {
     --pill-pad-y: 0.6rem;
-    --pill-pad-x: 1.2rem;
+    --pill-pad-x: 1.15rem;
     --pill-size: 0.875rem;
     position: relative;
     isolation: isolate;
@@ -160,9 +194,9 @@
     justify-content: center;
     gap: 0.5em;
     padding: var(--pill-pad-y) var(--pill-pad-x);
-    border: 1px solid var(--color-border);
+    border: 1px solid oklch(0.95 0.02 250 / 0.14);
     border-radius: 9999px;
-    background: var(--color-surface-muted);
+    background: oklch(0.96 0.015 250 / 0.07);
     color: var(--color-text-muted);
     font-family: var(--font-body);
     font-size: var(--pill-size);
@@ -172,10 +206,12 @@
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
-    text-shadow: 0 1px 1px oklch(0 0 0 / 0.4);
-    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.07);
-    -webkit-backdrop-filter: blur(14px) saturate(1.4);
-    backdrop-filter: blur(14px) saturate(1.4);
+    text-shadow: 0 1px 1px oklch(0 0 0 / 0.35);
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.09),
+      0 1px 2px oklch(0.05 0.02 262 / 0.22);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    backdrop-filter: blur(16px) saturate(1.5);
     -webkit-tap-highlight-color: transparent;
     transition:
       transform var(--dur-3) var(--ease-spring),
@@ -185,7 +221,7 @@
       box-shadow var(--dur-2) var(--ease-glass);
   }
 
-  /* A single glint crosses the pill when the pointer arrives. */
+  /* A single faint glint crosses the pill when the pointer arrives. */
   .glass-pill::before {
     content: '';
     position: absolute;
@@ -195,8 +231,8 @@
     background: linear-gradient(
       105deg,
       transparent 30%,
-      oklch(0.97 0.05 85 / 0.24) 48%,
-      oklch(0.97 0.05 85 / 0.08) 56%,
+      oklch(0.98 0.04 85 / 0.16) 48%,
+      oklch(0.98 0.04 85 / 0.05) 56%,
       transparent 70%
     );
     transform: translateX(-110%);
@@ -204,9 +240,8 @@
 
   @media (hover: hover) {
     .glass-pill:hover {
-      transform: translateY(-1px);
-      border-color: var(--color-border-strong);
-      background-color: var(--color-surface);
+      border-color: oklch(0.95 0.02 250 / 0.26);
+      background-color: oklch(0.96 0.015 250 / 0.12);
       color: var(--color-text);
     }
 
@@ -216,7 +251,7 @@
   }
 
   .glass-pill:active {
-    transform: translateY(0) scale(0.96);
+    transform: scale(0.96);
     transition-duration: var(--dur-1);
     transition-timing-function: ease-out;
   }
@@ -228,7 +263,7 @@
 
   .glass-pill:disabled,
   .glass-pill[aria-disabled='true'] {
-    opacity: 0.35;
+    opacity: 0.4;
     pointer-events: none;
   }
 
@@ -236,52 +271,81 @@
     to { transform: translateX(110%); }
   }
 
-  .glass-pill--xs { --pill-pad-y: 0.3rem;  --pill-pad-x: 0.7rem; --pill-size: 0.72rem; }
-  .glass-pill--sm { --pill-pad-y: 0.45rem; --pill-pad-x: 0.95rem; --pill-size: 0.8rem; }
-  .glass-pill--md { --pill-pad-y: 0.6rem;  --pill-pad-x: 1.2rem; --pill-size: 0.875rem; }
-  .glass-pill--lg { --pill-pad-y: 0.85rem; --pill-pad-x: 1.6rem; --pill-size: 0.95rem; }
+  .glass-pill--xs { --pill-pad-y: 0.3rem;  --pill-pad-x: 0.7rem;  --pill-size: 0.75rem; }
+  .glass-pill--sm { --pill-pad-y: 0.45rem; --pill-pad-x: 0.9rem;  --pill-size: 0.8125rem; }
+  .glass-pill--md { --pill-pad-y: 0.6rem;  --pill-pad-x: 1.15rem; --pill-size: 0.875rem; }
+  .glass-pill--lg { --pill-pad-y: 0.8rem;  --pill-pad-x: 1.5rem;  --pill-size: 0.9375rem; }
 
-  .glass-pill--active {
-    border-color: var(--color-border-strong);
-    background: var(--color-surface-strong);
+  /* Selected: denser, brighter glass. */
+  .glass-pill--active,
+  .glass-pill[aria-current='page'] {
+    border-color: oklch(0.97 0.02 250 / 0.32);
+    background-color: oklch(0.96 0.015 250 / 0.17);
     color: var(--color-text);
-    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.14), 0 4px 16px -6px oklch(0.05 0.02 262 / 0.6);
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.2),
+      0 4px 14px -6px oklch(0.05 0.02 262 / 0.6);
   }
 
-  /* Warm-lit glass: the one place the light source becomes the surface. */
+  /* No glass until you reach for it — for navigation and toolbars. */
+  .glass-pill--ghost {
+    border-color: transparent;
+    background-color: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .glass-pill--ghost.glass-pill--active,
+  .glass-pill--ghost[aria-current='page'] {
+    border-color: oklch(0.97 0.02 250 / 0.2);
+    background-color: oklch(0.96 0.015 250 / 0.11);
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.12);
+  }
+
+  /* Warm light as a surface — the primary action. */
   .glass-pill--accent {
-    border-color: oklch(0.86 0.12 78 / 0.5);
-    background: linear-gradient(180deg, oklch(0.86 0.12 78 / 0.24), oklch(0.72 0.14 62 / 0.10));
-    color: var(--color-light-bright);
+    border-color: oklch(0.97 0.06 88 / 0.75);
+    background: linear-gradient(180deg, oklch(0.93 0.09 86), oklch(0.83 0.13 72));
+    color: oklch(0.26 0.06 58);
+    font-weight: 600;
+    text-shadow: 0 1px 0 oklch(1 0.03 90 / 0.35);
     box-shadow:
-      inset 0 1px 0 oklch(0.97 0.06 85 / 0.35),
-      0 0 28px -8px oklch(0.86 0.12 78 / 0.5);
+      inset 0 1px 0 oklch(1 0 0 / 0.6),
+      inset 0 -1px 0 oklch(0.58 0.12 55 / 0.35),
+      0 8px 24px -10px oklch(0.80 0.14 70 / 0.7);
+  }
+
+  .glass-pill--accent::before {
+    background: linear-gradient(105deg, transparent 30%, oklch(1 0 0 / 0.45) 48%, oklch(1 0 0 / 0.12) 56%, transparent 70%);
   }
 
   @media (hover: hover) {
     .glass-pill--accent:hover {
-      border-color: oklch(0.90 0.10 80 / 0.75);
-      background-color: transparent;
-      background: linear-gradient(180deg, oklch(0.86 0.12 78 / 0.34), oklch(0.72 0.14 62 / 0.16));
-      color: oklch(0.98 0.03 85);
+      border-color: oklch(0.99 0.04 90 / 0.9);
+      background: linear-gradient(180deg, oklch(0.95 0.08 88), oklch(0.86 0.12 74));
+      color: oklch(0.22 0.06 58);
       box-shadow:
-        inset 0 1px 0 oklch(0.97 0.06 85 / 0.45),
-        0 0 36px -6px oklch(0.86 0.12 78 / 0.6);
+        inset 0 1px 0 oklch(1 0 0 / 0.7),
+        inset 0 -1px 0 oklch(0.58 0.12 55 / 0.35),
+        0 10px 32px -10px oklch(0.84 0.14 72 / 0.85);
     }
   }
 
-  /* ── Field ────────────────────────────────────────────────────────────────── */
+  /* ── Field ────────────────────────────────────────────────────────────── */
 
   .glass-field {
-    --field-radius: 1.1rem;
+    --field-radius: var(--radius-field);
     --field-blur: 16px;
     position: relative;
     border-radius: var(--field-radius);
-    border: 1px solid var(--color-border);
-    background: oklch(0.17 0.03 262 / calc(0.62 * var(--glass-opacity, 0.66)));
-    -webkit-backdrop-filter: blur(var(--field-blur));
-    backdrop-filter: blur(var(--field-blur));
-    box-shadow: inset 0 2px 6px oklch(0.05 0.02 262 / 0.28);
+    border: 1px solid oklch(0.92 0.03 250 / 0.14);
+    background: oklch(0.15 0.03 262 / calc(0.6 * var(--glass-opacity, 0.66)));
+    -webkit-backdrop-filter: blur(var(--field-blur)) saturate(1.3);
+    backdrop-filter: blur(var(--field-blur)) saturate(1.3);
+    box-shadow:
+      inset 0 1px 3px oklch(0.04 0.02 262 / 0.35),
+      0 1px 0 oklch(1 0 0 / 0.05);
     transition:
       background-color var(--dur-3) var(--ease-glass),
       border-color var(--dur-3) var(--ease-glass),
@@ -289,7 +353,7 @@
   }
 
   .glass-field:hover {
-    border-color: oklch(0.62 0.06 255 / 0.42);
+    border-color: oklch(0.92 0.03 250 / 0.24);
   }
 
   /* On focus a catch-light runs once around the rim, then rests top-right. */
@@ -309,12 +373,12 @@
   }
 
   .glass-field[data-focused='true'] {
-    border-color: oklch(0.86 0.12 78 / 0.18);
-    background-color: oklch(0.21 0.035 260 / calc(0.8 * var(--glass-opacity, 0.66)));
+    border-color: oklch(0.86 0.12 78 / 0.2);
+    background-color: oklch(0.19 0.035 260 / calc(0.78 * var(--glass-opacity, 0.66)));
     box-shadow:
-      inset 0 2px 6px oklch(0.05 0.02 262 / 0.2),
+      inset 0 1px 3px oklch(0.04 0.02 262 / 0.25),
       0 0 0 4px var(--color-light-soft),
-      0 12px 36px -14px oklch(0.86 0.12 78 / 0.4);
+      0 12px 36px -16px oklch(0.86 0.12 78 / 0.45);
   }
 
   .glass-field[data-focused='true']::before {
@@ -334,7 +398,7 @@
     right: 12%;
     height: 1px;
     pointer-events: none;
-    background: linear-gradient(90deg, transparent, oklch(0.92 0.06 80 / 0.22), transparent);
+    background: linear-gradient(90deg, transparent, oklch(0.92 0.06 80 / 0.2), transparent);
   }
 
   .glass-field__control {
@@ -343,7 +407,7 @@
     appearance: none;
     border: 0;
     background: transparent;
-    padding: 0.95rem 1.2rem;
+    padding: 0.875rem 1.125rem;
     color: var(--color-text);
     font-family: var(--font-body);
     font-size: 1rem;
@@ -365,7 +429,294 @@
     line-height: 1.65;
   }
 
-  /* ── Divider ──────────────────────────────────────────────────────────────── */
+  /* ── Switch ───────────────────────────────────────────────────────────────
+     A recessed glass track; when on, it fills with the warm light. */
+
+  .glass-switch-row {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    cursor: pointer;
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+  }
+
+  .glass-switch {
+    --switch-w: 2.75rem;
+    --switch-h: 1.625rem;
+    --switch-pad: 0.1875rem;
+    --switch-thumb: calc(var(--switch-h) - 2px - 2 * var(--switch-pad));
+    position: relative;
+    flex: none;
+    width: var(--switch-w);
+    height: var(--switch-h);
+    margin: 0;
+    padding: 0;
+    border: 1px solid oklch(0.95 0.02 250 / 0.16);
+    border-radius: 9999px;
+    background: oklch(0.12 0.03 262 / 0.5);
+    box-shadow: inset 0 1px 3px oklch(0.04 0.02 262 / 0.55), 0 1px 0 oklch(1 0 0 / 0.05);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      background-color var(--dur-2) var(--ease-glass),
+      border-color var(--dur-2) var(--ease-glass),
+      box-shadow var(--dur-2) var(--ease-glass);
+  }
+
+  .glass-switch__thumb {
+    position: absolute;
+    top: var(--switch-pad);
+    left: var(--switch-pad);
+    width: var(--switch-thumb);
+    height: var(--switch-thumb);
+    border-radius: 9999px;
+    background: radial-gradient(circle at 35% 30%, oklch(1 0 0), oklch(0.93 0.015 250) 55%, oklch(0.8 0.03 250));
+    box-shadow:
+      0 1px 3px oklch(0.04 0.02 262 / 0.55),
+      inset 0 -1px 1px oklch(0.6 0.03 250 / 0.35);
+    transition: transform var(--dur-3) var(--ease-spring);
+  }
+
+  .glass-switch[aria-checked='true'] {
+    border-color: oklch(0.97 0.06 88 / 0.75);
+    background: linear-gradient(180deg, oklch(0.90 0.10 84), oklch(0.80 0.13 70));
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.45),
+      0 0 20px -6px oklch(0.84 0.13 75 / 0.7);
+  }
+
+  .glass-switch[aria-checked='true'] .glass-switch__thumb {
+    transform: translateX(calc(var(--switch-w) - var(--switch-h)));
+  }
+
+  .glass-switch:active .glass-switch__thumb {
+    transition-duration: var(--dur-1);
+    scale: 0.9;
+  }
+
+  .glass-switch:focus-visible {
+    outline: 2px solid var(--color-light);
+    outline-offset: 3px;
+  }
+
+  .glass-switch:disabled,
+  .glass-switch-row:has(.glass-switch:disabled) {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .glass-switch--sm { --switch-w: 2.25rem; --switch-h: 1.375rem; --switch-pad: 0.1875rem; }
+
+  /* ── Slider ───────────────────────────────────────────────────────────────
+     A native range input. --fill (set by GlassSlider) paints the warm part
+     of the track; Firefox paints it natively with ::-moz-range-progress. */
+
+  .glass-slider-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .glass-slider-field__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    font-weight: 500;
+  }
+
+  .glass-slider-field__value {
+    color: var(--color-text-subtle);
+    font-family: var(--font-code);
+    font-size: var(--step--2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .glass-slider {
+    --track-h: 0.375rem;
+    --thumb: 1.25rem;
+    --fill: 50%;
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: var(--thumb);
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .glass-slider::-webkit-slider-runnable-track {
+    height: var(--track-h);
+    border-radius: 9999px;
+    background:
+      linear-gradient(90deg, oklch(0.78 0.14 66), oklch(0.90 0.10 84)) 0 0 / var(--fill) 100% no-repeat,
+      oklch(0.12 0.03 262 / 0.55);
+    box-shadow: inset 0 1px 2px oklch(0.04 0.02 262 / 0.6), 0 1px 0 oklch(1 0 0 / 0.06);
+  }
+
+  .glass-slider::-moz-range-track {
+    height: var(--track-h);
+    border-radius: 9999px;
+    background: oklch(0.12 0.03 262 / 0.55);
+    box-shadow: inset 0 1px 2px oklch(0.04 0.02 262 / 0.6), 0 1px 0 oklch(1 0 0 / 0.06);
+  }
+
+  .glass-slider::-moz-range-progress {
+    height: var(--track-h);
+    border-radius: 9999px;
+    background: linear-gradient(90deg, oklch(0.78 0.14 66), oklch(0.90 0.10 84));
+  }
+
+  .glass-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: var(--thumb);
+    height: var(--thumb);
+    margin-top: calc((var(--track-h) - var(--thumb)) / 2);
+    border: 1px solid oklch(1 0 0 / 0.75);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, oklch(1 0 0), oklch(0.94 0.015 250) 55%, oklch(0.8 0.03 250));
+    box-shadow: 0 2px 6px oklch(0.04 0.02 262 / 0.5), 0 0 0 0 var(--color-light-soft);
+    transition:
+      transform var(--dur-2) var(--ease-spring),
+      box-shadow var(--dur-2) var(--ease-glass);
+  }
+
+  .glass-slider::-moz-range-thumb {
+    width: var(--thumb);
+    height: var(--thumb);
+    box-sizing: border-box;
+    border: 1px solid oklch(1 0 0 / 0.75);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, oklch(1 0 0), oklch(0.94 0.015 250) 55%, oklch(0.8 0.03 250));
+    box-shadow: 0 2px 6px oklch(0.04 0.02 262 / 0.5);
+  }
+
+  @media (hover: hover) {
+    .glass-slider:hover::-webkit-slider-thumb {
+      box-shadow: 0 2px 6px oklch(0.04 0.02 262 / 0.5), 0 0 0 6px var(--color-light-soft);
+    }
+  }
+
+  .glass-slider:active::-webkit-slider-thumb {
+    transform: scale(1.12);
+  }
+
+  .glass-slider:focus-visible {
+    outline: none;
+  }
+
+  .glass-slider:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--color-light);
+    outline-offset: 2px;
+  }
+
+  .glass-slider:focus-visible::-moz-range-thumb {
+    outline: 2px solid var(--color-light);
+    outline-offset: 2px;
+  }
+
+  .glass-slider:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* ── Segmented control ────────────────────────────────────────────────────
+     A recessed tray; the selected option is a pane of glass that springs
+     across to whatever you pick. */
+
+  .glass-segmented {
+    --seg-pad: 0.1875rem;
+    --seg-pad-y: 0.5rem;
+    --seg-pad-x: 1rem;
+    --seg-size: 0.875rem;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    max-width: 100%;
+    gap: 0.125rem;
+    padding: var(--seg-pad);
+    overflow-x: auto;
+    scrollbar-width: none;
+    border: 1px solid oklch(0.95 0.02 250 / 0.12);
+    border-radius: 9999px;
+    background: oklch(0.12 0.03 262 / 0.42);
+    box-shadow: inset 0 1px 3px oklch(0.04 0.02 262 / 0.45), 0 1px 0 oklch(1 0 0 / 0.05);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
+  }
+
+  .glass-segmented::-webkit-scrollbar { display: none; }
+
+  .glass-segmented__indicator {
+    position: absolute;
+    z-index: -1;
+    top: var(--seg-pad);
+    bottom: var(--seg-pad);
+    left: 0;
+    width: var(--seg-w, 0px);
+    transform: translateX(var(--seg-x, 0px));
+    border: 1px solid oklch(0.98 0.02 250 / 0.26);
+    border-radius: 9999px;
+    background: oklch(0.96 0.015 250 / 0.16);
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.2),
+      0 2px 10px -3px oklch(0.04 0.02 262 / 0.55);
+    pointer-events: none;
+  }
+
+  .glass-segmented[data-ready='true'] .glass-segmented__indicator {
+    transition:
+      transform var(--dur-3) var(--ease-spring),
+      width var(--dur-3) var(--ease-spring);
+  }
+
+  .glass-segmented__option {
+    flex: none;
+    appearance: none;
+    margin: 0;
+    padding: var(--seg-pad-y) var(--seg-pad-x);
+    border: 0;
+    border-radius: 9999px;
+    background: transparent;
+    color: var(--color-text-subtle);
+    font-family: var(--font-body);
+    font-size: var(--seg-size);
+    font-weight: 500;
+    line-height: 1.1;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: color var(--dur-2) var(--ease-glass);
+  }
+
+  @media (hover: hover) {
+    .glass-segmented__option:hover { color: var(--color-text-muted); }
+  }
+
+  .glass-segmented__option[aria-checked='true'] {
+    color: var(--color-text);
+    text-shadow: 0 1px 1px oklch(0 0 0 / 0.35);
+  }
+
+  .glass-segmented__option:focus-visible {
+    outline: 2px solid var(--color-light);
+    outline-offset: -2px;
+  }
+
+  .glass-segmented--sm { --seg-pad-y: 0.375rem; --seg-pad-x: 0.8rem; --seg-size: 0.8125rem; }
+  .glass-segmented--block { display: flex; }
+  .glass-segmented--block .glass-segmented__option { flex: 1; }
+
+  /* ── Divider ──────────────────────────────────────────────────────────── */
 
   .glass-divider {
     position: relative;
@@ -401,18 +752,18 @@
     );
   }
 
-  /* ── Toast ────────────────────────────────────────────────────────────────── */
+  /* ── Toast ────────────────────────────────────────────────────────────── */
 
   .glass-toast {
     position: fixed;
     left: 50%;
-    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
     z-index: 9999;
     display: flex;
     align-items: center;
-    gap: 0.7rem;
+    gap: var(--space-3);
     max-width: min(32rem, calc(100vw - 2rem));
-    padding: 0.65rem 1.2rem 0.65rem 0.7rem;
+    padding: 0.625rem 1.25rem 0.625rem 0.625rem;
     border: 1px solid var(--color-border-strong);
     border-radius: 9999px;
     background: oklch(0.22 0.04 260 / 0.78);
@@ -420,7 +771,7 @@
     backdrop-filter: blur(20px) saturate(1.5);
     box-shadow:
       inset 0 1px 0 oklch(1 0 0 / 0.12),
-      0 18px 48px -12px oklch(0.04 0.02 262 / 0.7);
+      var(--elevation-3);
     color: var(--color-text);
     font-family: var(--font-body);
     font-size: 0.9rem;
@@ -468,7 +819,7 @@
   .glass-toast--error   { --toast-tone: var(--color-danger); }
   .glass-toast--info    { --toast-tone: var(--color-light); }
 
-  /* ── Reduced motion ───────────────────────────────────────────────────────── */
+  /* ── Reduced motion ───────────────────────────────────────────────────── */
 
   @media (prefers-reduced-motion: reduce) {
     .glass-surface--tilt { transform: none; }

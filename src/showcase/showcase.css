@@ -1,10 +1,33 @@
 @import '../glass.css';
 @import "tailwindcss";
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+/* Resets go in @layer base: unlayered rules would beat the library's
+   @layer components styles (a bare `button { font: inherit }` overrides
+   every pill's font size). */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  code,
+  pre {
+    font-family: var(--font-code);
+    font-feature-settings: 'liga' 1, 'calt' 1;
+    font-variant-ligatures: contextual;
+  }
 }
 
 html {
@@ -56,32 +79,322 @@ body::before {
   min-height: 100vh;
 }
 
-/* ─── Auto-hide top bar ──────────────────────────────────────────────────── */
-.topbar-inner {
+/* ═══════════════════════════════════════════════════════════════════════════
+   Site shell
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+html {
+  scroll-padding-top: 6rem;
+}
+
+.site {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-main {
+  flex: 1;
+}
+
+.site-pattern {
   position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+  background-repeat: repeat;
+  mix-blend-mode: soft-light;
+  opacity: 0.22;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+
+.site-header {
+  position: sticky;
   top: 0;
-  left: 0;
+  z-index: 200;
+  padding-top: var(--space-3);
+}
+
+.site-header__inner {
+  position: relative;
+}
+
+.site-header__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  border-radius: var(--radius-round);
+  box-shadow: var(--elevation-2) !important;
+}
+
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.site-header__end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+.site-popover {
+  position: absolute;
+  top: calc(100% + var(--space-3));
   right: 0;
-  transform: translateY(-110%);
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: auto;
+  z-index: 10;
+  animation: site-pop var(--dur-2) var(--ease-glass);
 }
 
-.topbar-inner.topbar-visible {
-  transform: translateY(0);
+.site-popover__pane {
+  box-shadow: var(--elevation-3) !important;
 }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
-  cursor: pointer;
+@keyframes site-pop {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
 }
 
-code,
-pre {
-  font-family: var(--font-code);
-  font-feature-settings: 'liga' 1, 'calt' 1;
-  font-variant-ligatures: contextual;
+.site-popover--menu .site-popover__pane {
+  min-width: 12rem;
+  padding: var(--space-2);
+  border-radius: var(--radius-card);
+}
+
+.site-popover--menu .glass-pill,
+.site-sheet-nav .glass-pill {
+  justify-content: flex-start;
+}
+
+.site-popover--theme .site-popover__pane {
+  width: min(24rem, calc(100vw - 2 * var(--space-gutter)));
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.site-popover--theme .site-popover__pane::-webkit-scrollbar { display: none; }
+
+.site-popover--sheet .site-popover__pane {
+  width: min(22rem, calc(100vw - 2 * var(--space-gutter)));
+}
+
+.site-sheet-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-1);
+}
+
+.site-only-narrow { display: none; }
+
+@media (max-width: 960px) {
+  .site-nav,
+  .site-only-wide { display: none; }
+  .site-only-narrow { display: block; }
+}
+
+/* ── Theme panel ────────────────────────────────────────────────────────── */
+
+.theme-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.theme-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.25rem, 1fr));
+  gap: var(--space-1);
+}
+
+.swatch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-chip);
+  background: transparent;
+  color: var(--color-text-subtle);
+  font-size: var(--step--2);
+  font-weight: 500;
+  text-align: left;
+  transition: background-color var(--dur-2) var(--ease-glass), color var(--dur-2) var(--ease-glass);
+}
+
+.swatch:hover {
+  background: oklch(0.96 0.015 250 / 0.07);
+  color: var(--color-text-muted);
+}
+
+.swatch[aria-pressed='true'] {
+  border-color: oklch(0.97 0.02 250 / 0.22);
+  background: oklch(0.96 0.015 250 / 0.12);
+  color: var(--color-text);
+}
+
+.swatch:focus-visible {
+  outline: 2px solid var(--color-light);
+  outline-offset: 1px;
+}
+
+.swatch__chip {
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 9999px;
+  box-shadow: 0 0 0 1px oklch(1 0 0 / 0.16);
+}
+
+.hue-slider::-webkit-slider-runnable-track {
+  background: linear-gradient(90deg in oklch longer hue, oklch(0.6 0.2 0), oklch(0.6 0.2 0));
+}
+
+.hue-slider::-moz-range-track {
+  background: linear-gradient(90deg in oklch longer hue, oklch(0.6 0.2 0), oklch(0.6 0.2 0));
+}
+
+.hue-slider::-moz-range-progress {
+  background: transparent;
+}
+
+/* ── Page scaffolding ───────────────────────────────────────────────────── */
+
+.page-header {
+  padding-top: var(--space-16);
+  padding-bottom: calc(var(--space-section) / 2);
+}
+
+.page-header__lede { margin-top: var(--space-6); }
+.page-header__extra { margin-top: var(--space-8); }
+
+.page-section__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.page-section__lede { margin-top: var(--space-4); }
+.page-section__body { margin-top: var(--space-12); }
+
+/* Long reference pages: one block per component or topic. */
+.docs-section {
+  margin-bottom: calc(var(--space-section) / 2);
+}
+
+/* ── Code ───────────────────────────────────────────────────────────────── */
+
+.code-block {
+  position: relative;
+  border: 1px solid oklch(0.95 0.02 250 / 0.12);
+  border-radius: var(--radius-card);
+  background: oklch(0.1 0.03 262 / 0.55);
+  box-shadow: inset 0 1px 3px oklch(0.04 0.02 262 / 0.45);
+}
+
+.code-block pre {
+  margin: 0;
+  padding: var(--space-4) var(--space-6);
+  padding-right: 5rem;
+  overflow-x: auto;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  scrollbar-width: thin;
+}
+
+.code-block--inline {
+  display: flex;
+  align-items: center;
+}
+
+/* One-liners wrap instead of scrolling: a hidden scroll is easy to miss. */
+.code-block--inline pre {
+  flex: 1;
+  padding-block: var(--space-3);
+  padding-right: var(--space-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.code-block--inline .code-block__copy {
+  position: static;
+  margin-right: var(--space-2);
+}
+
+.code-block__copy {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  /* Long lines scroll beneath it. */
+  background-color: oklch(0.14 0.035 262 / 0.92);
+}
+
+.code-block--inline .code-block__copy {
+  background-color: transparent;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+
+.site-footer {
+  position: relative;
+  z-index: 10;
+  padding-top: calc(var(--space-section) / 2);
+  padding-bottom: var(--space-12);
+}
+
+.site-footer__grid {
+  display: grid;
+  gap: var(--space-8);
+  margin-top: var(--space-12);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .site-footer__grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr) minmax(0, 1fr); }
+}
+
+.site-footer__links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  gap: var(--space-2) var(--space-6);
+  align-content: start;
+}
+
+.site-footer__links a {
+  color: var(--color-text-subtle);
+  font-size: var(--step--1);
+  text-decoration: none;
+  transition: color var(--dur-2) var(--ease-glass);
+}
+
+.site-footer__links a:hover {
+  color: var(--color-text);
 }

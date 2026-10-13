@@ -1,5 +1,7 @@
 # Glass Design System
 
+> **Historical write-up.** This document describes the material as it was first extracted from the Snippets app. For the current API, tokens (space, radius, type steps, elevation) and components, see the [README](../README.md) and the live showcase at [glass.sundbergsolutions.se](https://glass.sundbergsolutions.se). Notable changes since: `GlassPanel` defaults to `var(--radius-panel)` and has a `padding` prop, content no longer needs a `relative z-10` wrapper, and `GlassSwitch`, `GlassSlider` and `GlassSegmented` were added.
+
 A frosted-glass UI language for dark, depth-rich interfaces. Every surface in this app — cards, modals, toasts, navigation bars, form fields — is a single coherent material governed by two master knobs.
 
 ---

@@ -1,37 +1,29 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { GlassPanel, GlassPill, GlassDivider, GlassProvider, GlassInput, GlassTextarea, GlassInputWrap } from 'glass-design-system';
+import { GlassPanel, GlassPill, GlassDivider, GlassProvider, GlassInput, GlassTextarea, GlassInputWrap, GlassOrbs } from 'glass-design-system';
+import { PageHeader, JumpLinks } from '../components/Page';
 
 // ── Shared atoms ──────────────────────────────────────────────────────────────
 
 const PageSection: React.FC<React.PropsWithChildren<{ id: string }>> = ({ id, children }) => (
-  <section id={id} className="mb-28 scroll-mt-24">
+  <section id={id} className="docs-section">
     {children}
   </section>
 );
 
 const SectionLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <p className="mb-3 text-[0.68rem] font-semibold uppercase tracking-[0.38em] text-[var(--color-text-subtle)] text-bevel">
-    {children}
-  </p>
+  <p className="glass-small mb-[var(--space-2)]">{children}</p>
 );
 
 const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <h2 className="font-[var(--font-display)] text-[clamp(2rem,5vw,3.5rem)] font-[200] leading-[1.05] tracking-[-0.05em] text-[var(--color-text)] text-bevel-strong">
-    {children}
-  </h2>
+  <h2 className="glass-h2">{children}</h2>
 );
 
 const SectionSub: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--color-text-muted)] text-bevel">
-    {children}
-  </p>
+  <p className="glass-lede mt-[var(--space-4)]">{children}</p>
 );
 
 const DemoLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <p className="mb-5 text-[0.62rem] font-semibold uppercase tracking-[0.30em] text-[var(--color-text-subtle)] text-bevel">
-    {children}
-  </p>
+  <h3 className="glass-h4 mb-[var(--space-6)]">{children}</h3>
 );
 
 const Code: React.FC<React.PropsWithChildren> = ({ children }) => (
@@ -65,7 +57,7 @@ const Plate: React.FC<{
           style={{ background: accent, mixBlendMode: 'screen', opacity: 0.14 }}
         />
       )}
-      <p className="text-[0.58rem] font-semibold uppercase tracking-[0.28em] text-[var(--color-text-subtle)] text-bevel">
+      <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
         {label}
       </p>
       {sub && (
@@ -78,7 +70,7 @@ const Plate: React.FC<{
 // A code snippet block used for layout examples
 const CodeBlock: React.FC<{ children: string }> = ({ children }) => (
   <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.2rem]" className="mt-4 p-5">
-    <pre className="overflow-x-auto font-[var(--font-code)] text-[0.68rem] leading-6 text-[var(--color-text-muted)]">
+    <pre className="overflow-x-auto font-[var(--font-code)] text-[0.8125rem] leading-6 text-[var(--color-text-muted)]">
       <code>{children}</code>
     </pre>
   </GlassPanel>
@@ -139,7 +131,7 @@ const ColumnGridSection: React.FC = () => {
   ))}
 </div>`}</CodeBlock>
 
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
 
       {/* Asymmetric grids */}
       <DemoLabel>Asymmetric proportions</DemoLabel>
@@ -147,10 +139,10 @@ const ColumnGridSection: React.FC = () => {
 
         {/* 2:1 split */}
         <div>
-          <p className="mb-3 text-[0.60rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">
+          <p className="mb-3 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             2 : 1 — <Code>grid-cols-[2fr_1fr]</Code>
           </p>
-          <div className="grid gap-5" style={{ gridTemplateColumns: '2fr 1fr' }}>
+          <div className="grid gap-6" style={{ gridTemplateColumns: '2fr 1fr' }}>
             <Plate label="Main" sub="2fr — primary content area" intensity="medium" />
             <Plate label="Aside" sub="1fr — secondary" intensity="subtle" topGlow={false} />
           </div>
@@ -158,10 +150,10 @@ const ColumnGridSection: React.FC = () => {
 
         {/* 1:2:1 split */}
         <div>
-          <p className="mb-3 text-[0.60rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">
+          <p className="mb-3 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             1 : 2 : 1 — <Code>grid-cols-[1fr_2fr_1fr]</Code>
           </p>
-          <div className="grid gap-5" style={{ gridTemplateColumns: '1fr 2fr 1fr' }}>
+          <div className="grid gap-6" style={{ gridTemplateColumns: '1fr 2fr 1fr' }}>
             <Plate label="Nav" sub="1fr" intensity="subtle" topGlow={false} />
             <Plate label="Content" sub="2fr — hero focus" intensity="medium" />
             <Plate label="Panel" sub="1fr" intensity="subtle" topGlow={false} />
@@ -170,10 +162,10 @@ const ColumnGridSection: React.FC = () => {
 
         {/* fixed + fluid */}
         <div>
-          <p className="mb-3 text-[0.60rem] font-semibold uppercase tracking-[0.24em] text-[var(--color-text-subtle)]">
+          <p className="mb-3 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             Fixed + fluid — <Code>grid-cols-[280px_1fr]</Code>
           </p>
-          <div className="grid gap-5" style={{ gridTemplateColumns: '280px 1fr' }}>
+          <div className="grid gap-6" style={{ gridTemplateColumns: 'min(280px, 40%) minmax(0, 1fr)' }}>
             <Plate label="Sidebar" sub="280px — fixed width" intensity="subtle" topGlow={false} />
             <Plate label="Main" sub="1fr — fills remaining space" intensity="medium" />
           </div>
@@ -181,22 +173,22 @@ const ColumnGridSection: React.FC = () => {
       </div>
 
       <CodeBlock>{`{/* 2:1 asymmetric split */}
-<div className="grid gap-5" style={{ gridTemplateColumns: '2fr 1fr' }}>
+<div className="grid gap-6" style={{ gridTemplateColumns: '2fr 1fr' }}>
   <GlassPanel intensity="medium" …>Main content</GlassPanel>
   <GlassPanel intensity="subtle" …>Aside</GlassPanel>
 </div>
 
 {/* Fixed sidebar + fluid main */}
-<div className="grid gap-5" style={{ gridTemplateColumns: '280px 1fr' }}>
+<div className="grid gap-6" style={{ gridTemplateColumns: '280px 1fr' }}>
   <GlassPanel intensity="subtle" …>Sidebar</GlassPanel>
   <GlassPanel intensity="medium" …>Main</GlassPanel>
 </div>`}</CodeBlock>
 
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
 
       {/* auto-fill responsive */}
       <DemoLabel>Auto-fill responsive — no breakpoints needed</DemoLabel>
-      <p className="mb-4 text-[0.72rem] leading-6 text-[var(--color-text-muted)]">
+      <p className="mb-4 text-[0.8125rem] leading-6 text-[var(--color-text-muted)]">
         <Code>{'repeat(auto-fill, minmax(220px, 1fr))'}</Code> — columns appear as space allows.
         Resize the window to see the grid reflow automatically.
       </p>
@@ -204,7 +196,7 @@ const ColumnGridSection: React.FC = () => {
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-          gap: '1.25rem',
+          gap: 'var(--space-grid)',
         }}
       >
         {['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta'].map((name) => (
@@ -216,7 +208,7 @@ const ColumnGridSection: React.FC = () => {
 <div style={{
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-  gap: '1.25rem',
+  gap: 'var(--space-grid)',
 }}>
   {items.map((item) => (
     <GlassPanel key={item.id} intensity="subtle" …>
@@ -238,7 +230,7 @@ const BentoSection: React.FC = () => (
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
         gridAutoRows: '180px',
-        gap: '1.25rem',
+        gap: 'var(--space-grid)',
       }}
     >
       {/* Featured — 2 cols × 2 rows */}
@@ -251,7 +243,7 @@ const BentoSection: React.FC = () => (
         className="p-8 flex flex-col justify-between"
       >
         <div className="relative z-10">
-          <p className="text-[0.60rem] font-semibold uppercase tracking-[0.30em] text-[var(--color-text-subtle)] text-bevel">
+          <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
             Featured
           </p>
           <p className="mt-3 font-[var(--font-display)] text-3xl font-[200] tracking-[-0.05em] text-[var(--color-text)] text-bevel-strong leading-tight">
@@ -274,9 +266,9 @@ const BentoSection: React.FC = () => (
         topGlow
         rounded="rounded-[1.6rem]"
         style={{ gridColumn: 'span 2' }}
-        className="p-6 flex items-center gap-5"
+        className="p-6 flex items-center gap-6"
       >
-        <div className="relative z-10 flex items-center gap-5 w-full">
+        <div className="relative z-10 flex items-center gap-6 w-full">
           <div
             className="flex-none flex items-center justify-center rounded-full text-lg"
             style={{
@@ -288,7 +280,7 @@ const BentoSection: React.FC = () => (
             ◈
           </div>
           <div>
-            <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">Wide — 2 cols</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Wide — 2 cols</p>
             <p className="mt-0.5 text-sm font-[300] text-[var(--color-text)]">Spans the full right half</p>
           </div>
         </div>
@@ -303,7 +295,7 @@ const BentoSection: React.FC = () => (
         className="p-6 flex flex-col justify-between"
       >
         <div className="relative z-10">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+          <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             Tall — 2 rows
           </p>
           <p className="mt-2 text-xs leading-5 text-[var(--color-text-muted)]">
@@ -314,7 +306,7 @@ const BentoSection: React.FC = () => (
           {['Item one', 'Item two', 'Item three'].map((t) => (
             <div
               key={t}
-              className="flex items-center gap-2 text-[0.68rem] text-[var(--color-text-muted)]"
+              className="flex items-center gap-2 text-[0.8125rem] text-[var(--color-text-muted)]"
             >
               <span style={{ color: 'var(--color-accent-bright)', fontSize: '0.5rem' }}>◆</span>
               {t}
@@ -336,7 +328,7 @@ const BentoSection: React.FC = () => (
       >
         <div className="relative z-10 flex items-center justify-between">
           <div>
-            <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
               Footer bar — 3 cols
             </p>
             <p className="mt-0.5 text-xs text-[var(--color-text-muted)]">Spans three of four columns</p>
@@ -354,7 +346,7 @@ const BentoSection: React.FC = () => (
   display: 'grid',
   gridTemplateColumns: 'repeat(4, 1fr)',
   gridAutoRows: '180px',
-  gap: '1.25rem',
+  gap: 'var(--space-grid)',
 }}>
   {/* Featured hero — 2 cols × 2 rows */}
   <GlassPanel
@@ -386,7 +378,7 @@ const SidebarSection: React.FC = () => {
 
       {/* Width control */}
       <div className="mb-5 flex items-center gap-4">
-        <p className="text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">
+        <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
           Sidebar width — <span className="text-[var(--color-accent-bright)]">{sidebarWidth}px</span>
         </p>
         <input
@@ -399,7 +391,7 @@ const SidebarSection: React.FC = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: `${sidebarWidth}px 1fr`,
+          gridTemplateColumns: `min(${sidebarWidth}px, 45%) minmax(0, 1fr)`,
           gridTemplateRows: 'auto 1fr',
           gap: '1rem',
           minHeight: '420px',
@@ -414,7 +406,7 @@ const SidebarSection: React.FC = () => {
           className="p-5 flex flex-col gap-3"
         >
           <div className="relative z-10">
-            <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
               Navigation
             </p>
             <div className="mt-4 space-y-1">
@@ -441,7 +433,7 @@ const SidebarSection: React.FC = () => {
             <GlassDivider className="mb-3" />
             <div className="flex items-center gap-2.5">
               <div
-                className="flex-none rounded-full flex items-center justify-center text-[0.6rem] font-bold"
+                className="flex-none rounded-full flex items-center justify-center text-[0.75rem] font-bold"
                 style={{
                   width: '2rem', height: '2rem',
                   background: 'oklch(0.52 0.24 238 / 0.20)',
@@ -451,8 +443,8 @@ const SidebarSection: React.FC = () => {
                 FJ
               </div>
               <div>
-                <p className="text-[0.62rem] font-semibold text-[var(--color-text)]">Fredrik J.</p>
-                <p className="text-[0.56rem] text-[var(--color-text-subtle)]">Pro plan</p>
+                <p className="text-[0.75rem] font-semibold text-[var(--color-text)]">Fredrik J.</p>
+                <p className="text-[0.75rem] text-[var(--color-text-subtle)]">Pro plan</p>
               </div>
             </div>
           </div>
@@ -466,7 +458,7 @@ const SidebarSection: React.FC = () => {
           className="p-4 flex items-center justify-between"
         >
           <div className="relative z-10">
-            <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">Topbar</p>
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Topbar</p>
           </div>
           <div className="relative z-10 flex gap-2">
             <GlassPill size="xs">Filter</GlassPill>
@@ -482,7 +474,7 @@ const SidebarSection: React.FC = () => {
           className="p-6 flex flex-col"
         >
           <div className="relative z-10">
-            <p className="text-[0.60rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)] text-bevel">
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)] text-bevel">
               Main content
             </p>
             <p className="mt-1 font-[var(--font-display)] text-xl font-[200] tracking-[-0.04em] text-[var(--color-text)] text-bevel-strong">
@@ -523,12 +515,12 @@ type StatCardProps = { label: string; value: string; delta: string; positive: bo
 const StatCard: React.FC<StatCardProps> = ({ label, value, delta, positive }) => (
   <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-5">
     <div className="relative z-10">
-      <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">{label}</p>
+      <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">{label}</p>
       <p className="mt-2 font-[var(--font-display)] text-3xl font-[200] tracking-[-0.05em] text-[var(--color-text)] text-bevel-strong">
         {value}
       </p>
       <p
-        className="mt-1 text-[0.68rem] font-semibold"
+        className="mt-1 text-[0.8125rem] font-semibold"
         style={{ color: positive ? 'var(--color-success)' : 'var(--color-danger)' }}
       >
         {positive ? '▲' : '▼'} {delta}
@@ -561,9 +553,9 @@ const MiniSparkline: React.FC<{ values: number[]; color: string }> = ({ values, 
 const DashboardSection: React.FC = () => (
   <>
     <DemoLabel>Dashboard — stat row + feature area + activity list</DemoLabel>
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-6">
       {/* Stat row */}
-      <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
         <StatCard label="Total snippets" value="2,841"  delta="12% this week"  positive />
         <StatCard label="Languages"      value="34"     delta="2 new"          positive />
         <StatCard label="Avg. length"    value="64 ln"  delta="3 ln longer"    positive={false} />
@@ -574,8 +566,8 @@ const DashboardSection: React.FC = () => (
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 340px',
-          gap: '1.25rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 20rem), 1fr))',
+          gap: 'var(--space-grid)',
         }}
       >
         {/* Chart area */}
@@ -583,7 +575,7 @@ const DashboardSection: React.FC = () => (
           <div className="relative z-10">
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+                <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
                   Snippets added
                 </p>
                 <p className="mt-0.5 font-[var(--font-display)] text-2xl font-[200] tracking-[-0.04em] text-[var(--color-text)] text-bevel-strong">
@@ -607,7 +599,7 @@ const DashboardSection: React.FC = () => (
                 />
               ))}
             </div>
-            <div className="mt-2 flex justify-between text-[0.52rem] text-[var(--color-text-subtle)]">
+            <div className="mt-2 flex justify-between text-[0.75rem] text-[var(--color-text-subtle)]">
               <span>12 wks ago</span>
               <span>This week</span>
             </div>
@@ -617,7 +609,7 @@ const DashboardSection: React.FC = () => (
         {/* Activity list */}
         <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.6rem]" className="p-5">
           <div className="relative z-10">
-            <p className="mb-4 text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+            <p className="mb-4 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
               Recent activity
             </p>
             <div className="space-y-1">
@@ -633,7 +625,7 @@ const DashboardSection: React.FC = () => (
                   className="flex items-center gap-3 rounded-[0.8rem] px-3 py-2 transition-colors duration-200 hover:bg-[oklch(0.52_0.24_238_/_0.06)]"
                 >
                   <span
-                    className="flex-none rounded text-[0.48rem] font-bold px-1.5 py-0.5"
+                    className="flex-none rounded text-[0.75rem] font-bold px-1.5 py-0.5"
                     style={{
                       background: 'oklch(0.52 0.24 238 / 0.14)',
                       color: 'var(--color-accent-bright)',
@@ -645,10 +637,10 @@ const DashboardSection: React.FC = () => (
                     {lang}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[0.68rem] text-[var(--color-text)]">{name}</p>
-                    <p className="text-[0.56rem] text-[var(--color-text-subtle)]">{action}</p>
+                    <p className="truncate text-[0.8125rem] text-[var(--color-text)]">{name}</p>
+                    <p className="text-[0.75rem] text-[var(--color-text-subtle)]">{action}</p>
                   </div>
-                  <p className="flex-none text-[0.56rem] text-[var(--color-text-subtle)]">{time}</p>
+                  <p className="flex-none text-[0.75rem] text-[var(--color-text-subtle)]">{time}</p>
                 </div>
               ))}
             </div>
@@ -657,7 +649,7 @@ const DashboardSection: React.FC = () => (
       </div>
 
       {/* Bottom row — sparklines */}
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-3 gap-6">
         {[
           { label: 'TypeScript', data: [12,18,14,22,19,28,24,31,27,38,34,42], color: 'oklch(0.72 0.14 226)' },
           { label: 'Python',     data: [8,11,9,15,13,18,16,22,20,25,23,28],  color: 'oklch(0.76 0.16 160)' },
@@ -666,7 +658,7 @@ const DashboardSection: React.FC = () => (
           <GlassPanel key={label} intensity="subtle" topGlow={false} rounded="rounded-[1.4rem]" className="p-5">
             <div className="relative z-10">
               <div className="flex items-center justify-between">
-                <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">{label}</p>
+                <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">{label}</p>
                 <p className="font-[var(--font-display)] text-lg font-[200] tracking-[-0.03em]" style={{ color }}>{data[data.length - 1]}</p>
               </div>
               <MiniSparkline values={data} color={color} />
@@ -677,20 +669,20 @@ const DashboardSection: React.FC = () => (
     </div>
 
     <CodeBlock>{`{/* Dashboard — stat row + feature area + list */}
-<div className="flex flex-col gap-5">
+<div className="flex flex-col gap-6">
   {/* 4-column stat row — collapses to 2 on mobile */}
-  <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
+  <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
     {stats.map((s) => <StatCard key={s.label} {...s} />)}
   </div>
 
   {/* Feature row — fluid chart + fixed list */}
-  <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '1.25rem' }}>
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 'var(--space-grid)' }}>
     <GlassPanel intensity="medium" …>Chart</GlassPanel>
     <GlassPanel intensity="subtle" …>Activity</GlassPanel>
   </div>
 
   {/* Sparkline row — equal 3-column */}
-  <div className="grid grid-cols-3 gap-5">
+  <div className="grid grid-cols-3 gap-6">
     {languages.map((lang) => <SparkCard key={lang.label} {...lang} />)}
   </div>
 </div>`}</CodeBlock>
@@ -712,7 +704,7 @@ const StackingSection: React.FC = () => (
         style={{ inset: 0, zIndex: 1 }}
       >
         <div className="relative z-10 p-8">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+          <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             Layer 1 — rearmost (<Code>z-index: 1</Code>)
           </p>
           <p className="mt-2 text-xs text-[var(--color-text-muted)]">intensity="subtle"</p>
@@ -728,7 +720,7 @@ const StackingSection: React.FC = () => (
         style={{ top: '2.5rem', left: '3rem', right: '3rem', bottom: '2.5rem', zIndex: 2 }}
       >
         <div className="relative z-10 p-7">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+          <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             Layer 2 — middle (<Code>z-index: 2</Code>)
           </p>
           <p className="mt-2 text-xs text-[var(--color-text-muted)]">intensity="medium" — inset 2.5rem</p>
@@ -745,13 +737,13 @@ const StackingSection: React.FC = () => (
         style={{ top: '5rem', left: '6rem', right: '6rem', bottom: '5rem', zIndex: 3 }}
       >
         <div className="relative z-10 p-6 flex flex-col items-center justify-center h-full text-center">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+          <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             Layer 3 — foreground (<Code>z-index: 3</Code>)
           </p>
           <p className="mt-2 font-[var(--font-display)] text-2xl font-[200] tracking-[-0.04em] text-[var(--color-text)] text-bevel-strong">
             intensity="strong"
           </p>
-          <p className="mt-2 text-[0.68rem] text-[var(--color-text-muted)]">Inset 5rem on all sides</p>
+          <p className="mt-2 text-[0.8125rem] text-[var(--color-text-muted)]">Inset 5rem on all sides</p>
         </div>
       </GlassPanel>
     </div>
@@ -790,7 +782,7 @@ const StackingSection: React.FC = () => (
         }}
       >
         <div className="relative z-10">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">Floating card</p>
+          <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Floating card</p>
           <p className="mt-2 font-[var(--font-display)] text-2xl font-[200] tracking-[-0.04em] text-[var(--color-text)] text-bevel-strong">
             Elevated glass
           </p>
@@ -833,7 +825,7 @@ const ProviderScopingSection: React.FC = () => {
   return (
     <>
       <DemoLabel>Nested GlassProvider — per-region opacity overrides</DemoLabel>
-      <p className="mb-5 text-[0.72rem] leading-6 text-[var(--color-text-muted)]">
+      <p className="mb-5 text-[0.8125rem] leading-6 text-[var(--color-text-muted)]">
         Wrap layout regions in a <Code>{'<GlassProvider>'}</Code> to override glass properties
         for that subtree only — useful for modals, sidebars, or sections that need different depth.
       </p>
@@ -841,7 +833,7 @@ const ProviderScopingSection: React.FC = () => {
       {/* Controls */}
       <div className="mb-6 flex flex-wrap gap-8">
         <div>
-          <p className="mb-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">
+          <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             Outer opacity — <span className="text-[var(--color-accent-bright)]">{outerOpacity}</span>
           </p>
           <input type="range" min={0.20} max={1} step={0.05} value={outerOpacity}
@@ -849,7 +841,7 @@ const ProviderScopingSection: React.FC = () => {
             className="accent-[var(--color-accent)]" />
         </div>
         <div>
-          <p className="mb-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">
+          <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             Inner opacity — <span className="text-[var(--color-accent-bright)]">{innerOpacity}</span>
           </p>
           <input type="range" min={0.20} max={1} step={0.05} value={innerOpacity}
@@ -859,11 +851,11 @@ const ProviderScopingSection: React.FC = () => {
       </div>
 
       <GlassProvider opacity={outerOpacity}>
-        <div className="grid gap-5" style={{ gridTemplateColumns: '1fr 1fr' }}>
+        <div className="grid gap-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 16rem), 1fr))' }}>
           {/* Outer region */}
           <GlassPanel intensity="medium" topGlow rounded="rounded-[1.6rem]" className="p-6">
             <div className="relative z-10">
-              <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+              <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
                 Outer region
               </p>
               <p className="mt-1.5 text-xs leading-5 text-[var(--color-text-muted)]">
@@ -871,10 +863,10 @@ const ProviderScopingSection: React.FC = () => {
               </p>
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1rem]" className="p-3">
-                  <p className="relative z-10 text-[0.56rem] text-[var(--color-text-subtle)]">subtle</p>
+                  <p className="relative z-10 text-[0.75rem] text-[var(--color-text-subtle)]">subtle</p>
                 </GlassPanel>
                 <GlassPanel intensity="strong" topGlow={false} rounded="rounded-[1rem]" className="p-3">
-                  <p className="relative z-10 text-[0.56rem] text-[var(--color-text-subtle)]">strong</p>
+                  <p className="relative z-10 text-[0.75rem] text-[var(--color-text-subtle)]">strong</p>
                 </GlassPanel>
               </div>
             </div>
@@ -884,7 +876,7 @@ const ProviderScopingSection: React.FC = () => {
           <GlassProvider opacity={innerOpacity}>
             <GlassPanel intensity="medium" topGlow rounded="rounded-[1.6rem]" className="p-6 h-full">
               <div className="relative z-10">
-                <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+                <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
                   Inner region
                 </p>
                 <p className="mt-1.5 text-xs leading-5 text-[var(--color-text-muted)]">
@@ -892,10 +884,10 @@ const ProviderScopingSection: React.FC = () => {
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-2">
                   <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1rem]" className="p-3">
-                    <p className="relative z-10 text-[0.56rem] text-[var(--color-text-subtle)]">subtle</p>
+                    <p className="relative z-10 text-[0.75rem] text-[var(--color-text-subtle)]">subtle</p>
                   </GlassPanel>
                   <GlassPanel intensity="strong" topGlow={false} rounded="rounded-[1rem]" className="p-3">
-                    <p className="relative z-10 text-[0.56rem] text-[var(--color-text-subtle)]">strong</p>
+                    <p className="relative z-10 text-[0.75rem] text-[var(--color-text-subtle)]">strong</p>
                   </GlassPanel>
                 </div>
               </div>
@@ -924,22 +916,22 @@ const ProviderScopingSection: React.FC = () => {
 // ── § Gap scale ───────────────────────────────────────────────────────────────
 
 const GAP_OPTIONS = [
-  { label: 'tight', value: '0.5rem',  tw: 'gap-2' },
-  { label: 'cozy',  value: '1rem',    tw: 'gap-4' },
-  { label: 'base',  value: '1.25rem', tw: 'gap-5' },
-  { label: 'loose', value: '2rem',    tw: 'gap-8' },
-  { label: 'airy',  value: '3rem',    tw: 'gap-12' },
+  { label: 'Tight', value: 'var(--space-2)',    tw: 'gap-2' },
+  { label: 'Cozy',  value: 'var(--space-4)',    tw: 'gap-4' },
+  { label: 'Grid',  value: 'var(--space-grid)', tw: 'gap-[var(--space-grid)]' },
+  { label: 'Loose', value: 'var(--space-8)',    tw: 'gap-8' },
+  { label: 'Airy',  value: 'var(--space-12)',   tw: 'gap-12' },
 ];
 
 const GapSection: React.FC = () => {
-  const [activeGap, setActiveGap] = useState('1.25rem');
+  const [activeGap, setActiveGap] = useState('var(--space-grid)');
 
   return (
     <>
       <DemoLabel>Gap scale — spacing between glass panels</DemoLabel>
-      <p className="mb-4 text-[0.72rem] leading-6 text-[var(--color-text-muted)]">
+      <p className="mb-4 text-[0.8125rem] leading-6 text-[var(--color-text-muted)]">
         Gap controls breathing room between panels. Tighter grids feel data-dense; looser ones
-        feel editorial. Glass panels need enough gap so their corner glows don't bleed together.
+        feel editorial. The fluid --space-grid (12 → 24px) is the default between cards.
       </p>
 
       {/* Gap picker */}
@@ -951,7 +943,7 @@ const GapSection: React.FC = () => {
             variant={activeGap === value ? 'active' : 'default'}
             onClick={() => setActiveGap(value)}
           >
-            {label} — {tw}
+            {label}
           </GlassPill>
         ))}
       </div>
@@ -969,17 +961,17 @@ const GapSection: React.FC = () => {
         ))}
       </div>
 
-      <p className="mt-4 text-[0.68rem] leading-5 text-[var(--color-text-muted)]">
-        Current gap: <Code>{activeGap}</Code> — {GAP_OPTIONS.find(g => g.value === activeGap)?.tw}
+      <p className="mt-4 text-[0.8125rem] leading-5 text-[var(--color-text-muted)]">
+        Current gap: <Code>{GAP_OPTIONS.find(g => g.value === activeGap)?.tw}</Code>, <Code>{activeGap}</Code>
       </p>
 
-      <CodeBlock>{`{/* Recommended minimum gap for glass panels: gap-5 (1.25rem) */}
-{/* Smaller gaps risk corner glows merging across panel edges */}
-<div className="grid grid-cols-3 gap-5">  {/* ← cozy default */}
+      <CodeBlock>{`{/* Default between cards: the fluid grid gap, 12 → 24px */}
+<div className="grid grid-cols-3 gap-[var(--space-grid)]">
   {items.map((item) => <GlassPanel key={item.id} … />)}
 </div>
 
-<div className="grid grid-cols-3 gap-8">  {/* ← editorial / hero */}
+{/* Editorial: a fixed step from the scale */}
+<div className="grid grid-cols-3 gap-8">
   {items.map((item) => <GlassPanel key={item.id} … />)}
 </div>`}</CodeBlock>
     </>
@@ -994,15 +986,15 @@ const FormLayoutSection: React.FC = () => {
   return (
     <>
       <DemoLabel>Single-column form — stacked fields inside a glass panel</DemoLabel>
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {/* Live demo */}
         <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8">
-          <div className="relative z-10 flex flex-col gap-5">
-            <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+          <div className="relative z-10 flex flex-col gap-6">
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
               Create account
             </p>
             <div>
-              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Name</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Name</p>
               <GlassInput
                 type="text"
                 placeholder="Jane Doe"
@@ -1011,7 +1003,7 @@ const FormLayoutSection: React.FC = () => {
               />
             </div>
             <div>
-              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Email</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Email</p>
               <GlassInput
                 type="email"
                 placeholder="jane@example.com"
@@ -1020,7 +1012,7 @@ const FormLayoutSection: React.FC = () => {
               />
             </div>
             <div>
-              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Role</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Role</p>
               <GlassInputWrap>
                 <select
                   value={formState.role}
@@ -1034,7 +1026,7 @@ const FormLayoutSection: React.FC = () => {
               </GlassInputWrap>
             </div>
             <div>
-              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Bio</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Bio</p>
               <GlassTextarea
                 placeholder="Tell us about yourself…"
                 rows={3}
@@ -1053,7 +1045,7 @@ const FormLayoutSection: React.FC = () => {
         <div className="flex flex-col gap-6">
           <CodeBlock>{`{/* Stacked form inside a glass panel */}
 <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8">
-  <div className="flex flex-col gap-5">
+  <div className="flex flex-col gap-6">
     <div>
       <label>Name</label>
       <GlassInput type="text" placeholder="Jane Doe" … />
@@ -1081,28 +1073,28 @@ const FormLayoutSection: React.FC = () => {
         </div>
       </div>
 
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
 
       {/* Two-column form layout */}
       <DemoLabel>Two-column form — side-by-side fields for wider viewports</DemoLabel>
       <GlassPanel intensity="medium" topGlow rounded="rounded-[2rem]" className="p-8">
         <div className="relative z-10 flex flex-col gap-6">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+          <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
             Project settings
           </p>
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Project name</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Project name</p>
               <GlassInput type="text" placeholder="My project" />
             </div>
             <div>
-              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Repository URL</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Repository URL</p>
               <GlassInput type="url" placeholder="https://github.com/…" />
             </div>
           </div>
-          <div className="grid gap-5 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             <div>
-              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Language</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Language</p>
               <GlassInputWrap>
                 <select className="block w-full appearance-none bg-transparent px-5 py-4 text-base leading-normal text-[var(--color-text)] focus:outline-none">
                   {['TypeScript', 'JavaScript', 'Python', 'Rust', 'Go'].map((l) => (
@@ -1112,7 +1104,7 @@ const FormLayoutSection: React.FC = () => {
               </GlassInputWrap>
             </div>
             <div>
-              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Visibility</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Visibility</p>
               <GlassInputWrap>
                 <select className="block w-full appearance-none bg-transparent px-5 py-4 text-base leading-normal text-[var(--color-text)] focus:outline-none">
                   {['Public', 'Private', 'Team only'].map((v) => (
@@ -1122,7 +1114,7 @@ const FormLayoutSection: React.FC = () => {
               </GlassInputWrap>
             </div>
             <div>
-              <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">License</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">License</p>
               <GlassInputWrap>
                 <select className="block w-full appearance-none bg-transparent px-5 py-4 text-base leading-normal text-[var(--color-text)] focus:outline-none">
                   {['MIT', 'Apache 2.0', 'GPL 3.0', 'BSD 3-Clause', 'Unlicense'].map((l) => (
@@ -1133,7 +1125,7 @@ const FormLayoutSection: React.FC = () => {
             </div>
           </div>
           <div>
-            <p className="mb-1.5 text-[0.60rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Description</p>
+            <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Description</p>
             <GlassTextarea placeholder="Describe your project…" rows={3} />
           </div>
           <div className="flex justify-end gap-3 pt-2">
@@ -1147,7 +1139,7 @@ const FormLayoutSection: React.FC = () => {
 <GlassPanel intensity="medium" topGlow className="p-8">
   <div className="flex flex-col gap-6">
     {/* Side-by-side row */}
-    <div className="grid gap-5 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
       <div>
         <label>Project name</label>
         <GlassInput type="text" … />
@@ -1159,7 +1151,7 @@ const FormLayoutSection: React.FC = () => {
     </div>
 
     {/* Three-column row */}
-    <div className="grid gap-5 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
       <div><label>Language</label><GlassInputWrap><select …/></GlassInputWrap></div>
       <div><label>Visibility</label><GlassInputWrap><select …/></GlassInputWrap></div>
       <div><label>License</label><GlassInputWrap><select …/></GlassInputWrap></div>
@@ -1173,27 +1165,27 @@ const FormLayoutSection: React.FC = () => {
   </div>
 </GlassPanel>`}</CodeBlock>
 
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
 
       {/* Form inside sidebar layout */}
       <DemoLabel>Form in sidebar — search + filters alongside content</DemoLabel>
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '320px 1fr',
-          gap: '1.25rem',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 18rem), 1fr))',
+          gap: 'var(--space-grid)',
           minHeight: '400px',
         }}
       >
         {/* Sidebar with form */}
         <GlassPanel intensity="subtle" topGlow={false} rounded="rounded-[1.6rem]" className="p-5">
           <div className="relative z-10 flex flex-col gap-4">
-            <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+            <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
               Filters
             </p>
             <GlassInput type="search" placeholder="Search snippets…" />
             <div>
-              <p className="mb-1.5 text-[0.56rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Category</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Category</p>
               <GlassInputWrap>
                 <select className="block w-full appearance-none bg-transparent px-4 py-3 text-sm text-[var(--color-text)] focus:outline-none">
                   {['All categories', 'Functions', 'Classes', 'Utilities', 'Hooks'].map((c) => (
@@ -1203,7 +1195,7 @@ const FormLayoutSection: React.FC = () => {
               </GlassInputWrap>
             </div>
             <div>
-              <p className="mb-1.5 text-[0.56rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Language</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Language</p>
               <GlassInputWrap>
                 <select className="block w-full appearance-none bg-transparent px-4 py-3 text-sm text-[var(--color-text)] focus:outline-none">
                   {['All languages', 'TypeScript', 'Python', 'Rust', 'CSS'].map((l) => (
@@ -1214,7 +1206,7 @@ const FormLayoutSection: React.FC = () => {
             </div>
             <GlassDivider className="my-1" />
             <div>
-              <p className="mb-1.5 text-[0.56rem] font-semibold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">Sort by</p>
+              <p className="mb-1.5 text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">Sort by</p>
               <GlassInputWrap>
                 <select className="block w-full appearance-none bg-transparent px-4 py-3 text-sm text-[var(--color-text)] focus:outline-none">
                   {['Newest', 'Most used', 'Alphabetical', 'Recently edited'].map((s) => (
@@ -1231,7 +1223,7 @@ const FormLayoutSection: React.FC = () => {
         <GlassPanel intensity="medium" topGlow rounded="rounded-[1.6rem]" className="p-6">
           <div className="relative z-10">
             <div className="mb-5 flex items-center justify-between">
-              <p className="text-[0.58rem] font-semibold uppercase tracking-[0.26em] text-[var(--color-text-subtle)]">
+              <p className="text-[0.75rem] font-semibold text-[var(--color-text-subtle)]">
                 Results
               </p>
               <GlassPill size="xs">+ New snippet</GlassPill>
@@ -1250,7 +1242,7 @@ const FormLayoutSection: React.FC = () => {
                   style={{ border: '1px solid oklch(0.48 0.06 248 / 0.12)' }}
                 >
                   <span
-                    className="flex-none rounded text-[0.48rem] font-bold px-1.5 py-0.5"
+                    className="flex-none rounded text-[0.75rem] font-bold px-1.5 py-0.5"
                     style={{
                       background: 'oklch(0.52 0.24 238 / 0.14)',
                       color: 'var(--color-accent-bright)',
@@ -1262,8 +1254,8 @@ const FormLayoutSection: React.FC = () => {
                     {lang}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[0.72rem] font-semibold text-[var(--color-text)]">{name}</p>
-                    <p className="text-[0.60rem] text-[var(--color-text-muted)]">{desc}</p>
+                    <p className="truncate text-[0.8125rem] font-semibold text-[var(--color-text)]">{name}</p>
+                    <p className="text-[0.75rem] text-[var(--color-text-muted)]">{desc}</p>
                   </div>
                 </div>
               ))}
@@ -1276,7 +1268,7 @@ const FormLayoutSection: React.FC = () => {
 <div style={{
   display: 'grid',
   gridTemplateColumns: '320px 1fr',
-  gap: '1.25rem',
+  gap: 'var(--space-grid)',
 }}>
   {/* Sidebar with search + filter fields */}
   <GlassPanel intensity="subtle" …>
@@ -1298,84 +1290,65 @@ const FormLayoutSection: React.FC = () => {
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 const NAV_ITEMS = [
-  { id: 'column-grid',    label: 'Column Grid' },
+  { id: 'column-grid',    label: 'Column grid' },
   { id: 'bento',         label: 'Bento' },
   { id: 'sidebar',       label: 'Sidebar' },
   { id: 'dashboard',     label: 'Dashboard' },
   { id: 'stacking',      label: 'Stacking' },
   { id: 'provider-scope', label: 'Provider scope' },
   { id: 'gap-scale',     label: 'Gap scale' },
-  { id: 'form-layouts',  label: 'Form Layouts' },
+  { id: 'form-layouts',  label: 'Form layouts' },
 ];
 
 const LayoutShowcase: React.FC = () => (
-  <div
-    className="mx-auto"
-    style={{ maxWidth: '72rem', padding: 'clamp(5rem,10vw,8rem) clamp(1.5rem,5vw,3rem) 8rem' }}
-  >
-    {/* Page header */}
-    <div className="mb-20">
-      <p className="mb-3 text-[0.72rem] font-semibold uppercase tracking-[0.44em] text-[var(--color-text-subtle)] text-bevel">
-        Glass Design System
-      </p>
-      <h1 className="font-[var(--font-display)] text-[clamp(3rem,8vw,6rem)] font-[200] leading-[0.90] tracking-[-0.07em] text-[var(--color-text)] text-bevel-strong">
-        Layouts
-      </h1>
-      <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--color-text-muted)] text-bevel">
-        Glass panels are layout-agnostic — they adapt to any CSS grid or flexbox arrangement. This
-        page demonstrates canonical layout patterns, the grid system, gap scale, depth stacking, and
-        how <Code>GlassProvider</Code> scoping enables per-region opacity overrides.
-      </p>
-
-      {/* Quick nav */}
-      <div className="mt-8 flex flex-wrap gap-2">
-        {NAV_ITEMS.map(({ id, label }) => (
-          <GlassPill key={id} size="sm" as="a" href={`#${id}`}>
-            {label}
-          </GlassPill>
-        ))}
-      </div>
-    </div>
-
-    <GlassDivider className="mb-20" />
+  <div className="relative">
+    <GlassOrbs preset="kiln" speed={10} opacity={0.45} fixed />
+    <div className="relative z-10">
+    <PageHeader
+      title="Layouts"
+      lede="Glass panels fit any grid or flex arrangement. These are the patterns that come up most: column grids, bento, sidebars, dashboards, depth stacking and scoped providers."
+    >
+      <JumpLinks items={NAV_ITEMS} />
+    </PageHeader>
+    <div className="glass-container">
 
     {/* ── Column Grid */}
     <PageSection id="column-grid">
       <SectionLabel>Grid system</SectionLabel>
-      <SectionTitle>Column Grid</SectionTitle>
+      <SectionTitle>Column grid</SectionTitle>
       <SectionSub>
         Equal-width, asymmetric, and fluid auto-fill grids. Use Tailwind's{' '}
         <Code>grid-cols-N</Code> classes for fixed columns and CSS{' '}
         <Code>repeat(auto-fill, minmax(...))</Code> for fully responsive layouts with no
         breakpoints.
       </SectionSub>
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
       <ColumnGridSection />
     </PageSection>
 
     {/* ── Bento */}
     <PageSection id="bento">
       <SectionLabel>Grid system</SectionLabel>
-      <SectionTitle>Bento Grid</SectionTitle>
+      <SectionTitle>Bento grid</SectionTitle>
       <SectionSub>
         A magazine-style mosaic where panels span multiple columns and rows.
         Use <Code>grid-column: span N</Code> and <Code>grid-row: span N</Code> to create
         visual hierarchy without breaking out of the grid.
       </SectionSub>
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
       <BentoSection />
     </PageSection>
 
     {/* ── Sidebar */}
     <PageSection id="sidebar">
       <SectionLabel>Layout pattern</SectionLabel>
-      <SectionTitle>Sidebar Layout</SectionTitle>
+      <SectionTitle>Sidebar layout</SectionTitle>
       <SectionSub>
         A fixed-width navigation sidebar paired with a fluid main area and topbar.
         The sidebar spans both grid rows via <Code>grid-row: span 2</Code> — no extra
         wrappers needed.
       </SectionSub>
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
       <SidebarSection />
     </PageSection>
 
@@ -1387,74 +1360,64 @@ const LayoutShowcase: React.FC = () => (
         A realistic analytics dashboard composing stat cards, a chart area, an activity
         feed, and sparkline cards — each row using a different grid proportion.
       </SectionSub>
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
       <DashboardSection />
     </PageSection>
 
     {/* ── Stacking */}
     <PageSection id="stacking">
       <SectionLabel>Depth & composition</SectionLabel>
-      <SectionTitle>Stacking & Depth</SectionTitle>
+      <SectionTitle>Stacking and depth</SectionTitle>
       <SectionSub>
         Glass panels gain physical depth when layered. Use <Code>position: absolute</Code> and
         incrementing <Code>z-index</Code> values with inset offsets to create a sense of
         dimension — stronger <Code>intensity</Code> values should sit in front.
       </SectionSub>
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
       <StackingSection />
     </PageSection>
 
     {/* ── Provider scope */}
     <PageSection id="provider-scope">
       <SectionLabel>Configuration</SectionLabel>
-      <SectionTitle>Provider Scope</SectionTitle>
+      <SectionTitle>Provider scope</SectionTitle>
       <SectionSub>
         Nest a <Code>{'<GlassProvider>'}</Code> around any layout region to locally override{' '}
         <Code>opacity</Code>, <Code>blur</Code>, or light/shadow alpha — without affecting
         sibling regions. Useful for modals, sidebars, and hero sections that need different depth.
       </SectionSub>
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
       <ProviderScopingSection />
     </PageSection>
 
     {/* ── Gap scale */}
     <PageSection id="gap-scale">
       <SectionLabel>Grid system</SectionLabel>
-      <SectionTitle>Gap Scale</SectionTitle>
+      <SectionTitle>Gap scale</SectionTitle>
       <SectionSub>
-        Spacing between glass panels is part of the design. Too tight and the corner
-        glows bleed together; too loose and the grid loses cohesion. The recommended
-        default is <Code>gap-5</Code> (1.25rem).
+        Spacing between glass panels is part of the design. Too tight and the panes read as
+        one slab; too loose and the grid falls apart. The default is the fluid{' '}
+        <Code>--space-grid</Code>; for anything else pick a step from the spacing scale.
       </SectionSub>
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
       <GapSection />
     </PageSection>
 
     {/* ── Form Layouts */}
     <PageSection id="form-layouts">
       <SectionLabel>Layout pattern</SectionLabel>
-      <SectionTitle>Form Layouts</SectionTitle>
+      <SectionTitle>Form layouts</SectionTitle>
       <SectionSub>
         Glass form fields integrate seamlessly into any layout pattern — stacked single-column
         forms, multi-column grids, or sidebar filter panels. Use <Code>GlassInput</Code>,{' '}
         <Code>GlassTextarea</Code>, and <Code>GlassInputWrap</Code> inside panels for a
         cohesive depth language.
       </SectionSub>
-      <GlassDivider className="my-10" />
+      <GlassDivider className="my-[var(--space-12)]" />
       <FormLayoutSection />
     </PageSection>
 
-    {/* Footer */}
-    <GlassDivider className="mb-16" />
-    <div className="flex flex-wrap items-center justify-between gap-4 pb-16">
-      <p className="text-[0.62rem] text-[var(--color-text-subtle)]">
-        Glass Design System — layout patterns
-      </p>
-      <div className="flex gap-2">
-        <GlassPill size="xs" as={Link} to="/">Showcase</GlassPill>
-        <GlassPill size="xs" as={Link} to="/components">Components</GlassPill>
-        <GlassPill size="xs" as={Link} to="/product">Product demo</GlassPill>
-      </div>
+    </div>
     </div>
   </div>
 );

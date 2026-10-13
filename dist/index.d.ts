@@ -1,5 +1,6 @@
 import './glass.css';
 import './material.css';
+import './foundations.css';
 export { GlassProvider, useGlass, GLASS_DEFAULTS } from './context/GlassContext';
 export type { GlassConfig } from './context/GlassContext';
 export { getGlassStyles, GLASS_OPACITY, GLASS_BLUR, GLASS_LIGHT_ALPHA, GLASS_SHADOW_ALPHA, CARD_BG_ALPHA, GLOW_TR, GLOW_BL, } from './glass';
@@ -12,6 +13,7 @@ export type { BgPreset, BgId } from './backgrounds';
 export { default as GlassOrbs } from './components/GlassOrbs';
 export type { OrbPreset, OrbBlendMode, GlassOrbsProps } from './components/GlassOrbs';
 export { default as GlassPanel } from './components/GlassPanel';
+export type { GlassPanelPadding } from './components/GlassPanel';
 export { default as GlassPill } from './components/GlassPill';
 export type { GlassPillSize, GlassPillVariant } from './components/GlassPill';
 export { default as GlassDivider } from './components/GlassDivider';
@@ -19,3 +21,9 @@ export { default as GlassInput, GlassInputWrap, GlassTextarea, } from './compone
 export type { GlassInputVariant } from './components/GlassInput';
 export { default as GlassToast } from './components/GlassToast';
 export type { GlassToastProps, GlassToastTone } from './components/GlassToast';
+export { default as GlassSwitch } from './components/GlassSwitch';
+export type { GlassSwitchProps } from './components/GlassSwitch';
+export { default as GlassSlider } from './components/GlassSlider';
+export type { GlassSliderProps } from './components/GlassSlider';
+export { default as GlassSegmented } from './components/GlassSegmented';
+export type { GlassSegmentedProps, GlassSegmentedOption } from './components/GlassSegmented';
