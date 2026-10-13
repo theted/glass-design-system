@@ -77,6 +77,7 @@ Props: `preset`, `speed` (seconds), `opacity` (0-1), `fixed` (boolean), `blendMo
 - CSS animations go in `src/orbs.css`, tokens in `src/glass.css`
 - Showcase pages live in `src/showcase/pages/` and route from `src/showcase/App.tsx`; add new pages to `PRIMARY_NAV`/`MORE_NAV` in `SiteHeader.tsx`. Use `PageHeader` + `Section` from `components/Page.tsx`.
 - Showcase CSS resets go in `@layer base` (unlayered resets override the library's `@layer components`).
+- The showcase imports the library CSS itself in `showcase.css` (like a consumer). Imports in `src/index.ts` alone vanish from the production bundle (the barrel is side-effect-free per `package.json`) while dev mode still shows them; `build:showcase` runs `scripts/check-showcase-css.mjs` to catch that.
 - Browser checks: the Claude-in-Chrome tab can stop producing frames on pages without running animation (screenshots time out); headless Chromium over CDP renders them fine.
 - Run `npm run build && npm run build:types` before committing to update `dist/`
 - The `@utility` warnings from lightningcss during build are expected (Tailwind v4 syntax)
