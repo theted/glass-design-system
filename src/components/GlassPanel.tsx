@@ -6,6 +6,9 @@ import { useGlassPointer, useGlassReveal } from '../hooks/useGlassPointer';
 export type { GlassIntensity } from '../glass';
 import type { GlassIntensity } from '../glass';
 
+/** sm = 24px, md = fluid 20→40px (--space-panel), lg = fluid 28→64px. */
+export type GlassPanelPadding = 'none' | 'sm' | 'md' | 'lg';
+
 type Props = React.PropsWithChildren<{
   /** Controls opacity/blur/shadow depth. Scales against GlassProvider config. */
   intensity?: GlassIntensity;
@@ -13,7 +16,13 @@ type Props = React.PropsWithChildren<{
   topGlow?: boolean;
   /** Show bottom-left cobalt bounce light. Default false. */
   bottomGlow?: boolean;
-  /** Border-radius Tailwind class. Default 'rounded-[2.2rem]'. */
+  /** Inner padding from the spacing scale. Default 'none' (pad it yourself). */
+  padding?: GlassPanelPadding;
+  /**
+   * Border-radius class, e.g. 'rounded-3xl'. Default: none, the panel uses
+   * var(--radius-panel). Set the radius with style={{ borderRadius }} if
+   * your Tailwind doesn't scan this package.
+   */
   rounded?: string;
   /** Lean away from the pointer in 3D, like pressing on a pane. Default false. */
   tilt?: boolean;
@@ -35,11 +44,13 @@ type Props = React.PropsWithChildren<{
  * Every panel has a rim that catches the light (warm on the lit side, cool
  * opposite) and a faint spectral fringe where thick glass splits it. On
  * hover the light source follows the pointer: the rim turns toward it and
- * a warm specular gathers under it.
+ * a wide, faint pool of warm light drifts after it.
+ *
+ * Decorative layers sit beneath your content, so children need no wrapper.
  *
  * ```tsx
- * <GlassPanel intensity="medium" tilt reveal className="p-10">
- *   <div className="relative z-10">…</div>
+ * <GlassPanel intensity="medium" padding="md" tilt reveal>
+ *   <h3>…</h3>
  * </GlassPanel>
  * ```
  */
@@ -47,7 +58,8 @@ const GlassPanel: React.FC<Props> = ({
   intensity = 'medium',
   topGlow = true,
   bottomGlow = false,
-  rounded = 'rounded-[2.2rem]',
+  padding = 'none',
+  rounded,
   tilt = false,
   reveal = false,
   spectrum = true,
@@ -78,6 +90,7 @@ const GlassPanel: React.FC<Props> = ({
     'glass-surface',
     tilt && 'glass-surface--tilt',
     reveal && 'glass-surface--reveal',
+    padding !== 'none' && `glass-surface--pad-${padding}`,
     rounded,
     className,
   ].filter(Boolean).join(' ');
@@ -85,36 +98,16 @@ const GlassPanel: React.FC<Props> = ({
   const vars = {
     '--glass-light-alpha': config.lightAlpha,
     '--glass-shadow-alpha': config.shadowAlpha,
+    '--glass-lip': glass.shimmerColor,
   } as React.CSSProperties;
 
   return (
     <Tag ref={setRef} className={classes} style={{ ...glass.panel, ...vars, ...style }} {...rest}>
-      {/* Top-edge 1px shimmer — light catching the upper lip of the glass */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{ background: `linear-gradient(90deg, transparent 5%, ${glass.shimmerColor} 70%, transparent)`, zIndex: 1 }}
-      />
-
+      <div aria-hidden="true" className="glass-surface__lip" />
       <div aria-hidden="true" className="glass-surface__shade" />
       <div aria-hidden="true" className="glass-surface__sheen" />
-
-      {topGlow && (
-        <div
-          aria-hidden="true"
-          className="glass-surface__glow"
-          style={{ right: '-10rem', top: '-14rem', width: '44rem', height: '28rem', ...glass.topRightGlow }}
-        />
-      )}
-
-      {bottomGlow && (
-        <div
-          aria-hidden="true"
-          className="glass-surface__glow"
-          style={{ left: '-10rem', bottom: '-10rem', width: '28rem', height: '24rem', ...glass.bottomLeftGlow }}
-        />
-      )}
-
+      {topGlow && <div aria-hidden="true" className="glass-surface__glow glass-surface__glow--tr" style={glass.topRightGlow} />}
+      {bottomGlow && <div aria-hidden="true" className="glass-surface__glow glass-surface__glow--bl" style={glass.bottomLeftGlow} />}
       <div aria-hidden="true" className="glass-surface__rim" />
       {spectrum && <div aria-hidden="true" className="glass-surface__spectrum" />}
 

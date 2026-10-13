@@ -343,38 +343,36 @@ var B = ({ preset: e = "drift", speed: t = 6, opacity: n = .95, fixed: r = !1, b
 			/* @__PURE__ */ l("div", { className: "glass-orb glass-orb-6" })
 		]
 	});
-}, V = ({ intensity: e = "medium", topGlow: t = !0, bottomGlow: r = !1, rounded: i = "rounded-[2.2rem]", tilt: a = !1, reveal: o = !1, spectrum: c = !0, className: d = "", style: f, children: p, as: h = "div", ref: g, ..._ }) => {
-	let v = m(), y = M(e, v), b = s(null);
-	P(b), F(b, o);
-	let x = n((e) => {
-		b.current = e, typeof g == "function" ? g(e) : g && (g.current = e);
-	}, [g]), S = [
+}, V = ({ intensity: e = "medium", topGlow: t = !0, bottomGlow: r = !1, padding: i = "none", rounded: a, tilt: o = !1, reveal: c = !1, spectrum: d = !0, className: f = "", style: p, children: h, as: g = "div", ref: _, ...v }) => {
+	let y = m(), b = M(e, y), x = s(null);
+	P(x), F(x, c);
+	let S = n((e) => {
+		x.current = e, typeof _ == "function" ? _(e) : _ && (_.current = e);
+	}, [_]), C = [
 		"glass-surface",
-		a && "glass-surface--tilt",
-		o && "glass-surface--reveal",
-		i,
-		d
-	].filter(Boolean).join(" "), C = {
-		"--glass-light-alpha": v.lightAlpha,
-		"--glass-shadow-alpha": v.shadowAlpha
+		o && "glass-surface--tilt",
+		c && "glass-surface--reveal",
+		i !== "none" && `glass-surface--pad-${i}`,
+		a,
+		f
+	].filter(Boolean).join(" "), w = {
+		"--glass-light-alpha": y.lightAlpha,
+		"--glass-shadow-alpha": y.shadowAlpha,
+		"--glass-lip": b.shimmerColor
 	};
-	return /* @__PURE__ */ u(h, {
-		ref: x,
-		className: S,
+	return /* @__PURE__ */ u(g, {
+		ref: S,
+		className: C,
 		style: {
-			...y.panel,
-			...C,
-			...f
+			...b.panel,
+			...w,
+			...p
 		},
-		..._,
+		...v,
 		children: [
 			/* @__PURE__ */ l("div", {
 				"aria-hidden": "true",
-				className: "pointer-events-none absolute inset-x-0 top-0 h-px",
-				style: {
-					background: `linear-gradient(90deg, transparent 5%, ${y.shimmerColor} 70%, transparent)`,
-					zIndex: 1
-				}
+				className: "glass-surface__lip"
 			}),
 			/* @__PURE__ */ l("div", {
 				"aria-hidden": "true",
@@ -386,35 +384,23 @@ var B = ({ preset: e = "drift", speed: t = 6, opacity: n = .95, fixed: r = !1, b
 			}),
 			t && /* @__PURE__ */ l("div", {
 				"aria-hidden": "true",
-				className: "glass-surface__glow",
-				style: {
-					right: "-10rem",
-					top: "-14rem",
-					width: "44rem",
-					height: "28rem",
-					...y.topRightGlow
-				}
+				className: "glass-surface__glow glass-surface__glow--tr",
+				style: b.topRightGlow
 			}),
 			r && /* @__PURE__ */ l("div", {
 				"aria-hidden": "true",
-				className: "glass-surface__glow",
-				style: {
-					left: "-10rem",
-					bottom: "-10rem",
-					width: "28rem",
-					height: "24rem",
-					...y.bottomLeftGlow
-				}
+				className: "glass-surface__glow glass-surface__glow--bl",
+				style: b.bottomLeftGlow
 			}),
 			/* @__PURE__ */ l("div", {
 				"aria-hidden": "true",
 				className: "glass-surface__rim"
 			}),
-			c && /* @__PURE__ */ l("div", {
+			d && /* @__PURE__ */ l("div", {
 				"aria-hidden": "true",
 				className: "glass-surface__spectrum"
 			}),
-			p
+			h
 		]
 	});
 }, H = "glass-pill", U = ({ size: e = "md", variant: t = "default", as: n = "button", className: r = "", children: i, ...a }) => {
@@ -428,9 +414,9 @@ var B = ({ preset: e = "drift", speed: t = 6, opacity: n = .95, fixed: r = !1, b
 }, W = ({ className: e = "" }) => /* @__PURE__ */ l("div", {
 	"aria-hidden": "true",
 	className: `glass-divider ${e}`.trim()
-}), G = ({ children: e, focused: t, fieldBlur: n = 16, radius: r = "1.1rem", wrapperClassName: i = "", wrapperStyle: a, shimmer: o = !0 }) => {
+}), G = ({ children: e, focused: t, fieldBlur: n = 16, radius: r, wrapperClassName: i = "", wrapperStyle: a, shimmer: o = !0 }) => {
 	let [s, d] = c(!1), f = t ?? s, { opacity: p } = m(), h = {
-		"--field-radius": r,
+		...r && { "--field-radius": r },
 		"--field-blur": `${n}px`,
 		"--glass-opacity": p
 	};
@@ -479,7 +465,6 @@ var q = e.forwardRef(({ fieldBlur: e, wrapperClassName: t, wrapperStyle: n, shim
 	return /* @__PURE__ */ l(G, {
 		focused: d,
 		fieldBlur: e,
-		radius: "1.3rem",
 		wrapperClassName: t,
 		wrapperStyle: n,
 		shimmer: r,
@@ -533,6 +518,105 @@ var J = {
 			})
 		})
 	}), /* @__PURE__ */ l("span", { children: e ? o : null })]
-}));
+})), X = ({ checked: e, defaultChecked: t = !1, onChange: n, children: r, size: i = "md", className: a = "", wrapperClassName: o = "", disabled: s, onClick: d, ...f }) => {
+	let [p, m] = c(t), h = e ?? p, g = /* @__PURE__ */ l("button", {
+		type: "button",
+		role: "switch",
+		"aria-checked": h,
+		disabled: s,
+		className: `glass-switch${i === "sm" ? " glass-switch--sm" : ""} ${a}`.trim(),
+		onClick: (t) => {
+			d?.(t), !t.defaultPrevented && (e === void 0 && m(!h), n?.(!h));
+		},
+		...f,
+		children: /* @__PURE__ */ l("span", {
+			"aria-hidden": "true",
+			className: "glass-switch__thumb"
+		})
+	});
+	return r ? /* @__PURE__ */ u("label", {
+		className: `glass-switch-row ${o}`.trim(),
+		children: [/* @__PURE__ */ l("span", { children: r }), g]
+	}) : g;
+}, Z = ({ value: e, defaultValue: t, onChange: n, min: r = 0, max: i = 100, step: a = 1, label: o, showValue: s, format: d = String, className: f = "", wrapperClassName: p = "", style: m, ...h }) => {
+	let [g, _] = c(t ?? r), v = e ?? g, y = i === r ? 0 : (v - r) / (i - r) * 100, b = /* @__PURE__ */ l("input", {
+		type: "range",
+		min: r,
+		max: i,
+		step: a,
+		value: v,
+		onChange: (t) => {
+			let r = Number(t.target.value);
+			e === void 0 && _(r), n?.(r);
+		},
+		className: `glass-slider ${f}`.trim(),
+		style: {
+			"--fill": `${y}%`,
+			...m
+		},
+		...h
+	});
+	return o ? /* @__PURE__ */ u("label", {
+		className: `glass-slider-field ${p}`.trim(),
+		children: [/* @__PURE__ */ u("span", {
+			className: "glass-slider-field__head",
+			children: [/* @__PURE__ */ l("span", { children: o }), (s ?? !0) && /* @__PURE__ */ l("span", {
+				className: "glass-slider-field__value",
+				children: d(v)
+			})]
+		}), b]
+	}) : b;
+}, Q = (e) => typeof e == "string" ? {
+	value: e,
+	label: e
+} : e;
+function $({ options: e, value: t, onChange: r, size: i = "md", block: o = !1, className: d = "", "aria-label": f }) {
+	let p = s(null), [m, h] = c(!1), g = e.map(Q), _ = Math.max(0, g.findIndex((e) => e.value === t)), v = n(() => {
+		let e = p.current, t = e?.querySelectorAll("[role=\"radio\"]")[_];
+		!e || !t || (e.style.setProperty("--seg-x", `${t.offsetLeft}px`), e.style.setProperty("--seg-w", `${t.offsetWidth}px`));
+	}, [_]);
+	a(() => {
+		v();
+		let e = requestAnimationFrame(() => h(!0));
+		return () => cancelAnimationFrame(e);
+	}, [v]), a(() => {
+		let e = p.current;
+		if (!e || typeof ResizeObserver > "u") return;
+		let t = new ResizeObserver(v);
+		return t.observe(e), document.fonts?.ready.then(v), () => t.disconnect();
+	}, [v]);
+	let y = (e) => {
+		let t = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
+		if (!t) return;
+		e.preventDefault();
+		let n = (_ + t + g.length) % g.length;
+		r(g[n].value), p.current?.querySelectorAll("[role=\"radio\"]")[n]?.focus();
+	};
+	return /* @__PURE__ */ u("div", {
+		ref: p,
+		role: "radiogroup",
+		"aria-label": f,
+		"data-ready": m,
+		onKeyDown: y,
+		className: [
+			"glass-segmented",
+			i === "sm" && "glass-segmented--sm",
+			o && "glass-segmented--block",
+			d
+		].filter(Boolean).join(" "),
+		children: [/* @__PURE__ */ l("span", {
+			"aria-hidden": "true",
+			className: "glass-segmented__indicator"
+		}), g.map((e, t) => /* @__PURE__ */ l("button", {
+			type: "button",
+			role: "radio",
+			"aria-checked": t === _,
+			tabIndex: t === _ ? 0 : -1,
+			className: "glass-segmented__option",
+			onClick: () => r(e.value),
+			children: e.label
+		}, e.value))]
+	});
+}
 //#endregion
-export { R as BG_PRESETS, j as CARD_BG_ALPHA, g as GLASS_BLUR, d as GLASS_DEFAULTS, _ as GLASS_LIGHT_ALPHA, h as GLASS_OPACITY, N as GLASS_REST_ANGLE, v as GLASS_SHADOW_ALPHA, A as GLOW_BL, k as GLOW_TR, W as GlassDivider, K as GlassInput, G as GlassInputWrap, B as GlassOrbs, V as GlassPanel, U as GlassPill, p as GlassProvider, q as GlassTextarea, Y as GlassToast, L as PATTERNS, M as getGlassStyles, z as makeHueGradient, m as useGlass, P as useGlassPointer, F as useGlassReveal };
+export { R as BG_PRESETS, j as CARD_BG_ALPHA, g as GLASS_BLUR, d as GLASS_DEFAULTS, _ as GLASS_LIGHT_ALPHA, h as GLASS_OPACITY, N as GLASS_REST_ANGLE, v as GLASS_SHADOW_ALPHA, A as GLOW_BL, k as GLOW_TR, W as GlassDivider, K as GlassInput, G as GlassInputWrap, B as GlassOrbs, V as GlassPanel, U as GlassPill, p as GlassProvider, $ as GlassSegmented, Z as GlassSlider, X as GlassSwitch, q as GlassTextarea, Y as GlassToast, L as PATTERNS, M as getGlassStyles, z as makeHueGradient, m as useGlass, P as useGlassPointer, F as useGlassReveal };

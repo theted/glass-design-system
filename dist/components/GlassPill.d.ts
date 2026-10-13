@@ -1,6 +1,6 @@
 import React from 'react';
 export type GlassPillSize = 'xs' | 'sm' | 'md' | 'lg';
-export type GlassPillVariant = 'default' | 'active' | 'accent';
+export type GlassPillVariant = 'default' | 'active' | 'accent' | 'ghost';
 type Props = React.PropsWithChildren<{
     /** Visual size tier. Default: 'md'. */
     size?: GlassPillSize;

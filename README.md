@@ -7,6 +7,8 @@ A frosted-glass UI component library for dark, depth-rich interfaces. Every surf
 - **Rim light.** Every panel edge has a warm catch-light, a cool reflection opposite, and a faint spectral fringe where thick glass splits the light. On hover the rim turns toward the pointer.
 - **No re-renders on mousemove.** Pointer state is written to registered CSS custom properties (`--glass-x`, `--glass-y`, `--glass-angle`, `--glass-hover`), so the browser interpolates the light and React stays idle.
 - **Shared motion.** Three curves (`--ease-glass`, `--ease-spring`, `--ease-in-glass`) and a doubling duration scale (`--dur-1` … `--dur-4`). `prefers-reduced-motion` collapses all of them.
+- **A spacing system you can count.** Ten steps on a 4px grid whose names match Tailwind's (`var(--space-6)` is `p-6`), four fluid tokens for page structure, plus radius, type-step and elevation scales. See [Foundations](#foundations).
+- **Plain CSS underneath.** Components don't depend on your Tailwind scanning this package; their styles ship in `@layer components`.
 
 ---
 
@@ -47,18 +49,16 @@ import 'glass-design-system/styles';
 export default function App() {
   return (
     <GlassProvider blur={40} opacity={0.66}>
-      <GlassPanel intensity="medium" className="p-8">
-        <div className="relative z-10">
-          <h2>Hello glass</h2>
-          <GlassPill size="lg">Get started</GlassPill>
-        </div>
+      <GlassPanel intensity="medium" padding="md">
+        <h2 className="glass-h3">Hello glass</h2>
+        <GlassPill size="lg" variant="accent">Get started</GlassPill>
       </GlassPanel>
     </GlassProvider>
   );
 }
 ```
 
-> **Content elevation:** wrap your content in `<div className="relative z-10">` inside any `GlassPanel`. The decorative overlay divs (shimmer, glows) are absolutely positioned — without elevation your content can paint beneath them.
+> **No content wrapper needed.** The panel's decorative layers (glows, specular, shade) sit at `z-index: -1` inside its isolated stacking context, beneath your content. Existing `relative z-10` wrappers keep working.
 
 ---
 
@@ -100,18 +100,11 @@ const { blur, opacity } = useGlass();
 
 ## GlassPanel
 
-The primary surface component. Applies the glass material, rim light and spectral fringe, top-edge shimmer, ambient glows, and pointer-tracking specular/shadow automatically.
+The primary surface component. Applies the glass material, rim light and spectral fringe, top-edge shimmer, ambient glows, and a pointer-tracking specular: a wide, faint pool of warm light sized to the pane.
 
 ```tsx
-<GlassPanel
-  intensity="medium"
-  topGlow
-  rounded="rounded-[2rem]"
-  className="p-7"
->
-  <div className="relative z-10">
-    {/* your content */}
-  </div>
+<GlassPanel intensity="medium" padding="md">
+  {/* your content */}
 </GlassPanel>
 ```
 
@@ -120,8 +113,9 @@ The primary surface component. Applies the glass material, rim light and spectra
 | `intensity` | `'subtle' \| 'medium' \| 'strong'` | `'medium'` | Opacity / visual weight tier |
 | `topGlow` | `boolean` | `true` | Upper-right warm glow from the light source |
 | `bottomGlow` | `boolean` | `false` | Lower-left cobalt bounce light |
-| `rounded` | `string` | `'rounded-[2.2rem]'` | Any Tailwind border-radius class |
-| `tilt` | `boolean` | `false` | Leans away from the pointer in 3D, like pressing on a pane |
+| `padding` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'none'` | `sm` 24px, `md` fluid 20→40px (`--space-panel`), `lg` fluid 28→64px |
+| `rounded` | `string` | — | A border-radius class. Without it the panel uses `var(--radius-panel)` (28px) |
+| `tilt` | `boolean` | `false` | Leans up to 3° away from the pointer, like pressing on a pane |
 | `reveal` | `boolean` | `false` | Frost condenses onto the pane the first time it scrolls into view |
 | `spectrum` | `boolean` | `true` | Spectral dispersion fringe along the rim |
 | `ref` | `Ref<HTMLElement>` | — | Forwarded to the root element |
@@ -210,7 +204,7 @@ import { GlassInputWrap } from 'glass-design-system';
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `focused` | `boolean` | — | Controlled focus state; auto-detected from child focus events when omitted |
-| `radius` | `string` | `'1.1rem'` | CSS border-radius value |
+| `radius` | `string` | `var(--radius-field)` | CSS border-radius value |
 | `fieldBlur` | `number` | `16` | Backdrop blur in px |
 | `shimmer` | `boolean` | `true` | Top-edge shimmer line |
 | `wrapperClassName` | `string` | — | Extra class on the wrapper div |
@@ -244,7 +238,7 @@ import { Link } from 'react-router-dom';
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `size` | `'xs' \| 'sm' \| 'md' \| 'lg'` | `'md'` | Size tier |
-| `variant` | `'default' \| 'active' \| 'accent'` | `'default'` | Colour / state variant |
+| `variant` | `'default' \| 'active' \| 'accent' \| 'ghost'` | `'default'` | Colour / state variant |
 | `as` | `React.ElementType` | `'button'` | Underlying element (`Link`, `'a'`, `'button'`) |
 | `className` | `string` | `''` | Appended to root |
 
@@ -252,18 +246,19 @@ import { Link } from 'react-router-dom';
 
 | Size | Text | Typical use |
 |------|------|-------------|
-| `xs` | 0.72 rem | Layout toggles, tags, tiny controls |
-| `sm` | 0.80 rem | Card controls, compact nav |
-| `md` | 0.875 rem | Standard nav links and buttons |
-| `lg` | 0.95 rem | Primary actions, toolbar actions |
+| `xs` | 12px | Layout toggles, tags, tiny controls |
+| `sm` | 13px | Card controls, compact nav |
+| `md` | 14px | Standard nav links and buttons |
+| `lg` | 15px | Primary actions, toolbar actions |
 
 ### Variants
 
 | Variant | Appearance | Use |
 |---------|-----------|-----|
-| `default` | Muted surface, lifts on hover | Resting state |
-| `active` | Denser glass | Already-selected state |
-| `accent` | Warm-lit amber glass | The primary action on a screen. Use one. |
+| `default` | Clear glass that frosts over on hover | Secondary actions, filters, tags |
+| `active` | Denser, brighter glass | Already-selected state. `aria-current="page"` gets it too, so `NavLink`s light up on their own |
+| `accent` | The warm light as a solid surface, dark ink | The primary action on a screen. Use one. |
+| `ghost` | No glass until hovered | Navigation bars, toolbars, cancel buttons |
 
 ---
 
@@ -301,6 +296,80 @@ import { GlassToast } from 'glass-design-system';
 | `onClose` | `() => void` | — | Called after `duration` |
 | `duration` | `number` | `4500` | Auto-close delay in ms; `0` keeps it open |
 | `tone` | `'success' \| 'error' \| 'info'` | `'success'` | Icon and tint |
+
+---
+
+## GlassSwitch
+
+An on/off toggle. The recessed track fills with the warm light when on; the thumb springs across. Renders a `<button role="switch">`.
+
+```tsx
+import { GlassSwitch } from 'glass-design-system';
+
+<GlassSwitch checked={notify} onChange={setNotify}>
+  Email me when someone replies
+</GlassSwitch>
+
+<GlassSwitch aria-label="Line numbers" defaultChecked />
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `checked` | `boolean` | — | Controlled state; omit and use `defaultChecked` for uncontrolled |
+| `onChange` | `(checked: boolean) => void` | — | Called with the new state |
+| `children` | `ReactNode` | — | Visible label, rendered before the switch inside a `<label>` |
+| `size` | `'sm' \| 'md'` | `'md'` | 36×22 or 44×26px |
+
+All other `<button>` props (`disabled`, `aria-label`, …) are forwarded.
+
+---
+
+## GlassSlider
+
+A native range input on a recessed glass track. The filled part is the warm light; the thumb is a bead of frosted glass.
+
+```tsx
+import { GlassSlider } from 'glass-design-system';
+
+<GlassSlider label="Blur" min={0} max={80} value={blur} onChange={setBlur} format={(v) => `${v}px`} />
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` / `defaultValue` | `number` | — | Controlled or initial value |
+| `onChange` | `(value: number) => void` | — | Called with the new value as a number |
+| `min` / `max` / `step` | `number` | `0` / `100` / `1` | Range |
+| `label` | `ReactNode` | — | Visible label above the track; without it pass `aria-label` |
+| `showValue` | `boolean` | `true` with a label | Show the current value opposite the label |
+| `format` | `(value: number) => string` | `String` | Format the shown value |
+
+---
+
+## GlassSegmented
+
+Pick one of a few options. The selection is a pane of glass that springs across the tray. A radio group underneath: arrow keys move the selection.
+
+```tsx
+import { GlassSegmented } from 'glass-design-system';
+
+<GlassSegmented aria-label="View" options={['Grid', 'List']} value={view} onChange={setView} />
+
+// Custom labels
+<GlassSegmented
+  options={[{ value: '7d', label: '7 days' }, { value: '30d', label: '30 days' }]}
+  value={range}
+  onChange={setRange}
+  size="sm"
+/>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `options` | `T[] \| { value: T; label: ReactNode }[]` | — | Strings, or values with custom labels |
+| `value` | `T` | — | Selected value (controlled) |
+| `onChange` | `(value: T) => void` | — | Called with the picked value |
+| `size` | `'sm' \| 'md'` | `'md'` | Option padding and type size |
+| `block` | `boolean` | `false` | Fill the container, options sharing the width |
 
 ---
 
@@ -371,6 +440,49 @@ function CustomSurface() {
 
 ---
 
+## Foundations
+
+Tokens every part is built from. Use the steps; don't invent values.
+
+### Space
+
+| Token | Size | Tailwind | Use it for |
+|-------|------|----------|------------|
+| `--space-1` | 4px | `p-1` | Icon to its label |
+| `--space-2` | 8px | `p-2` | Pills in a group, tight stacks |
+| `--space-3` | 12px | `p-3` | Label to field, title to body |
+| `--space-4` | 16px | `p-4` | Padding inside small parts |
+| `--space-6` | 24px | `p-6` | Between related blocks |
+| `--space-8` | 32px | `p-8` | Card padding, form groups |
+| `--space-12` | 48px | `p-12` | Heading to section content |
+| `--space-16` | 64px | `p-16` | Between groups inside a section |
+| `--space-24` | 96px | `p-24` | Between sections |
+| `--space-32` | 128px | `p-32` | Hero breathing room |
+
+Fluid tokens for page structure: `--space-gutter` (16→40px), `--space-section` (64→128px), `--space-panel` (20→40px) and `--space-grid` (12→24px). Big gaps hold small ones: the space inside a group is always smaller than the space around it.
+
+### Layout, radius, type, elevation
+
+- **Widths:** `--page-max` (76rem), `--page-wide` (96rem), `--measure` (62ch).
+- **Radius:** `--radius-chip` 8, `--radius-field` 14, `--radius-card` 20, `--radius-panel` 28, `--radius-sheet` 36. Nested corners stay concentric when inner = outer − padding.
+- **Type steps:** `--step--2` (12px) through `--step-7` (57→107px), a fluid modular scale with ratio 1.2 on phones and 1.3 on laptops.
+- **Elevation:** `--elevation-1` … `--elevation-3` for menus, sticky bars and dialogs.
+
+### Layout and type classes
+
+Optional classes in `@layer components` (any Tailwind utility wins): `.glass-container` (`--wide`), `.glass-section`, `.glass-stack` (gap `--stack`), `.glass-cluster` (gap `--cluster`), `.glass-grid` (min `--grid-min`), `.glass-measure`, and one class per text role: `.glass-display`, `.glass-h1` … `.glass-h4`, `.glass-lede`, `.glass-body`, `.glass-small`, `.glass-caption`, `.glass-code`.
+
+```tsx
+<section className="glass-section">
+  <div className="glass-container glass-stack">
+    <h2 className="glass-h2">Recent work</h2>
+    <div className="glass-grid">…</div>
+  </div>
+</section>
+```
+
+---
+
 ## CSS tokens
 
 Import the stylesheet once at the app root:
@@ -383,7 +495,7 @@ This provides CSS custom properties (`--color-text`, `--color-accent`, `--color-
 
 Fonts: **Bricolage Grotesque** (display, variable weight/width/optical size), **Schibsted Grotesk** (body) and **JetBrains Mono** (code), via `--font-display`, `--font-body` and `--font-code`.
 
-Component styles live in `@layer components`, so Tailwind utilities you pass through `className` (e.g. `absolute right-4`) still win. Import the stylesheet before `tailwindcss`.
+Component styles live in `@layer components`, so Tailwind utilities you pass through `className` (e.g. `absolute right-4`) still win. Import the stylesheet before `tailwindcss`, and keep your own element resets (`button { font: inherit }` and the like) inside `@layer base`: an unlayered reset beats every layered rule and would override the components.
 
 ---
 
@@ -398,13 +510,13 @@ body {
 }
 ```
 
-The `kiln` preset of `<GlassOrbs>` is the house backdrop: a cobalt field with one slow, low amber sun.
+The `kiln` preset of `<GlassOrbs>` is the house backdrop: a cobalt field with one slow, low amber sun in the upper right, the corner every rim catches light from.
 
 ---
 
 ## Showcase
 
-Run the interactive showcase to explore all intensity tiers, glows, blur levels, tint swatches, nested patterns, and form components live on five background presets:
+Run the interactive showcase (live at [glass.sundbergsolutions.se](https://glass.sundbergsolutions.se)): an overview with live material knobs, Foundations, Components, Layouts, Examples (settings, command palette, sign-in, player, notifications), Orbs, and the theme panel for backdrops and patterns:
 
 ```sh
 npm run showcase

@@ -1,15 +1,19 @@
 import React from 'react';
 
 export type GlassPillSize    = 'xs' | 'sm' | 'md' | 'lg';
-export type GlassPillVariant = 'default' | 'active' | 'accent';
+export type GlassPillVariant = 'default' | 'active' | 'accent' | 'ghost';
 
 /**
  * Styling lives in `material.css` (.glass-pill): sentence-case labels, a
  * spring on press, and a single glint that crosses the pill on hover.
  *
- *   default — muted glass, lifts and brightens on hover
- *   active  — already-selected state (denser glass)
- *   accent  — warm-lit glass; reserve for the primary action on a screen
+ *   default — clear glass that frosts over on hover
+ *   active  — already-selected state (denser, brighter glass)
+ *   accent  — the warm light as a solid surface; one primary action per screen
+ *   ghost   — no glass until hovered; for navigation and toolbars
+ *
+ * `aria-current="page"` styles a pill as active too, so router links that
+ * set it (React Router's NavLink does) need no extra logic.
  */
 const BASE = 'glass-pill';
 
