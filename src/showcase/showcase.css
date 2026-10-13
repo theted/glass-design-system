@@ -1,4 +1,12 @@
+/* The library's styles, imported the way a consumer imports
+   'glass-design-system/styles'. Don't rely on src/index.ts's CSS imports:
+   package.json marks only dist/glass.css as a side effect, so the
+   production bundle skips that barrel file and drops its CSS imports
+   (dev mode still loads them, which hides the problem). npm run
+   build:showcase checks the output for this. */
 @import '../glass.css';
+@import '../material.css';
+@import '../foundations.css';
 @import "tailwindcss";
 
 /* Resets go in @layer base: unlayered rules would beat the library's
