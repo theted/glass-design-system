@@ -132,7 +132,7 @@ var p = (...e) => e.filter(Boolean).join(" "), m = (...e) => (t) => {
 }, A = t(null), j = () => n(A), M = (e) => {
 	let t = j(), n = e.invalid ?? t?.invalid;
 	return {
-		id: e.id ?? t?.id,
+		id: t?.id ?? e.id,
 		required: e.required ?? t?.required,
 		"aria-invalid": n || void 0,
 		"aria-describedby": p(t?.describedBy, e["aria-describedby"]) || void 0

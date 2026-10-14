@@ -34,7 +34,7 @@ export interface GlassFieldProps {
     required?: boolean;
     /** Says "Optional" after the label. Mark the few optional fields, not the many required ones. */
     optional?: boolean;
-    /** The control's id. Generated when omitted. */
+    /** The control's id: set it here rather than on the control. Generated when omitted. */
     id?: string;
     className?: string;
     /** One GlassInput, GlassTextarea or GlassSelect. */
