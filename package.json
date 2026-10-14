@@ -1,26 +1,29 @@
 {
   "name": "glass-design-system",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
-    "./styles": "./dist/glass.css"
+    "./styles": "./dist/glass.css",
+    "./tailwind": "./dist/tailwind.css",
+    "./compat": "./dist/compat.css",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
   ],
   "sideEffects": [
-    "./dist/glass.css"
+    "*.css"
   ],
   "scripts": {
-    "build": "vite build",
-    "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly && node -e \"require('fs').writeFileSync('dist/glass.css.d.ts', 'export {};\\n')\"",
+    "build": "vite build && node scripts/build-extras.mjs css",
+    "build:types": "tsc -p tsconfig.build.json && node scripts/build-extras.mjs types",
     "showcase": "vite --config vite.showcase.config.ts",
     "build:showcase": "vite build --config vite.showcase.config.ts && node scripts/check-showcase-css.mjs",
     "typecheck": "tsc --noEmit"
@@ -29,17 +32,26 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
-  "prepublishOnly": "npm run build && npm run build:types",
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
-    "gsap": "^3.14.2",
-    "postcss": "^8.5.8",
     "react-router-dom": "^7.13.2",
-    "tailwindcss": "^4.0.0",
+    "sugar-high": "0.9.5",
     "typescript": "^5.9.3",
     "vite": "^8.0.0"
-  }
+  },
+  "description": "Cool glass, warm light: a frosted-glass design system for React 19. One material, five CSS knobs.",
+  "keywords": [
+    "react",
+    "design-system",
+    "glassmorphism",
+    "oklch",
+    "css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theted/glass-design-system.git"
+  },
+  "homepage": "https://glass.sundbergsolutions.se"
 }

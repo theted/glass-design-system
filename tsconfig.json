@@ -9,6 +9,7 @@
         "skipLibCheck": true,
         "noEmit": true,
         "esModuleInterop": true,
+        "types": ["vite/client"],
         "baseUrl": ".",
         "paths": {
             "glass-design-system": ["./src/index.ts"],

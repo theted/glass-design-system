@@ -1,27 +1,27 @@
-import React from 'react';
-export interface GlassSliderProps extends Omit<React.ComponentPropsWithoutRef<'input'>, 'onChange' | 'value' | 'defaultValue' | 'type'> {
+import type { ComponentPropsWithRef, ReactNode } from 'react';
+export type GlassSliderProps = Omit<ComponentPropsWithRef<'input'>, 'onChange' | 'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'> & {
     value?: number;
     defaultValue?: number;
+    /** Called with the new value as a number. */
     onChange?: (value: number) => void;
     min?: number;
     max?: number;
     step?: number;
     /** Visible label above the track. Without it, pass `aria-label`. */
-    label?: React.ReactNode;
-    /** Show the current value opposite the label. Default true when `label` is set. */
+    label?: ReactNode;
+    /** Show the current value opposite the label. Default true when there's a label. */
     showValue?: boolean;
     /** Format the shown value, e.g. (v) => `${v}px`. */
     format?: (value: number) => string;
-    /** Extra className on the outer wrapper. */
+    /** Extra class on the outer label (when there is one). */
     wrapperClassName?: string;
-}
+};
 /**
- * GlassSlider — a range input on a recessed glass track. The filled part of
- * the track is the warm light; the thumb is a bead of frosted glass.
+ * A native range input on a recessed track. The filled part is the light;
+ * the thumb is a bead of frosted glass.
  *
  * ```tsx
  * <GlassSlider label="Blur" min={0} max={80} value={blur} onChange={setBlur} format={(v) => `${v}px`} />
  * ```
  */
-declare const GlassSlider: React.FC<GlassSliderProps>;
-export default GlassSlider;
+export declare const GlassSlider: ({ value, defaultValue, onChange, min, max, step, label, showValue, format, className, wrapperClassName, style, ...rest }: GlassSliderProps) => import("react/jsx-runtime").JSX.Element;

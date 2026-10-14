@@ -1,0 +1,109 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Layout — a handful of primitives that give a page the system's rhythm.
+
+   Each reads one custom property for its gap, so any step is one style away:
+     <div class="glass-stack" style="--glass-gap: var(--space-3)">
+   The React components (<GlassStack gap={3}>) set it for you, and only
+   accept steps on the scale. The properties don't inherit, so a stack inside
+   a stack starts from its own default.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@property --glass-gap { syntax: '*'; inherits: false; }
+@property --glass-min { syntax: '*'; inherits: false; }
+@property --glass-side { syntax: '*'; inherits: false; }
+
+@layer components {
+
+  /* What <GlassProvider> renders: carries the knobs, draws nothing. */
+  .glass-scope {
+    display: contents;
+  }
+
+  /* A centred column with the page gutter on both sides. */
+  .glass-container {
+    width: 100%;
+    max-width: calc(var(--page-max) + 2 * var(--space-gutter));
+    margin-inline: auto;
+    padding-inline: var(--space-gutter);
+  }
+
+  .glass-container--wide { max-width: calc(var(--page-wide) + 2 * var(--space-gutter)); }
+  .glass-container--narrow { max-width: calc(var(--page-narrow) + 2 * var(--space-gutter)); }
+
+  /* Half the section space above and below, so neighbouring sections sit
+     exactly one --space-section apart. */
+  .glass-section {
+    padding-block: calc(var(--space-section) / 2);
+  }
+
+  /* Things in a column. */
+  .glass-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--glass-gap, var(--space-6));
+  }
+
+  /* A wrapping row: buttons, badges, filters. */
+  .glass-cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--glass-gap, var(--space-2));
+  }
+
+  /* As many equal columns as fit, each at least --glass-min wide. */
+  .glass-grid {
+    display: grid;
+    gap: var(--glass-gap, var(--space-grid));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--glass-min, 16rem)), 1fr));
+  }
+
+  /* A fixed side next to a fluid main; the two stack when the main would
+     get narrower than half the row. */
+  .glass-split {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--glass-gap, var(--space-8));
+  }
+
+  .glass-split > :first-child {
+    flex-grow: 1;
+    flex-basis: var(--glass-side, 16rem);
+  }
+
+  .glass-split > :last-child {
+    flex-grow: 999;
+    flex-basis: 0;
+    min-width: 50%;
+  }
+
+  .glass-split--end > :first-child {
+    flex-grow: 999;
+    flex-basis: 0;
+    min-width: 50%;
+  }
+
+  .glass-split--end > :last-child {
+    flex-grow: 1;
+    flex-basis: var(--glass-side, 16rem);
+    min-width: 0;
+  }
+
+  /* The longest comfortable line of text. */
+  .glass-measure {
+    max-width: var(--measure);
+  }
+
+  /* Hidden visually, still read aloud. */
+  .glass-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+}

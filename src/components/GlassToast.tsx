@@ -1,67 +1,74 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import type { ReactNode } from 'react';
+import { cx } from '../utils';
 
 export type GlassToastTone = 'success' | 'error' | 'info';
 
 export interface GlassToastProps {
   /** Whether the toast is showing. */
   open: boolean;
-  /** Called when the toast should close (after `duration`). */
+  /** Called when the toast should close: after `duration`, or from your action. */
   onClose?: () => void;
-  /** Auto-close after this many ms. Pass 0 to keep it open. Default 4500. */
+  /** Close after this many ms. 0 keeps it open. Default 4500. */
   duration?: number;
   /** Icon and tint. Default 'success'. */
   tone?: GlassToastTone;
+  /** A button at the end, like Undo. Give it size="sm". */
+  action?: ReactNode;
   className?: string;
-  children: React.ReactNode;
+  /** What happened, in a short sentence: "Message sent." */
+  children: ReactNode;
 }
 
-const ICON_PATH: Record<GlassToastTone, string> = {
+const ICON: Record<GlassToastTone, string> = {
   success: 'M5 10.5l3.2 3.2L15 7',
   error: 'M6.5 6.5l7 7M13.5 6.5l-7 7',
   info: 'M10 6v.5M10 9.5V14',
 };
 
 /**
- * GlassToast — a pill of glass that springs up from the bottom edge.
- * The icon draws itself in once the pill has landed.
- *
- * Announced politely to screen readers (errors assertively).
+ * A pill of glass that springs up from the bottom edge to say something
+ * happened; its icon draws itself in once it lands. Announced politely to
+ * screen readers, errors assertively. Rendered into document.body, so it
+ * can sit anywhere in your tree: a fixed element inside glass would
+ * otherwise be pinned to the pane (backdrop-filter makes a containing block).
  *
  * ```tsx
- * <GlassToast open={sent} onClose={() => setSent(false)}>
- *   Message sent. I'll reply within a few days.
- * </GlassToast>
+ * <GlassToast open={sent} onClose={() => setSent(false)}>Message sent.</GlassToast>
  * ```
  */
-const GlassToast: React.FC<GlassToastProps> = ({
+export const GlassToast = ({
   open,
   onClose,
   duration = 4500,
   tone = 'success',
-  className = '',
+  action,
+  className,
   children,
-}) => {
+}: GlassToastProps) => {
   useEffect(() => {
     if (!open || !duration || !onClose) return;
-    const t = setTimeout(onClose, duration);
-    return () => clearTimeout(t);
+    const timer = setTimeout(onClose, duration);
+    return () => clearTimeout(timer);
   }, [open, duration, onClose]);
 
-  return (
+  const toast = (
     <div
       role={tone === 'error' ? 'alert' : 'status'}
       aria-live={tone === 'error' ? 'assertive' : 'polite'}
       data-open={open}
-      className={`glass-toast glass-toast--${tone} ${className}`.trim()}
+      className={cx('glass-toast', tone !== 'success' && `glass-toast--${tone}`, className)}
     >
       <span className="glass-toast__icon" aria-hidden="true">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d={ICON_PATH[tone]} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <path d={ICON[tone]} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </span>
-      <span>{open ? children : null}</span>
+      <span className="glass-toast__message">{open ? children : null}</span>
+      {open && action && <span className="glass-toast__action">{action}</span>}
     </div>
   );
-};
 
-export default GlassToast;
+  return typeof document === 'undefined' ? toast : createPortal(toast, document.body);
+};

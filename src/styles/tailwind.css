@@ -1,0 +1,80 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Tailwind v4 bridge — the system's tokens as utilities.
+
+     @import 'glass-design-system/styles';
+     @import 'tailwindcss';
+     @import 'glass-design-system/tailwind';
+
+   `reference` registers names without emitting CSS variables (the tokens
+   already exist), and `inline` makes each utility read the token directly,
+   so `text-muted` is `color: var(--color-text-muted)` and follows the hue
+   knob, a GlassProvider, or anything else that retunes the token.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@theme inline reference {
+  /* Colour: text-fg, text-muted, bg-ground, border-line, text-light … */
+  --color-fg: var(--color-text);
+  --color-muted: var(--color-text-muted);
+  --color-subtle: var(--color-text-subtle);
+  --color-ground: var(--color-ground);
+  --color-ground-deep: var(--color-ground-deep);
+  --color-line: var(--color-line);
+  --color-line-strong: var(--color-line-strong);
+  --color-fill: var(--color-fill);
+  --color-fill-hover: var(--color-fill-hover);
+  --color-fill-active: var(--color-fill-active);
+  --color-well: var(--color-well);
+  --color-light: var(--color-light);
+  --color-light-bright: var(--color-light-bright);
+  --color-light-soft: var(--color-light-soft);
+  --color-on-light: var(--color-on-light);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --color-info: var(--color-info);
+
+  /* Type: font-display, font-body, font-code; text-step--2 … text-step-7 */
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-code: var(--font-code);
+  --text-step--2: var(--step--2);
+  --text-step--1: var(--step--1);
+  --text-step-0: var(--step-0);
+  --text-step-1: var(--step-1);
+  --text-step-2: var(--step-2);
+  --text-step-3: var(--step-3);
+  --text-step-4: var(--step-4);
+  --text-step-5: var(--step-5);
+  --text-step-6: var(--step-6);
+  --text-step-7: var(--step-7);
+
+  /* Space: the numeric steps are Tailwind's own (p-6 = 24px); these add the
+     fluid page tokens: px-gutter, py-section, p-panel, gap-grid. */
+  --spacing-gutter: var(--space-gutter);
+  --spacing-section: var(--space-section);
+  --spacing-panel: var(--space-panel);
+  --spacing-grid: var(--space-grid);
+
+  /* Widths: max-w-page, max-w-wide, max-w-narrow, max-w-measure */
+  --container-page: var(--page-max);
+  --container-wide: var(--page-wide);
+  --container-narrow: var(--page-narrow);
+  --container-measure: var(--measure);
+
+  /* Shape: rounded-chip … rounded-sheet */
+  --radius-chip: var(--radius-chip);
+  --radius-field: var(--radius-field);
+  --radius-card: var(--radius-card);
+  --radius-panel: var(--radius-panel);
+  --radius-sheet: var(--radius-sheet);
+
+  /* Depth: shadow-1 … shadow-3 */
+  --shadow-1: var(--elevation-1);
+  --shadow-2: var(--elevation-2);
+  --shadow-3: var(--elevation-3);
+
+  /* Motion: ease-glass, ease-spring, ease-in-glass */
+  --ease-glass: var(--ease-glass);
+  --ease-spring: var(--ease-spring);
+  --ease-in-glass: var(--ease-in-glass);
+}

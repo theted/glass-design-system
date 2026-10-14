@@ -1,39 +1,43 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { ComponentPropsWithRef, ReactNode } from 'react';
+import { cx } from '../utils';
 
-export interface GlassSwitchProps
-  extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange' | 'children'> {
-  /** Controlled state. Leave undefined and use `defaultChecked` for uncontrolled. */
+export type GlassSwitchProps = Omit<ComponentPropsWithRef<'button'>, 'onChange' | 'children' | 'defaultChecked'> & {
+  /** Controlled state. Leave it out and use `defaultChecked` for uncontrolled. */
   checked?: boolean;
   defaultChecked?: boolean;
+  /** Called with the new state. */
   onChange?: (checked: boolean) => void;
-  /** Visible label, rendered before the switch. Without it, pass `aria-label`. */
-  children?: React.ReactNode;
-  /** Default 'md'. */
+  /** Visible label, before the switch. Without it, pass `aria-label`. */
+  children?: ReactNode;
+  /** Default 'md' (44×26); 'sm' is 36×22. */
   size?: 'sm' | 'md';
-  /** Extra className on the outer label. */
+  /** Fill the row: label on the left, switch on the right. For settings lists. */
+  block?: boolean;
+  /** Extra class on the outer label (when there is one). */
   wrapperClassName?: string;
-}
+};
 
 /**
- * GlassSwitch — an on/off toggle. The recessed track fills with the warm
- * light when on; the thumb springs across.
+ * On or off, taking effect immediately. The recessed track fills with the
+ * light when on and the thumb springs across. A `<button role="switch">`.
  *
  * ```tsx
- * <GlassSwitch checked={wifi} onChange={setWifi}>Wi-Fi</GlassSwitch>
+ * <GlassSwitch checked={notify} onChange={setNotify}>Email me when someone replies</GlassSwitch>
  * ```
  */
-const GlassSwitch: React.FC<GlassSwitchProps> = ({
+export const GlassSwitch = ({
   checked,
   defaultChecked = false,
   onChange,
   children,
   size = 'md',
-  className = '',
-  wrapperClassName = '',
-  disabled,
+  block = false,
+  className,
+  wrapperClassName,
   onClick,
   ...rest
-}) => {
+}: GlassSwitchProps) => {
   const [inner, setInner] = useState(defaultChecked);
   const on = checked ?? inner;
 
@@ -42,8 +46,7 @@ const GlassSwitch: React.FC<GlassSwitchProps> = ({
       type="button"
       role="switch"
       aria-checked={on}
-      disabled={disabled}
-      className={`glass-switch${size === 'sm' ? ' glass-switch--sm' : ''} ${className}`.trim()}
+      className={cx('glass-switch', size === 'sm' && 'glass-switch--sm', className)}
       onClick={(e) => {
         onClick?.(e);
         if (e.defaultPrevented) return;
@@ -56,15 +59,13 @@ const GlassSwitch: React.FC<GlassSwitchProps> = ({
     </button>
   );
 
-  if (!children) return button;
+  if (children == null) return button;
 
-  // A <label> around a <button> names it and forwards clicks on the text.
+  // A <label> around the button names it and forwards clicks on the text.
   return (
-    <label className={`glass-switch-row ${wrapperClassName}`.trim()}>
+    <label className={cx('glass-switch-row', block && 'glass-switch-row--block', wrapperClassName)}>
       <span>{children}</span>
       {button}
     </label>
   );
 };
-
-export default GlassSwitch;

@@ -1,24 +1,35 @@
-import React from 'react';
+import type { ReactNode } from 'react';
+import { cx } from '../utils';
 
-type Props = {
-  /** Extra Tailwind classes — e.g. `my-8` for vertical spacing. */
+export interface GlassDividerProps {
+  /** A word in the middle of the line, like "or". */
+  label?: ReactNode;
+  /** 'vertical' stretches to the height of a flex row. Default 'horizontal'. */
+  orientation?: 'horizontal' | 'vertical';
   className?: string;
-};
+}
 
 /**
- * GlassDivider — a 1px rule that fades out at both ends and warms where the
- * light hits its centre, with a faint split-light line beneath, as if the
- * edge of a glass sheet were seen through a prism.
+ * A hairline that fades out at both ends and warms where the light hits its
+ * middle. Use it between groups that a gap alone doesn't separate enough.
  *
  * ```tsx
- * <GlassDivider className="my-10" />
+ * <GlassDivider />
+ * <GlassDivider label="or" />
  * ```
  */
-const GlassDivider: React.FC<Props> = ({ className = '' }) => (
-  <div
-    aria-hidden="true"
-    className={`glass-divider ${className}`.trim()}
-  />
-);
-
-export default GlassDivider;
+export const GlassDivider = ({ label, orientation = 'horizontal', className }: GlassDividerProps) => {
+  if (orientation === 'vertical') {
+    return (
+      <div role="separator" aria-orientation="vertical" className={cx('glass-divider glass-divider--vertical', className)} />
+    );
+  }
+  if (label != null) {
+    return (
+      <div role="separator" className={cx('glass-divider glass-divider--labelled', className)}>
+        {label}
+      </div>
+    );
+  }
+  return <hr className={cx('glass-divider', className)} />;
+};

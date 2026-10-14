@@ -1,0 +1,764 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Controls — buttons, fields, choices.
+
+   Two materials. Clear glass for things you press (buttons, the selected
+   segment); recessed wells for things you fill (fields, tracks, trays). The
+   warm light marks the one primary action, focus, and anything switched on.
+   Every control shares the --control-* heights, so a row of them lines up.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+
+  /* ── Button ─────────────────────────────────────────────────────────────── */
+
+  .glass-button {
+    --_h: var(--control-md);
+    --_px: 1.1rem;
+    --_fs: 0.875rem;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    min-height: var(--_h);
+    padding: 0 var(--_px);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-round);
+    background-color: var(--color-fill);
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: var(--_fs);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.08), 0 1px 2px oklch(0.05 0.02 var(--glass-hue) / 0.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    backdrop-filter: blur(16px) saturate(1.5);
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform var(--dur-3) var(--ease-spring),
+      background-color var(--dur-2) var(--ease-glass),
+      border-color var(--dur-2) var(--ease-glass),
+      color var(--dur-2) var(--ease-glass),
+      box-shadow var(--dur-2) var(--ease-glass);
+  }
+
+  .glass-button svg {
+    flex: none;
+    width: 1.15em;
+    height: 1.15em;
+  }
+
+  @media (hover: hover) {
+    .glass-button:hover {
+      border-color: var(--color-line-strong);
+      background-color: var(--color-fill-hover);
+      color: var(--color-text);
+    }
+  }
+
+  .glass-button:active {
+    transform: scale(0.97);
+    transition-duration: var(--dur-1);
+    transition-timing-function: ease-out;
+  }
+
+  .glass-button:focus-visible {
+    outline: 2px solid var(--color-light);
+    outline-offset: 2px;
+  }
+
+  .glass-button:disabled,
+  .glass-button[aria-disabled='true'] {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .glass-button--xs { --_h: var(--control-xs); --_px: 0.7rem; --_fs: 0.75rem; }
+  .glass-button--sm { --_h: var(--control-sm); --_px: 0.9rem; --_fs: 0.8125rem; }
+  .glass-button--lg { --_h: var(--control-lg); --_px: 1.5rem; --_fs: 0.9375rem; }
+
+  /* Square, for a lone icon. Give it an aria-label. */
+  .glass-button--icon {
+    width: var(--_h);
+    padding: 0;
+  }
+
+  /* Stretch to the container. */
+  .glass-button--block {
+    display: flex;
+    width: 100%;
+  }
+
+  /* Selected: denser, brighter glass. Toggle buttons get it from
+     aria-pressed, router links from aria-current (NavLink sets it). */
+  .glass-button[aria-pressed='true'],
+  .glass-button[aria-current]:not([aria-current='false']) {
+    border-color: oklch(0.97 0.02 calc(var(--glass-hue) - 12) / 0.32);
+    background-color: var(--color-fill-active);
+    color: var(--color-text);
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.2),
+      0 4px 14px -6px oklch(0.05 0.02 var(--glass-hue) / 0.6);
+  }
+
+  /* No glass until you reach for it: toolbars, navigation, "Cancel". */
+  .glass-button--ghost {
+    border-color: transparent;
+    background-color: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* The warm light as a surface: the one primary action on a screen. */
+  .glass-button--primary {
+    border-color: oklch(0.97 0.06 calc(var(--light-hue) + 12) / 0.75);
+    background: linear-gradient(180deg, oklch(0.93 0.09 calc(var(--light-hue) + 10)), oklch(0.83 0.13 calc(var(--light-hue) - 4)));
+    color: var(--color-on-light);
+    font-weight: 600;
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.6),
+      inset 0 -1px 0 oklch(0.58 0.12 calc(var(--light-hue) - 20) / 0.35),
+      0 8px 24px -10px oklch(0.8 0.14 calc(var(--light-hue) - 6) / 0.7);
+  }
+
+  @media (hover: hover) {
+    .glass-button--primary:hover {
+      border-color: oklch(0.99 0.04 calc(var(--light-hue) + 14) / 0.9);
+      background: linear-gradient(180deg, oklch(0.95 0.08 calc(var(--light-hue) + 12)), oklch(0.86 0.12 calc(var(--light-hue) - 2)));
+      color: var(--color-on-light);
+      box-shadow:
+        inset 0 1px 0 oklch(1 0 0 / 0.7),
+        inset 0 -1px 0 oklch(0.58 0.12 calc(var(--light-hue) - 20) / 0.35),
+        0 10px 32px -10px oklch(0.84 0.14 calc(var(--light-hue) - 4) / 0.85);
+    }
+  }
+
+  /* For the confirm step of something you can't undo. */
+  .glass-button--danger {
+    border-color: oklch(0.71 0.17 25 / 0.45);
+    background-color: oklch(0.6 0.17 25 / 0.18);
+    color: oklch(0.88 0.08 25);
+  }
+
+  @media (hover: hover) {
+    .glass-button--danger:hover {
+      border-color: oklch(0.75 0.17 25 / 0.7);
+      background-color: oklch(0.6 0.17 25 / 0.28);
+      color: oklch(0.95 0.04 25);
+    }
+  }
+
+  .glass-button__label {
+    display: inline-flex;
+    align-items: center;
+    gap: inherit;
+  }
+
+  /* Busy: the label stays (so the width doesn't jump) under a spinner. */
+  .glass-button[aria-busy='true'] {
+    pointer-events: none;
+  }
+
+  .glass-button[aria-busy='true'] > :not(.glass-spinner) {
+    opacity: 0;
+  }
+
+  .glass-button > .glass-spinner {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+  }
+
+  /* ── Spinner ──────────────────────────────────────────────────────────── */
+
+  .glass-spinner {
+    display: inline-block;
+    flex: none;
+    width: 1.1em;
+    height: 1.1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: glass-spin 700ms linear infinite;
+  }
+
+  @keyframes glass-spin {
+    to { transform: rotate(1turn); }
+  }
+
+  /* ── Field: label, control, hint, error ─────────────────────────────── */
+
+  .glass-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .glass-field__label {
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .glass-field__optional {
+    margin-left: 0.4em;
+    color: var(--color-text-subtle);
+    font-weight: 400;
+  }
+
+  .glass-field__hint,
+  .glass-field__error {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--step--2);
+    line-height: 1.45;
+  }
+
+  .glass-field__hint { color: var(--color-text-subtle); }
+  .glass-field__error { color: var(--color-danger); }
+
+  /* ── Input, textarea, select ────────────────────────────────────────────
+     Put .glass-input straight on the control. With icons or a suffix, wrap
+     it in .glass-input-group: the group takes the well, the input inside
+     goes clear. */
+
+  .glass-input,
+  .glass-input-group {
+    --_h: var(--control-md);
+    width: 100%;
+    min-height: var(--_h);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-field);
+    background-color: oklch(0.13 0.03 var(--glass-hue) / calc(0.5 + var(--glass-opacity) * 0.3));
+    color: var(--color-text);
+    box-shadow: inset 0 1px 2px oklch(0.04 0.02 var(--glass-hue) / 0.35), 0 1px 0 oklch(1 0 0 / 0.04);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    backdrop-filter: blur(16px) saturate(1.3);
+    transition:
+      border-color var(--dur-2) var(--ease-glass),
+      box-shadow var(--dur-2) var(--ease-glass),
+      background-color var(--dur-2) var(--ease-glass);
+  }
+
+  .glass-input {
+    display: block;
+    margin: 0;
+    padding: 0 0.875rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.5;
+    caret-color: var(--color-light);
+    appearance: none;
+  }
+
+  .glass-input::placeholder {
+    color: var(--color-text-subtle);
+    opacity: 1;
+  }
+
+  @media (hover: hover) {
+    .glass-input:hover,
+    .glass-input-group:hover {
+      border-color: var(--color-line-strong);
+    }
+  }
+
+  .glass-input:focus,
+  .glass-input-group:focus-within {
+    outline: none;
+    border-color: oklch(0.86 0.12 var(--light-hue) / 0.55);
+    box-shadow:
+      inset 0 1px 2px oklch(0.04 0.02 var(--glass-hue) / 0.25),
+      0 0 0 3px var(--color-light-soft);
+  }
+
+  .glass-input[aria-invalid='true'],
+  .glass-input-group:has([aria-invalid='true']) {
+    border-color: oklch(0.71 0.17 25 / 0.7);
+  }
+
+  .glass-input[aria-invalid='true']:focus,
+  .glass-input-group:has([aria-invalid='true']):focus-within {
+    box-shadow:
+      inset 0 1px 2px oklch(0.04 0.02 var(--glass-hue) / 0.25),
+      0 0 0 3px oklch(0.71 0.17 25 / 0.22);
+  }
+
+  .glass-input:disabled,
+  .glass-input-group:has(:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .glass-input--sm,
+  .glass-input-group--sm { --_h: var(--control-sm); font-size: 0.875rem; }
+
+  .glass-input--lg,
+  .glass-input-group--lg { --_h: var(--control-lg); font-size: 1.0625rem; }
+
+  textarea.glass-input {
+    padding-block: 0.625rem;
+    line-height: 1.6;
+    resize: vertical;
+  }
+
+  /* Grows with its content where the browser can (field-sizing). */
+  textarea.glass-input--auto {
+    field-sizing: content;
+    min-height: calc(var(--_h) * 2);
+    resize: none;
+  }
+
+  select.glass-input {
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23b8c0d8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.875rem center;
+    cursor: pointer;
+  }
+
+  select.glass-input option {
+    background-color: var(--color-ground);
+    color: var(--color-text);
+  }
+
+  .glass-input-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0 0.875rem;
+    color: var(--color-text-subtle);
+    cursor: text;
+  }
+
+  .glass-input-group > svg {
+    flex: none;
+    width: 1.1em;
+    height: 1.1em;
+  }
+
+  .glass-input-group > .glass-input {
+    flex: 1;
+    align-self: stretch;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    font-size: inherit;
+  }
+
+  .glass-input-group > .glass-input:focus {
+    box-shadow: none;
+  }
+
+  /* ── Checkbox and radio ─────────────────────────────────────────────────
+     Native inputs, restyled: a recessed well that fills with the light. */
+
+  .glass-check {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    line-height: 1.4;
+    cursor: pointer;
+  }
+
+  .glass-check__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding-top: 0.0625rem;
+  }
+
+  .glass-check__description {
+    color: var(--color-text-subtle);
+    font-size: var(--step--2);
+  }
+
+  .glass-check:has(:disabled) {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .glass-checkbox {
+    position: relative;
+    flex: none;
+    display: grid;
+    place-content: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 0.375rem;
+    background-color: var(--color-well);
+    box-shadow: inset 0 1px 2px oklch(0.04 0.02 var(--glass-hue) / 0.5);
+    appearance: none;
+    cursor: inherit;
+    transition:
+      background-color var(--dur-2) var(--ease-glass),
+      border-color var(--dur-2) var(--ease-glass),
+      box-shadow var(--dur-2) var(--ease-glass);
+  }
+
+  .glass-checkbox[type='radio'] {
+    border-radius: 50%;
+  }
+
+  /* The mark: a check, a dash, or a dot, in the ink that sits on the light. */
+  .glass-checkbox::after {
+    content: '';
+    width: 0.625rem;
+    height: 0.625rem;
+    background-color: var(--color-on-light);
+    clip-path: polygon(14% 52%, 0 66%, 38% 100%, 100% 22%, 86% 8%, 37% 70%);
+    transform: scale(0);
+    transition: transform var(--dur-2) var(--ease-spring);
+  }
+
+  .glass-checkbox[type='radio']::after {
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 50%;
+    clip-path: none;
+  }
+
+  .glass-checkbox:indeterminate::after {
+    height: 0.125rem;
+    clip-path: none;
+    border-radius: 1px;
+  }
+
+  .glass-checkbox:is(:checked, :indeterminate) {
+    border-color: oklch(0.97 0.06 calc(var(--light-hue) + 12) / 0.75);
+    background: linear-gradient(180deg, oklch(0.92 0.1 calc(var(--light-hue) + 8)), oklch(0.82 0.13 calc(var(--light-hue) - 6)));
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.45), 0 0 14px -4px oklch(0.84 0.13 var(--light-hue) / 0.6);
+  }
+
+  .glass-checkbox:is(:checked, :indeterminate)::after {
+    transform: scale(1);
+  }
+
+  .glass-checkbox:focus-visible {
+    outline: 2px solid var(--color-light);
+    outline-offset: 2px;
+  }
+
+  .glass-checkbox[aria-invalid='true'] {
+    border-color: oklch(0.71 0.17 25 / 0.7);
+  }
+
+  /* ── Switch ───────────────────────────────────────────────────────────────
+     A recessed track; switched on, it fills with the light and the thumb
+     springs across. */
+
+  .glass-switch-row {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    cursor: pointer;
+  }
+
+  /* Full width: the label on the left, the switch on the right. */
+  .glass-switch-row--block {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .glass-switch {
+    --_w: 2.75rem;
+    --_h: 1.625rem;
+    --_pad: 0.1875rem;
+    --_thumb: calc(var(--_h) - 2px - 2 * var(--_pad));
+    position: relative;
+    flex: none;
+    width: var(--_w);
+    height: var(--_h);
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-round);
+    background-color: var(--color-well);
+    box-shadow: inset 0 1px 3px oklch(0.04 0.02 var(--glass-hue) / 0.55), 0 1px 0 oklch(1 0 0 / 0.05);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      background-color var(--dur-2) var(--ease-glass),
+      border-color var(--dur-2) var(--ease-glass),
+      box-shadow var(--dur-2) var(--ease-glass);
+  }
+
+  .glass-switch__thumb {
+    position: absolute;
+    top: var(--_pad);
+    left: var(--_pad);
+    width: var(--_thumb);
+    height: var(--_thumb);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, oklch(1 0 0), oklch(0.94 0.012 calc(var(--glass-hue) - 12)) 55%, oklch(0.8 0.03 calc(var(--glass-hue) - 12)));
+    box-shadow: 0 1px 3px oklch(0.04 0.02 var(--glass-hue) / 0.55), inset 0 -1px 1px oklch(0.6 0.03 var(--glass-hue) / 0.35);
+    transition:
+      transform var(--dur-3) var(--ease-spring),
+      scale var(--dur-1) ease-out;
+  }
+
+  .glass-switch[aria-checked='true'] {
+    border-color: oklch(0.97 0.06 calc(var(--light-hue) + 12) / 0.75);
+    background: linear-gradient(180deg, oklch(0.9 0.1 calc(var(--light-hue) + 8)), oklch(0.8 0.13 calc(var(--light-hue) - 6)));
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.45), 0 0 20px -6px oklch(0.84 0.13 var(--light-hue) / 0.7);
+  }
+
+  .glass-switch[aria-checked='true'] .glass-switch__thumb {
+    transform: translateX(calc(var(--_w) - var(--_h)));
+  }
+
+  .glass-switch:active .glass-switch__thumb {
+    scale: 0.9;
+  }
+
+  .glass-switch:focus-visible {
+    outline: 2px solid var(--color-light);
+    outline-offset: 3px;
+  }
+
+  .glass-switch:disabled,
+  .glass-switch-row:has(.glass-switch:disabled) {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .glass-switch--sm {
+    --_w: 2.25rem;
+    --_h: 1.375rem;
+  }
+
+  /* ── Slider ───────────────────────────────────────────────────────────────
+     A native range input. --fill (set by GlassSlider) paints the lit part of
+     the track; Firefox paints it itself with ::-moz-range-progress. */
+
+  .glass-slider-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .glass-slider-field__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    font-weight: 500;
+  }
+
+  .glass-slider-field__value {
+    color: var(--color-text-subtle);
+    font-family: var(--font-code);
+    font-size: var(--step--2);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .glass-slider {
+    --_track: 0.375rem;
+    --_thumb: 1.25rem;
+    --_lit: linear-gradient(90deg, oklch(0.78 0.14 calc(var(--light-hue) - 10)), oklch(0.9 0.1 calc(var(--light-hue) + 8)));
+    --_bead: radial-gradient(circle at 35% 30%, oklch(1 0 0), oklch(0.94 0.012 calc(var(--glass-hue) - 12)) 55%, oklch(0.8 0.03 calc(var(--glass-hue) - 12)));
+    --fill: 50%;
+    display: block;
+    width: 100%;
+    height: var(--_thumb);
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .glass-slider::-webkit-slider-runnable-track {
+    height: var(--_track);
+    border-radius: var(--radius-round);
+    background: var(--_lit) 0 0 / var(--fill) 100% no-repeat, var(--color-well);
+    box-shadow: inset 0 1px 2px oklch(0.04 0.02 var(--glass-hue) / 0.6), 0 1px 0 oklch(1 0 0 / 0.06);
+  }
+
+  .glass-slider::-moz-range-track {
+    height: var(--_track);
+    border-radius: var(--radius-round);
+    background: var(--color-well);
+    box-shadow: inset 0 1px 2px oklch(0.04 0.02 var(--glass-hue) / 0.6), 0 1px 0 oklch(1 0 0 / 0.06);
+  }
+
+  .glass-slider::-moz-range-progress {
+    height: var(--_track);
+    border-radius: var(--radius-round);
+    background: var(--_lit);
+  }
+
+  .glass-slider::-webkit-slider-thumb {
+    width: var(--_thumb);
+    height: var(--_thumb);
+    margin-top: calc((var(--_track) - var(--_thumb)) / 2);
+    border: 1px solid oklch(1 0 0 / 0.75);
+    border-radius: 50%;
+    background: var(--_bead);
+    box-shadow: 0 2px 6px oklch(0.04 0.02 var(--glass-hue) / 0.5), 0 0 0 0 var(--color-light-soft);
+    -webkit-appearance: none;
+    appearance: none;
+    transition:
+      transform var(--dur-2) var(--ease-spring),
+      box-shadow var(--dur-2) var(--ease-glass);
+  }
+
+  .glass-slider::-moz-range-thumb {
+    box-sizing: border-box;
+    width: var(--_thumb);
+    height: var(--_thumb);
+    border: 1px solid oklch(1 0 0 / 0.75);
+    border-radius: 50%;
+    background: var(--_bead);
+    box-shadow: 0 2px 6px oklch(0.04 0.02 var(--glass-hue) / 0.5);
+  }
+
+  @media (hover: hover) {
+    .glass-slider:hover::-webkit-slider-thumb {
+      box-shadow: 0 2px 6px oklch(0.04 0.02 var(--glass-hue) / 0.5), 0 0 0 6px var(--color-light-soft);
+    }
+  }
+
+  .glass-slider:active::-webkit-slider-thumb {
+    transform: scale(1.12);
+  }
+
+  .glass-slider:focus-visible {
+    outline: none;
+  }
+
+  .glass-slider:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--color-light);
+    outline-offset: 2px;
+  }
+
+  .glass-slider:focus-visible::-moz-range-thumb {
+    outline: 2px solid var(--color-light);
+    outline-offset: 2px;
+  }
+
+  .glass-slider:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* ── Segmented ────────────────────────────────────────────────────────────
+     A recessed tray; the selection is a pane of glass that springs across
+     to whatever you pick. */
+
+  .glass-segmented {
+    --_pad: 0.1875rem;
+    --_h: var(--control-md);
+    --_px: 1rem;
+    --_fs: 0.875rem;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    max-width: 100%;
+    gap: 0.125rem;
+    padding: var(--_pad);
+    overflow-x: auto;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-round);
+    background-color: var(--color-well);
+    box-shadow: inset 0 1px 3px oklch(0.04 0.02 var(--glass-hue) / 0.45), 0 1px 0 oklch(1 0 0 / 0.05);
+    scrollbar-width: none;
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
+  }
+
+  .glass-segmented::-webkit-scrollbar { display: none; }
+
+  .glass-segmented__option {
+    flex: none;
+    min-height: calc(var(--_h) - 2 * var(--_pad) - 2px);
+    margin: 0;
+    padding: 0 var(--_px);
+    border: 0;
+    border-radius: var(--radius-round);
+    background: transparent;
+    color: var(--color-text-subtle);
+    font-family: var(--font-body);
+    font-size: var(--_fs);
+    font-weight: 500;
+    line-height: 1.1;
+    white-space: nowrap;
+    cursor: pointer;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: color var(--dur-2) var(--ease-glass);
+  }
+
+  @media (hover: hover) {
+    .glass-segmented__option:hover { color: var(--color-text-muted); }
+  }
+
+  .glass-segmented__option[aria-checked='true'] {
+    color: var(--color-text);
+  }
+
+  .glass-segmented__option:focus-visible {
+    outline: 2px solid var(--color-light);
+    outline-offset: -2px;
+  }
+
+  .glass-segmented--sm { --_h: var(--control-sm); --_px: 0.8rem; --_fs: 0.8125rem; }
+  .glass-segmented--block { display: flex; }
+  .glass-segmented--block .glass-segmented__option { flex: 1; }
+
+  /* ── Indicator ────────────────────────────────────────────────────────────
+     The pane that glides to the selected item in a segmented control or a
+     nav. useGlassIndicator() writes --indicator-x/-w onto the container. */
+
+  .glass-indicator {
+    position: absolute;
+    z-index: -1;
+    top: var(--_pad, 0.1875rem);
+    bottom: var(--_pad, 0.1875rem);
+    left: 0;
+    width: var(--indicator-w, 0px);
+    border: 1px solid oklch(0.98 0.02 calc(var(--glass-hue) - 12) / 0.26);
+    border-radius: var(--radius-round);
+    background-color: var(--color-fill-active);
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.2), 0 2px 10px -3px oklch(0.04 0.02 var(--glass-hue) / 0.55);
+    opacity: var(--indicator-on, 0);
+    transform: translateX(var(--indicator-x, 0px));
+    pointer-events: none;
+  }
+
+  [data-indicator='ready'] > .glass-indicator {
+    transition:
+      transform var(--dur-3) var(--ease-spring),
+      width var(--dur-3) var(--ease-spring),
+      opacity var(--dur-2) var(--ease-glass);
+  }
+}

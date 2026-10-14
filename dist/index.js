@@ -1,622 +1,655 @@
-import e, { createContext as t, useCallback as n, useContext as r, useEffect as i, useLayoutEffect as a, useMemo as o, useRef as s, useState as c } from "react";
-import { jsx as l, jsxs as u } from "react/jsx-runtime";
-//#region src/context/GlassContext.tsx
-var d = {
+import { cloneElement as e, createContext as t, useContext as n, useEffect as r, useId as i, useLayoutEffect as a, useMemo as o, useRef as s, useState as c } from "react";
+import { Fragment as l, jsx as u, jsxs as d } from "react/jsx-runtime";
+import { createPortal as f } from "react-dom";
+//#region src/utils.ts
+var p = (...e) => e.filter(Boolean).join(" "), m = (...e) => (t) => {
+	for (let n of e) typeof n == "function" ? n(t) : n && (n.current = t);
+}, h = (...e) => o(() => m(...e), e), g = (e) => `var(--space-${e})`, _ = {
 	blur: 40,
 	opacity: .66,
-	lightAlpha: .22,
-	shadowAlpha: .2
-}, f = t(d);
-function p({ children: e, blur: t, opacity: n, lightAlpha: i, shadowAlpha: a }) {
-	let s = r(f), c = o(() => ({
-		blur: t ?? s.blur,
-		opacity: n ?? s.opacity,
-		lightAlpha: i ?? s.lightAlpha,
-		shadowAlpha: a ?? s.shadowAlpha
+	sheen: .22,
+	hue: 262,
+	lightHue: 76
+}, v = t(_), y = {
+	blur: (e) => ["--glass-blur", `${e}px`],
+	opacity: (e) => ["--glass-opacity", String(e)],
+	sheen: (e) => ["--glass-sheen", String(e)],
+	hue: (e) => ["--glass-hue", String(e)],
+	lightHue: (e) => ["--light-hue", String(e)]
+}, b = (e) => Object.fromEntries(Object.keys(y).filter((t) => e[t] !== void 0).map((t) => y[t](e[t]))), x = ({ children: e, className: t, style: r, ...i }) => {
+	let a = n(v), { blur: s, opacity: c, sheen: l, hue: d, lightHue: f } = i, m = o(() => ({
+		blur: s ?? a.blur,
+		opacity: c ?? a.opacity,
+		sheen: l ?? a.sheen,
+		hue: d ?? a.hue,
+		lightHue: f ?? a.lightHue
 	}), [
-		t,
-		n,
-		i,
-		a,
-		s
+		s,
+		c,
+		l,
+		d,
+		f,
+		a
 	]);
-	return /* @__PURE__ */ l(f.Provider, {
-		value: c,
-		children: e
+	return /* @__PURE__ */ u(v.Provider, {
+		value: m,
+		children: /* @__PURE__ */ u("div", {
+			className: p("glass-scope", t),
+			style: {
+				...b(i),
+				...r
+			},
+			children: e
+		})
 	});
-}
-function m() {
-	return r(f);
-}
-//#endregion
-//#region src/glass.ts
-var h = d.opacity, g = d.blur, _ = d.lightAlpha, v = d.shadowAlpha, y = {
-	subtle: .17,
-	medium: .3,
-	strong: .64
-}, b = {
-	subtle: .2,
-	medium: .32,
-	strong: .44
-}, x = {
-	subtle: .24,
-	medium: .38,
-	strong: .64
-}, S = {
-	subtle: .2,
-	medium: .34,
-	strong: .46
-}, C = {
-	subtle: .06,
-	medium: .09,
-	strong: .12
-}, w = {
-	subtle: 1.35,
-	medium: 1.5,
-	strong: 1.6
-}, T = "0.21 0.034 260", E = "0.52 0.05 255", D = "0.93 0.07 80", O = "0.05 0.02 262", k = "0.80 0.12 72", A = "0.55 0.18 262", j = Math.round(.512 * d.opacity * 1e3) / 1e3;
-function M(e = "medium", t = d) {
-	let { blur: n, opacity: r } = t;
-	function i(e) {
-		return (Math.round(e * r * 1e3) / 1e3).toFixed(3);
-	}
-	return {
-		panel: {
-			background: `oklch(${T} / ${i(y[e])})`,
-			backdropFilter: `blur(${n}px) saturate(${w[e]})`,
-			border: `1px solid oklch(${E} / ${i(b[e])})`,
-			boxShadow: [
-				`0 1px 1px oklch(${O} / ${i(S[e] * .8)})`,
-				`0 24px 64px -16px oklch(${O} / ${i(S[e] * 1.6)})`,
-				`inset 0 1px 0 oklch(${D} / ${i(x[e] * .45)})`,
-				`inset 0 -1px 0 oklch(${O} / ${i(S[e])})`
-			].join(", ")
-		},
-		shimmerColor: `oklch(${D} / ${i(x[e])})`,
-		topRightGlow: {
-			background: `radial-gradient(closest-side, oklch(${k} / ${i(C[e])}) 0%, oklch(${k} / ${i(C[e] * .4)}) 45%, transparent 100%)`,
-			filter: "none"
-		},
-		bottomLeftGlow: {
-			background: `radial-gradient(closest-side, oklch(${A} / ${i(C[e] * 1.4)}) 0%, oklch(${A} / ${i(C[e] * .5)}) 45%, transparent 100%)`,
-			filter: "none"
-		}
-	};
-}
-//#endregion
-//#region src/hooks/useGlassPointer.ts
-var N = 45;
-function P(e, t = !0) {
-	i(() => {
+}, ee = () => n(v), S = {
+	x: .72,
+	y: .18,
+	angle: 45
+}, C = (e, t = !0) => {
+	r(() => {
 		let n = e.current;
 		if (!n || !t) return;
-		let r = 0, i = 45, a = null, o = (e) => {
-			let t = ((e - i) % 360 + 540) % 360 - 180;
-			i += t, n.style.setProperty("--glass-angle", `${i}deg`);
-		}, s = () => {
+		let r = 0, i = S.angle, a = null, o = (e) => {
+			i += ((e - i) % 360 + 540) % 360 - 180, n.style.setProperty("--glass-angle", `${i}deg`);
+		}, s = (e, t) => {
+			n.style.setProperty("--glass-x", e.toFixed(4)), n.style.setProperty("--glass-y", t.toFixed(4));
+		}, c = () => {
 			if (r = 0, !a) return;
 			let { x: e, y: t } = a;
-			a = null, n.style.setProperty("--glass-x", e.toFixed(4)), n.style.setProperty("--glass-y", t.toFixed(4)), o(Math.atan2(e - .5, .5 - t) * 180 / Math.PI);
-		}, c = (e) => {
+			a = null, s(e, t), o(Math.atan2(e - .5, .5 - t) * 180 / Math.PI);
+		}, l = (e) => {
 			if (e.pointerType === "touch") return;
 			let t = n.getBoundingClientRect();
 			a = {
 				x: Math.min(1, Math.max(0, (e.clientX - t.left) / t.width)),
 				y: Math.min(1, Math.max(0, (e.clientY - t.top) / t.height))
-			}, r ||= requestAnimationFrame(s);
-		}, l = (e) => {
-			e.pointerType !== "touch" && (n.style.setProperty("--glass-hover", "1"), c(e));
+			}, r ||= requestAnimationFrame(c);
 		}, u = () => {
-			a = null, n.style.setProperty("--glass-hover", "0"), o(45);
+			a = null, s(S.x, S.y), o(S.angle);
 		};
-		return n.addEventListener("pointerenter", l), n.addEventListener("pointermove", c), n.addEventListener("pointerleave", u), () => {
-			cancelAnimationFrame(r), n.removeEventListener("pointerenter", l), n.removeEventListener("pointermove", c), n.removeEventListener("pointerleave", u);
+		return n.addEventListener("pointermove", l), n.addEventListener("pointerleave", u), () => {
+			cancelAnimationFrame(r), n.removeEventListener("pointermove", l), n.removeEventListener("pointerleave", u);
 		};
 	}, [e, t]);
-}
-function F(e, t = !0) {
+}, w = (e, t = !0) => {
 	a(() => {
 		let n = e.current;
 		if (!n || !t || typeof IntersectionObserver > "u") return;
 		n.dataset.reveal = "pending";
 		let r = new IntersectionObserver((e) => {
-			for (let t of e) t.isIntersecting && (n.dataset.reveal = "in", r.disconnect());
+			e.some((e) => e.isIntersecting) && (n.dataset.reveal = "in", r.disconnect());
 		}, {
 			rootMargin: "0px 0px -8% 0px",
 			threshold: .08
 		});
 		return r.observe(n), () => r.disconnect();
 	}, [e, t]);
-}
-//#endregion
-//#region src/patterns.ts
-var I = (e) => `data:image/svg+xml,${encodeURIComponent(e.trim())}`, L = [
-	{
-		id: "none",
-		label: "None",
-		swatch: "transparent",
-		url: "",
-		size: ""
-	},
-	{
-		id: "grid",
-		label: "Grid",
-		swatch: I("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><path d='M 20 0 L 0 0 0 20' fill='none' stroke='white' stroke-width='0.5' opacity='0.6'/></svg>"),
-		url: I("<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><path d='M 32 0 L 0 0 0 32' fill='none' stroke='white' stroke-width='0.6'/></svg>"),
-		size: "32px 32px"
-	},
-	{
-		id: "dots",
-		label: "Dots",
-		swatch: I("<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><circle cx='6' cy='6' r='1.5' fill='white' opacity='0.6'/></svg>"),
-		url: I("<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18'><circle cx='9' cy='9' r='1.5' fill='white'/></svg>"),
-		size: "18px 18px"
-	},
-	{
-		id: "crosshatch",
-		label: "Hatch",
-		swatch: I("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M 0 16 L 16 0 M 0 0 L 16 16' stroke='white' stroke-width='0.7' opacity='0.5'/></svg>"),
-		url: I("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><path d='M 0 20 L 20 0 M 0 0 L 20 20' stroke='white' stroke-width='0.7'/></svg>"),
-		size: "20px 20px"
-	},
-	{
-		id: "diagonal",
-		label: "Lines",
-		swatch: I("<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><path d='M 0 12 L 12 0' stroke='white' stroke-width='0.7' opacity='0.5'/></svg>"),
-		url: I("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M 0 16 L 16 0' stroke='white' stroke-width='0.7'/></svg>"),
-		size: "16px 16px"
-	},
-	{
-		id: "diamond",
-		label: "Diamond",
-		swatch: I("<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><path d='M 10 1 L 19 10 10 19 1 10 Z' fill='none' stroke='white' stroke-width='0.7' opacity='0.5'/></svg>"),
-		url: I("<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28'><path d='M 14 1 L 27 14 14 27 1 14 Z' fill='none' stroke='white' stroke-width='0.6'/></svg>"),
-		size: "28px 28px"
-	},
-	{
-		id: "hex",
-		label: "Hex",
-		swatch: I("<svg xmlns='http://www.w3.org/2000/svg' width='26' height='22'><polygon points='13,1 24,7 24,15 13,21 2,15 2,7' fill='none' stroke='white' stroke-width='0.7' opacity='0.5'/></svg>"),
-		url: I("<svg xmlns='http://www.w3.org/2000/svg' width='40' height='34'><polygon points='20,2 37,11 37,23 20,32 3,23 3,11' fill='none' stroke='white' stroke-width='0.6'/></svg>"),
-		size: "40px 34px"
-	},
-	{
-		id: "grid-sm",
-		label: "Fine Grid",
-		swatch: I("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M 16 0 L 0 0 0 16' fill='none' stroke='white' stroke-width='0.4' opacity='0.6'/></svg>"),
-		url: I("<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M 16 0 L 0 0 0 16' fill='none' stroke='white' stroke-width='0.4'/></svg>"),
-		size: "16px 16px"
-	},
-	{
-		id: "dots-sm",
-		label: "Fine Dots",
-		swatch: I("<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><circle cx='5' cy='5' r='0.7' fill='white' opacity='0.6'/></svg>"),
-		url: I("<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><circle cx='5' cy='5' r='0.7' fill='white'/></svg>"),
-		size: "10px 10px"
-	},
-	{
-		id: "grain",
-		label: "Grain",
-		swatch: I("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='24' height='24' filter='url(#g)'/></svg>"),
-		url: I("<svg xmlns='http://www.w3.org/2000/svg' width='256' height='256'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='256' height='256' filter='url(#g)'/></svg>"),
-		size: "256px 256px"
-	},
-	{
-		id: "noise",
-		label: "Noise",
-		swatch: I("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.25' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='24' height='24' filter='url(#n)'/></svg>"),
-		url: I("<svg xmlns='http://www.w3.org/2000/svg' width='256' height='256'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.25' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='256' height='256' filter='url(#n)'/></svg>"),
-		size: "256px 256px"
-	},
-	{
-		id: "turbulence",
-		label: "Turbulence",
-		swatch: I("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><filter id='t'><feTurbulence type='turbulence' baseFrequency='0.02' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='24' height='24' filter='url(#t)'/></svg>"),
-		url: I("<svg xmlns='http://www.w3.org/2000/svg' width='256' height='256'><filter id='t'><feTurbulence type='turbulence' baseFrequency='0.02' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='256' height='256' filter='url(#t)'/></svg>"),
-		size: "256px 256px"
-	}
-], R = [
-	{
-		id: "night",
-		label: "Night",
-		swatch: "linear-gradient(135deg, oklch(0.20 0.06 240), oklch(0.12 0.04 260))",
-		gradient: "\n      radial-gradient(circle at 14% 18%, oklch(0.42 0.24 216 / 0.26), transparent 26%),\n      radial-gradient(circle at 88% 10%, oklch(0.50 0.28 206 / 0.28), transparent 24%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.11 0.08 248 / 0.94), transparent 100%),\n      linear-gradient(180deg, oklch(0.12 0.030 246) 0%, oklch(0.07 0.05 250) 100%)\n    "
-	},
-	{
-		id: "ember",
-		label: "Ember",
-		swatch: "linear-gradient(135deg, oklch(0.22 0.08 28), oklch(0.10 0.04 15))",
-		gradient: "\n      radial-gradient(circle at 18% 15%, oklch(0.48 0.22 38 / 0.30), transparent 32%),\n      radial-gradient(circle at 82% 72%, oklch(0.40 0.20 18 / 0.28), transparent 36%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.10 0.06 22 / 0.92), transparent 100%),\n      linear-gradient(180deg, oklch(0.11 0.028 28) 0%, oklch(0.06 0.016 18) 100%)\n    "
-	},
-	{
-		id: "forest",
-		label: "Forest",
-		swatch: "linear-gradient(135deg, oklch(0.20 0.07 155), oklch(0.09 0.03 165))",
-		gradient: "\n      radial-gradient(circle at 25% 35%, oklch(0.44 0.20 155 / 0.28), transparent 34%),\n      radial-gradient(circle at 78% 15%, oklch(0.38 0.16 175 / 0.24), transparent 30%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.09 0.06 160 / 0.94), transparent 100%),\n      linear-gradient(180deg, oklch(0.11 0.032 152) 0%, oklch(0.06 0.018 162) 100%)\n    "
-	},
-	{
-		id: "dusk",
-		label: "Dusk",
-		swatch: "linear-gradient(135deg, oklch(0.22 0.09 290), oklch(0.10 0.04 310))",
-		gradient: "\n      radial-gradient(circle at 65% 8%, oklch(0.52 0.24 292 / 0.30), transparent 34%),\n      radial-gradient(circle at 12% 75%, oklch(0.42 0.20 322 / 0.26), transparent 36%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.10 0.07 300 / 0.92), transparent 100%),\n      linear-gradient(180deg, oklch(0.11 0.030 285) 0%, oklch(0.07 0.022 305) 100%)\n    "
-	},
-	{
-		id: "dawn",
-		label: "Dawn",
-		swatch: "linear-gradient(135deg, oklch(0.94 0.04 80), oklch(0.82 0.06 45))",
-		gradient: "\n      radial-gradient(circle at 22% 20%, oklch(0.90 0.08 72 / 0.40), transparent 38%),\n      radial-gradient(circle at 80% 60%, oklch(0.78 0.10 42 / 0.28), transparent 40%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.72 0.06 50 / 0.50), transparent 100%),\n      linear-gradient(180deg, oklch(0.95 0.014 78) 0%, oklch(0.86 0.022 55) 100%)\n    "
-	},
-	{
-		id: "aurora",
-		label: "Aurora",
-		swatch: "linear-gradient(135deg, oklch(0.28 0.16 185), oklch(0.16 0.10 320))",
-		gradient: "\n      radial-gradient(circle at 12% 20%, oklch(0.52 0.22 185 / 0.30), transparent 32%),\n      radial-gradient(circle at 85% 15%, oklch(0.48 0.24 320 / 0.26), transparent 36%),\n      radial-gradient(circle at 48% 75%, oklch(0.36 0.18 268 / 0.22), transparent 40%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.09 0.07 230 / 0.94), transparent 100%),\n      linear-gradient(180deg, oklch(0.09 0.024 215) 0%, oklch(0.05 0.018 240) 100%)\n    "
-	},
-	{
-		id: "nebula",
-		label: "Nebula",
-		swatch: "linear-gradient(135deg, oklch(0.20 0.10 268), oklch(0.20 0.10 48))",
-		gradient: "\n      radial-gradient(circle at 78% 12%, oklch(0.58 0.20 52 / 0.28), transparent 30%),\n      radial-gradient(circle at 14% 58%, oklch(0.46 0.24 278 / 0.30), transparent 38%),\n      radial-gradient(circle at 68% 76%, oklch(0.38 0.18 250 / 0.22), transparent 34%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.09 0.07 268 / 0.94), transparent 100%),\n      linear-gradient(180deg, oklch(0.10 0.030 262) 0%, oklch(0.06 0.020 278) 100%)\n    "
-	},
-	{
-		id: "lagoon",
-		label: "Lagoon",
-		swatch: "linear-gradient(135deg, oklch(0.22 0.09 195), oklch(0.10 0.05 238))",
-		gradient: "\n      radial-gradient(circle at 20% 18%, oklch(0.56 0.18 192 / 0.28), transparent 30%),\n      radial-gradient(circle at 78% 22%, oklch(0.42 0.14 175 / 0.22), transparent 28%),\n      radial-gradient(circle at 54% 80%, oklch(0.36 0.20 240 / 0.26), transparent 40%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.08 0.06 212 / 0.94), transparent 100%),\n      linear-gradient(180deg, oklch(0.10 0.028 205) 0%, oklch(0.05 0.020 230) 100%)\n    "
-	},
-	{
-		id: "crimson",
-		label: "Crimson",
-		swatch: "linear-gradient(135deg, oklch(0.22 0.10 18), oklch(0.12 0.06 348))",
-		gradient: "\n      radial-gradient(circle at 25% 12%, oklch(0.52 0.24 18 / 0.30), transparent 32%),\n      radial-gradient(circle at 80% 55%, oklch(0.46 0.20 350 / 0.26), transparent 36%),\n      radial-gradient(circle at 15% 76%, oklch(0.38 0.16 330 / 0.20), transparent 30%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.09 0.06 14 / 0.94), transparent 100%),\n      linear-gradient(180deg, oklch(0.10 0.028 14) 0%, oklch(0.06 0.018 350) 100%)\n    "
-	},
-	{
-		id: "solstice",
-		label: "Solstice",
-		swatch: "linear-gradient(135deg, oklch(0.24 0.08 58), oklch(0.14 0.07 188))",
-		gradient: "\n      radial-gradient(circle at 75% 15%, oklch(0.60 0.20 60 / 0.28), transparent 34%),\n      radial-gradient(circle at 18% 65%, oklch(0.50 0.22 190 / 0.28), transparent 38%),\n      radial-gradient(circle at 50% 45%, oklch(0.32 0.08 122 / 0.14), transparent 40%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.09 0.04 100 / 0.94), transparent 100%),\n      linear-gradient(180deg, oklch(0.10 0.022 80) 0%, oklch(0.06 0.020 195) 100%)\n    "
-	},
-	{
-		id: "veil",
-		label: "Veil",
-		swatch: "linear-gradient(135deg, oklch(0.22 0.09 295), oklch(0.14 0.07 350))",
-		gradient: "\n      radial-gradient(circle at 22% 18%, oklch(0.52 0.18 352 / 0.28), transparent 34%),\n      radial-gradient(circle at 78% 22%, oklch(0.48 0.20 302 / 0.26), transparent 32%),\n      radial-gradient(circle at 45% 72%, oklch(0.38 0.18 270 / 0.24), transparent 38%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.10 0.07 290 / 0.94), transparent 100%),\n      linear-gradient(180deg, oklch(0.11 0.030 285) 0%, oklch(0.06 0.024 308) 100%)\n    "
-	},
-	{
-		id: "sunset",
-		label: "Sunset",
-		swatch: "linear-gradient(135deg, oklch(0.26 0.12 36), oklch(0.14 0.08 292))",
-		gradient: "\n      radial-gradient(circle at 50% 8%, oklch(0.62 0.22 42 / 0.30), transparent 40%),\n      radial-gradient(circle at 15% 52%, oklch(0.44 0.22 295 / 0.26), transparent 36%),\n      radial-gradient(circle at 85% 45%, oklch(0.40 0.20 22 / 0.24), transparent 30%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.10 0.07 278 / 0.94), transparent 100%),\n      linear-gradient(180deg, oklch(0.11 0.030 30) 0%, oklch(0.06 0.022 285) 100%)\n    "
-	},
-	{
-		id: "abyss",
-		label: "Abyss",
-		swatch: "linear-gradient(135deg, oklch(0.12 0.04 245), oklch(0.05 0.02 255))",
-		gradient: "\n      radial-gradient(circle at 30% 20%, oklch(0.34 0.10 238 / 0.22), transparent 36%),\n      radial-gradient(circle at 72% 68%, oklch(0.26 0.08 258 / 0.18), transparent 32%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.07 0.04 248 / 0.96), transparent 100%),\n      linear-gradient(180deg, oklch(0.07 0.018 244) 0%, oklch(0.04 0.012 252) 100%)\n    "
-	},
-	{
-		id: "biolume",
-		label: "Biolume",
-		swatch: "linear-gradient(135deg, oklch(0.18 0.10 192), oklch(0.08 0.05 218))",
-		gradient: "\n      radial-gradient(circle at 25% 25%, oklch(0.40 0.16 192 / 0.20), transparent 40%),\n      radial-gradient(circle at 72% 18%, oklch(0.36 0.14 175 / 0.16), transparent 36%),\n      radial-gradient(circle at 48% 74%, oklch(0.32 0.18 215 / 0.18), transparent 44%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.08 0.06 204 / 0.96), transparent 100%),\n      linear-gradient(180deg, oklch(0.09 0.022 196) 0%, oklch(0.05 0.016 218) 100%)\n    "
-	},
-	{
-		id: "grove",
-		label: "Grove",
-		swatch: "linear-gradient(135deg, oklch(0.18 0.08 148), oklch(0.08 0.04 162))",
-		gradient: "\n      radial-gradient(circle at 30% 22%, oklch(0.42 0.16 148 / 0.20), transparent 38%),\n      radial-gradient(circle at 68% 28%, oklch(0.36 0.14 164 / 0.16), transparent 34%),\n      radial-gradient(circle at 20% 74%, oklch(0.34 0.18 140 / 0.18), transparent 40%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.08 0.05 152 / 0.96), transparent 100%),\n      linear-gradient(180deg, oklch(0.09 0.020 145) 0%, oklch(0.05 0.014 160) 100%)\n    "
-	},
-	{
-		id: "pelagic",
-		label: "Pelagic",
-		swatch: "linear-gradient(135deg, oklch(0.16 0.08 232), oklch(0.07 0.04 248))",
-		gradient: "\n      radial-gradient(circle at 22% 18%, oklch(0.38 0.16 228 / 0.20), transparent 38%),\n      radial-gradient(circle at 78% 24%, oklch(0.32 0.14 248 / 0.16), transparent 34%),\n      radial-gradient(circle at 52% 78%, oklch(0.28 0.12 238 / 0.18), transparent 42%),\n      radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.07 0.05 240 / 0.97), transparent 100%),\n      linear-gradient(180deg, oklch(0.08 0.020 232) 0%, oklch(0.04 0.014 248) 100%)\n    "
-	}
-];
-function z(e, t) {
-	let n = +(.28 * t).toFixed(2), r = +(.24 * t).toFixed(2), i = (e + 20) % 360;
-	return `
-    radial-gradient(circle at 20% 15%, oklch(0.44 0.22 ${e} / ${n}), transparent 32%),
-    radial-gradient(circle at 80% 70%, oklch(0.38 0.18 ${i} / ${r}), transparent 36%),
-    radial-gradient(ellipse 100% 55% at 50% 100%, oklch(0.11 0.07 ${e} / 0.92), transparent 100%),
-    linear-gradient(180deg, oklch(0.11 0.030 ${e}) 0%, oklch(0.06 0.018 ${i}) 100%)
-  `;
-}
-//#endregion
-//#region src/components/GlassOrbs.tsx
-var B = ({ preset: e = "drift", speed: t = 6, opacity: n = .95, fixed: r = !1, blendMode: i = "screen", className: a = "" }) => {
-	let o = {
-		"--orb-speed": `${t}s`,
-		"--orb-opacity": String(n),
-		"--orb-blend": i
-	};
-	return /* @__PURE__ */ u("div", {
-		"aria-hidden": "true",
-		className: `glass-orbs glass-orbs--${e}${r ? " glass-orbs--fixed" : ""} ${a}`.trim(),
-		style: o,
-		children: [
-			/* @__PURE__ */ l("div", { className: "glass-orb glass-orb-1" }),
-			/* @__PURE__ */ l("div", { className: "glass-orb glass-orb-2" }),
-			/* @__PURE__ */ l("div", { className: "glass-orb glass-orb-3" }),
-			/* @__PURE__ */ l("div", { className: "glass-orb glass-orb-4" }),
-			/* @__PURE__ */ l("div", { className: "glass-orb glass-orb-5" }),
-			/* @__PURE__ */ l("div", { className: "glass-orb glass-orb-6" })
-		]
+}, T = ({ as: e, intensity: t = "medium", padding: n = "md", radius: r, glow: i = !1, prism: a = !1, tilt: o = !1, reveal: c = !1, pointerLight: l = !0, className: d, ref: f, ...m }) => {
+	let g = e ?? "div", _ = s(null), v = h(_, f);
+	return C(_, l), w(_, c), /* @__PURE__ */ u(g, {
+		ref: v,
+		className: p("glass", t !== "medium" && `glass--${t}`, n !== "none" && `glass--pad-${n}`, r && `glass--radius-${r}`, i && "glass--glow", a && "glass--prism", o && "glass--tilt", c && "glass--reveal", d),
+		...m
 	});
-}, V = ({ intensity: e = "medium", topGlow: t = !0, bottomGlow: r = !1, padding: i = "none", rounded: a, tilt: o = !1, reveal: c = !1, spectrum: d = !0, className: f = "", style: p, children: h, as: g = "div", ref: _, ...v }) => {
-	let y = m(), b = M(e, y), x = s(null);
-	P(x), F(x, c);
-	let S = n((e) => {
-		x.current = e, typeof _ == "function" ? _(e) : _ && (_.current = e);
-	}, [_]), C = [
-		"glass-surface",
-		o && "glass-surface--tilt",
-		c && "glass-surface--reveal",
-		i !== "none" && `glass-surface--pad-${i}`,
-		a,
-		f
-	].filter(Boolean).join(" "), w = {
-		"--glass-light-alpha": y.lightAlpha,
-		"--glass-shadow-alpha": y.shadowAlpha,
-		"--glass-lip": b.shimmerColor
-	};
-	return /* @__PURE__ */ u(g, {
-		ref: S,
-		className: C,
-		style: {
-			...b.panel,
-			...w,
-			...p
-		},
-		...v,
-		children: [
-			/* @__PURE__ */ l("div", {
-				"aria-hidden": "true",
-				className: "glass-surface__lip"
-			}),
-			/* @__PURE__ */ l("div", {
-				"aria-hidden": "true",
-				className: "glass-surface__shade"
-			}),
-			/* @__PURE__ */ l("div", {
-				"aria-hidden": "true",
-				className: "glass-surface__sheen"
-			}),
-			t && /* @__PURE__ */ l("div", {
-				"aria-hidden": "true",
-				className: "glass-surface__glow glass-surface__glow--tr",
-				style: b.topRightGlow
-			}),
-			r && /* @__PURE__ */ l("div", {
-				"aria-hidden": "true",
-				className: "glass-surface__glow glass-surface__glow--bl",
-				style: b.bottomLeftGlow
-			}),
-			/* @__PURE__ */ l("div", {
-				"aria-hidden": "true",
-				className: "glass-surface__rim"
-			}),
-			d && /* @__PURE__ */ l("div", {
-				"aria-hidden": "true",
-				className: "glass-surface__spectrum"
-			}),
-			h
-		]
-	});
-}, H = "glass-pill", U = ({ size: e = "md", variant: t = "default", as: n = "button", className: r = "", children: i, ...a }) => {
-	let o = n === "button" && !a.type ? { type: "button" } : {};
-	return /* @__PURE__ */ l(n, {
-		className: `${H} glass-pill--${e}${t === "default" ? "" : ` glass-pill--${t}`} ${r}`.trim(),
-		...o,
-		...a,
-		children: i
-	});
-}, W = ({ className: e = "" }) => /* @__PURE__ */ l("div", {
+}, E = [
+	"kiln",
+	"dusk",
+	"aurora",
+	"ember",
+	"fjord",
+	"abyss"
+], D = [
+	"none",
+	"grain",
+	"dots",
+	"grid"
+], O = ({ palette: e = "kiln", motion: t = !0, speed: n, strength: r, texture: i = "none", fixed: a = !1, className: o, style: s }) => /* @__PURE__ */ u("div", {
 	"aria-hidden": "true",
-	className: `glass-divider ${e}`.trim()
-}), G = ({ children: e, focused: t, fieldBlur: n = 16, radius: r, wrapperClassName: i = "", wrapperStyle: a, shimmer: o = !0 }) => {
-	let [s, d] = c(!1), f = t ?? s, { opacity: p } = m(), h = {
-		...r && { "--field-radius": r },
-		"--field-blur": `${n}px`,
-		"--glass-opacity": p
+	className: p("glass-backdrop", e !== "kiln" && `glass-backdrop--${e}`, !t && "glass-backdrop--still", i !== "none" && `glass-backdrop--${i}`, a && "glass-backdrop--fixed", o),
+	style: {
+		...n !== void 0 && { "--backdrop-speed": `${n}s` },
+		...r !== void 0 && { "--backdrop-strength": r },
+		...s
+	},
+	children: Array.from({ length: 6 }, (e, t) => /* @__PURE__ */ u("span", { className: "glass-backdrop__orb" }, t))
+}), k = ({ as: e, variant: t = "secondary", size: n = "md", pressed: r, loading: i = !1, icon: a = !1, block: o = !1, className: s, children: c, ...f }) => {
+	let m = e ?? "button";
+	return /* @__PURE__ */ u(m, {
+		type: m === "button" ? "button" : void 0,
+		"aria-pressed": r,
+		"aria-busy": i || void 0,
+		className: p("glass-button", t !== "secondary" && `glass-button--${t}`, n !== "md" && `glass-button--${n}`, a && "glass-button--icon", o && "glass-button--block", s),
+		...f,
+		children: i ? /* @__PURE__ */ d(l, { children: [/* @__PURE__ */ u("span", {
+			className: "glass-button__label",
+			children: c
+		}), /* @__PURE__ */ u("span", {
+			className: "glass-spinner",
+			"aria-hidden": "true"
+		})] }) : c
+	});
+}, A = t(null), j = () => n(A), M = (e) => {
+	let t = j(), n = e.invalid ?? t?.invalid;
+	return {
+		id: e.id ?? t?.id,
+		required: e.required ?? t?.required,
+		"aria-invalid": n || void 0,
+		"aria-describedby": p(t?.describedBy, e["aria-describedby"]) || void 0
 	};
-	return /* @__PURE__ */ u("div", {
-		className: `glass-field ${i}`.trim(),
-		"data-focused": f,
-		style: {
-			...h,
-			...a
+}, N = ({ label: e, hint: t, error: n, required: r, optional: a, id: o, className: s, children: c }) => {
+	let l = i(), f = o ?? `field-${l}`, m = t ? `${f}-hint` : void 0, h = n ? `${f}-error` : void 0;
+	return /* @__PURE__ */ u(A.Provider, {
+		value: {
+			id: f,
+			describedBy: p(m, h) || void 0,
+			invalid: !!n,
+			required: r
 		},
-		onFocus: () => {
-			t === void 0 && d(!0);
-		},
-		onBlur: () => {
-			t === void 0 && d(!1);
-		},
-		children: [o && /* @__PURE__ */ l("div", {
-			"aria-hidden": "true",
-			className: "glass-field__shimmer"
-		}), e]
-	});
-}, K = e.forwardRef(({ fieldBlur: e, wrapperClassName: t, wrapperStyle: n, shimmer: r, onFocus: i, onBlur: a, className: o, ...s }, u) => {
-	let [d, f] = c(!1);
-	return /* @__PURE__ */ l(G, {
-		focused: d,
-		fieldBlur: e,
-		wrapperClassName: t,
-		wrapperStyle: n,
-		shimmer: r,
-		children: /* @__PURE__ */ l("input", {
-			ref: u,
-			...s,
-			className: `glass-field__control ${o ?? ""}`.trim(),
-			onFocus: (e) => {
-				f(!0), i?.(e);
-			},
-			onBlur: (e) => {
-				f(!1), a?.(e);
-			}
+		children: /* @__PURE__ */ d("div", {
+			className: p("glass-field", s),
+			children: [
+				/* @__PURE__ */ d("label", {
+					className: "glass-field__label",
+					htmlFor: f,
+					children: [e, a && /* @__PURE__ */ u("span", {
+						className: "glass-field__optional",
+						children: "Optional"
+					})]
+				}),
+				c,
+				t && /* @__PURE__ */ u("p", {
+					id: m,
+					className: "glass-field__hint",
+					children: t
+				}),
+				n && /* @__PURE__ */ u("p", {
+					id: h,
+					className: "glass-field__error",
+					children: n
+				})
+			]
 		})
 	});
-});
-K.displayName = "GlassInput";
-var q = e.forwardRef(({ fieldBlur: e, wrapperClassName: t, wrapperStyle: n, shimmer: r, onFocus: i, onBlur: a, className: o, ...s }, u) => {
-	let [d, f] = c(!1);
-	return /* @__PURE__ */ l(G, {
-		focused: d,
-		fieldBlur: e,
-		wrapperClassName: t,
-		wrapperStyle: n,
-		shimmer: r,
-		children: /* @__PURE__ */ l("textarea", {
-			ref: u,
-			...s,
-			className: `glass-field__control ${o ?? ""}`.trim(),
-			onFocus: (e) => {
-				f(!0), i?.(e);
-			},
-			onBlur: (e) => {
-				f(!1), a?.(e);
-			}
-		})
+}, P = (e, t) => t !== "md" && `${e}--${t}`, te = ({ size: e = "md", invalid: t, leading: n, trailing: r, className: i, style: a, ref: o, id: c, required: l, "aria-describedby": f, ...m }) => {
+	let g = s(null), _ = h(g, o), v = M({
+		id: c,
+		invalid: t,
+		required: l,
+		"aria-describedby": f
+	}), y = n != null || r != null, b = /* @__PURE__ */ u("input", {
+		ref: _,
+		className: p("glass-input", !y && P("glass-input", e), !y && i),
+		style: y ? void 0 : a,
+		...v,
+		...m
 	});
-});
-q.displayName = "GlassTextarea";
-//#endregion
-//#region src/components/GlassToast.tsx
-var J = {
-	success: "M5 10.5l3.2 3.2L15 7",
-	error: "M6.5 6.5l7 7M13.5 6.5l-7 7",
-	info: "M10 6v.5M10 9.5V14"
-}, Y = ({ open: e, onClose: t, duration: n = 4500, tone: r = "success", className: a = "", children: o }) => (i(() => {
-	if (!e || !n || !t) return;
-	let r = setTimeout(t, n);
-	return () => clearTimeout(r);
-}, [
-	e,
-	n,
-	t
-]), /* @__PURE__ */ u("div", {
-	role: r === "error" ? "alert" : "status",
-	"aria-live": r === "error" ? "assertive" : "polite",
-	"data-open": e,
-	className: `glass-toast glass-toast--${r} ${a}`.trim(),
-	children: [/* @__PURE__ */ l("span", {
-		className: "glass-toast__icon",
-		"aria-hidden": "true",
-		children: /* @__PURE__ */ l("svg", {
-			width: "20",
-			height: "20",
-			viewBox: "0 0 20 20",
-			fill: "none",
-			children: /* @__PURE__ */ l("path", {
-				d: J[r],
-				stroke: "currentColor",
-				strokeWidth: "1.8",
-				strokeLinecap: "round",
-				strokeLinejoin: "round"
-			})
-		})
-	}), /* @__PURE__ */ l("span", { children: e ? o : null })]
-})), X = ({ checked: e, defaultChecked: t = !1, onChange: n, children: r, size: i = "md", className: a = "", wrapperClassName: o = "", disabled: s, onClick: d, ...f }) => {
-	let [p, m] = c(t), h = e ?? p, g = /* @__PURE__ */ l("button", {
+	return y ? /* @__PURE__ */ d("div", {
+		className: p("glass-input-group", P("glass-input-group", e), i),
+		style: a,
+		onMouseDown: (e) => {
+			e.target === g.current || e.target.closest("button, a, input, select, textarea") || (e.preventDefault(), g.current?.focus());
+		},
+		children: [
+			n,
+			b,
+			r
+		]
+	}) : b;
+}, F = ({ invalid: e, autoGrow: t = !1, className: n, id: r, required: i, "aria-describedby": a, ...o }) => {
+	let s = M({
+		id: r,
+		invalid: e,
+		required: i,
+		"aria-describedby": a
+	});
+	return /* @__PURE__ */ u("textarea", {
+		className: p("glass-input", t && "glass-input--auto", n),
+		...s,
+		...o
+	});
+}, I = ({ size: e = "md", invalid: t, className: n, id: r, required: i, "aria-describedby": a, ...o }) => {
+	let s = M({
+		id: r,
+		invalid: t,
+		required: i,
+		"aria-describedby": a
+	});
+	return /* @__PURE__ */ u("select", {
+		className: p("glass-input", P("glass-input", e), n),
+		...s,
+		...o
+	});
+}, L = (e, { label: t, description: n, wrapperClassName: r }) => t == null ? e : /* @__PURE__ */ d("label", {
+	className: p("glass-check", r),
+	children: [e, /* @__PURE__ */ d("span", {
+		className: "glass-check__text",
+		children: [/* @__PURE__ */ u("span", { children: t }), n != null && /* @__PURE__ */ u("span", {
+			className: "glass-check__description",
+			children: n
+		})]
+	})]
+}), R = ({ label: e, description: t, invalid: n, wrapperClassName: r, indeterminate: i = !1, className: o, ref: c, ...l }) => {
+	let d = s(null), f = h(d, c);
+	return a(() => {
+		d.current && (d.current.indeterminate = i);
+	}, [i]), L(/* @__PURE__ */ u("input", {
+		ref: f,
+		type: "checkbox",
+		"aria-invalid": n || void 0,
+		className: p("glass-checkbox", o),
+		...l
+	}), {
+		label: e,
+		description: t,
+		wrapperClassName: r
+	});
+}, z = ({ label: e, description: t, invalid: n, wrapperClassName: r, className: i, ...a }) => L(/* @__PURE__ */ u("input", {
+	type: "radio",
+	"aria-invalid": n || void 0,
+	className: p("glass-checkbox", i),
+	...a
+}), {
+	label: e,
+	description: t,
+	wrapperClassName: r
+}), B = ({ checked: e, defaultChecked: t = !1, onChange: n, children: r, size: i = "md", block: a = !1, className: o, wrapperClassName: s, onClick: l, ...f }) => {
+	let [m, h] = c(t), g = e ?? m, _ = /* @__PURE__ */ u("button", {
 		type: "button",
 		role: "switch",
-		"aria-checked": h,
-		disabled: s,
-		className: `glass-switch${i === "sm" ? " glass-switch--sm" : ""} ${a}`.trim(),
+		"aria-checked": g,
+		className: p("glass-switch", i === "sm" && "glass-switch--sm", o),
 		onClick: (t) => {
-			d?.(t), !t.defaultPrevented && (e === void 0 && m(!h), n?.(!h));
+			l?.(t), !t.defaultPrevented && (e === void 0 && h(!g), n?.(!g));
 		},
 		...f,
-		children: /* @__PURE__ */ l("span", {
+		children: /* @__PURE__ */ u("span", {
 			"aria-hidden": "true",
 			className: "glass-switch__thumb"
 		})
 	});
-	return r ? /* @__PURE__ */ u("label", {
-		className: `glass-switch-row ${o}`.trim(),
-		children: [/* @__PURE__ */ l("span", { children: r }), g]
-	}) : g;
-}, Z = ({ value: e, defaultValue: t, onChange: n, min: r = 0, max: i = 100, step: a = 1, label: o, showValue: s, format: d = String, className: f = "", wrapperClassName: p = "", style: m, ...h }) => {
-	let [g, _] = c(t ?? r), v = e ?? g, y = i === r ? 0 : (v - r) / (i - r) * 100, b = /* @__PURE__ */ l("input", {
+	return r == null ? _ : /* @__PURE__ */ d("label", {
+		className: p("glass-switch-row", a && "glass-switch-row--block", s),
+		children: [/* @__PURE__ */ u("span", { children: r }), _]
+	});
+}, V = ({ value: e, defaultValue: t, onChange: n, min: r = 0, max: i = 100, step: a = 1, label: o, showValue: s = !0, format: l = String, className: f, wrapperClassName: m, style: h, ...g }) => {
+	let [_, v] = c(t ?? r), y = e ?? _, b = i === r ? 0 : (y - r) / (i - r) * 100, x = /* @__PURE__ */ u("input", {
 		type: "range",
 		min: r,
 		max: i,
 		step: a,
-		value: v,
+		value: y,
 		onChange: (t) => {
 			let r = Number(t.target.value);
-			e === void 0 && _(r), n?.(r);
+			e === void 0 && v(r), n?.(r);
 		},
-		className: `glass-slider ${f}`.trim(),
+		className: p("glass-slider", f),
 		style: {
-			"--fill": `${y}%`,
-			...m
+			"--fill": `${b}%`,
+			...h
 		},
-		...h
+		...g
 	});
-	return o ? /* @__PURE__ */ u("label", {
-		className: `glass-slider-field ${p}`.trim(),
-		children: [/* @__PURE__ */ u("span", {
+	return o == null ? x : /* @__PURE__ */ d("label", {
+		className: p("glass-slider-field", m),
+		children: [/* @__PURE__ */ d("span", {
 			className: "glass-slider-field__head",
-			children: [/* @__PURE__ */ l("span", { children: o }), (s ?? !0) && /* @__PURE__ */ l("span", {
+			children: [/* @__PURE__ */ u("span", { children: o }), s && /* @__PURE__ */ u("span", {
 				className: "glass-slider-field__value",
-				children: d(v)
+				children: l(y)
 			})]
-		}), b]
-	}) : b;
-}, Q = (e) => typeof e == "string" ? {
+		}), x]
+	});
+}, H = (e, t) => {
+	a(() => {
+		let n = e.current;
+		if (!n) return;
+		let r = 0, i = () => {
+			r = 0;
+			let e = n.querySelector(`:scope > ${t}`);
+			n.style.setProperty("--indicator-on", e ? "1" : "0"), e && (n.style.setProperty("--indicator-x", `${e.offsetLeft}px`), n.style.setProperty("--indicator-w", `${e.offsetWidth}px`));
+		}, a = () => {
+			r ||= requestAnimationFrame(i);
+		};
+		i();
+		let o = requestAnimationFrame(() => {
+			n.dataset.indicator = "ready";
+		}), s = typeof ResizeObserver > "u" ? null : new ResizeObserver(a);
+		s?.observe(n);
+		for (let e of n.children) s?.observe(e);
+		let c = new MutationObserver(a);
+		return c.observe(n, {
+			subtree: !0,
+			childList: !0,
+			attributes: !0,
+			attributeFilter: [
+				"aria-current",
+				"aria-checked",
+				"aria-selected",
+				"aria-pressed"
+			]
+		}), document.fonts?.ready.then(a), () => {
+			cancelAnimationFrame(r), cancelAnimationFrame(o), s?.disconnect(), c.disconnect(), delete n.dataset.indicator;
+		};
+	}, [e, t]);
+}, U = {
+	ArrowRight: 1,
+	ArrowDown: 1,
+	ArrowLeft: -1,
+	ArrowUp: -1
+}, W = (e) => typeof e == "string" ? {
 	value: e,
 	label: e
-} : e;
-function $({ options: e, value: t, onChange: r, size: i = "md", block: o = !1, className: d = "", "aria-label": f }) {
-	let p = s(null), [m, h] = c(!1), g = e.map(Q), _ = Math.max(0, g.findIndex((e) => e.value === t)), v = n(() => {
-		let e = p.current, t = e?.querySelectorAll("[role=\"radio\"]")[_];
-		!e || !t || (e.style.setProperty("--seg-x", `${t.offsetLeft}px`), e.style.setProperty("--seg-w", `${t.offsetWidth}px`));
-	}, [_]);
-	a(() => {
-		v();
-		let e = requestAnimationFrame(() => h(!0));
-		return () => cancelAnimationFrame(e);
-	}, [v]), a(() => {
-		let e = p.current;
-		if (!e || typeof ResizeObserver > "u") return;
-		let t = new ResizeObserver(v);
-		return t.observe(e), document.fonts?.ready.then(v), () => t.disconnect();
-	}, [v]);
-	let y = (e) => {
-		let t = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
+} : e, G = ({ options: e, value: t, onChange: n, size: r = "md", block: i = !1, className: a, "aria-label": o }) => {
+	let c = s(null), l = e.map(W), f = Math.max(0, l.findIndex((e) => e.value === t));
+	H(c, "[aria-checked=\"true\"]");
+	let m = (e) => {
+		let t = U[e.key];
 		if (!t) return;
 		e.preventDefault();
-		let n = (_ + t + g.length) % g.length;
-		r(g[n].value), p.current?.querySelectorAll("[role=\"radio\"]")[n]?.focus();
+		let r = (f + t + l.length) % l.length;
+		n(l[r].value), c.current?.querySelectorAll("[role=\"radio\"]")[r]?.focus();
 	};
-	return /* @__PURE__ */ u("div", {
-		ref: p,
+	return /* @__PURE__ */ d("div", {
+		ref: c,
 		role: "radiogroup",
-		"aria-label": f,
-		"data-ready": m,
-		onKeyDown: y,
-		className: [
-			"glass-segmented",
-			i === "sm" && "glass-segmented--sm",
-			o && "glass-segmented--block",
-			d
-		].filter(Boolean).join(" "),
-		children: [/* @__PURE__ */ l("span", {
+		"aria-label": o,
+		onKeyDown: m,
+		className: p("glass-segmented", r === "sm" && "glass-segmented--sm", i && "glass-segmented--block", a),
+		children: [/* @__PURE__ */ u("span", {
 			"aria-hidden": "true",
-			className: "glass-segmented__indicator"
-		}), g.map((e, t) => /* @__PURE__ */ l("button", {
+			className: "glass-indicator"
+		}), l.map((e, t) => /* @__PURE__ */ u("button", {
 			type: "button",
 			role: "radio",
-			"aria-checked": t === _,
-			tabIndex: t === _ ? 0 : -1,
+			"aria-checked": t === f,
+			tabIndex: t === f ? 0 : -1,
 			className: "glass-segmented__option",
-			onClick: () => r(e.value),
+			onClick: () => n(e.value),
 			children: e.label
 		}, e.value))]
 	});
-}
+}, K = ({ size: e = "sm", className: t, children: n, ref: r, ...i }) => {
+	let a = s(null), o = h(a, r);
+	return H(a, "[aria-current]:not([aria-current=\"false\"])"), /* @__PURE__ */ d("nav", {
+		ref: o,
+		className: p("glass-nav", e === "md" && "glass-nav--lg", t),
+		...i,
+		children: [/* @__PURE__ */ u("span", {
+			"aria-hidden": "true",
+			className: "glass-indicator"
+		}), n]
+	});
+}, q = () => /* @__PURE__ */ u("svg", {
+	viewBox: "0 0 20 20",
+	fill: "none",
+	"aria-hidden": "true",
+	children: /* @__PURE__ */ u("path", {
+		d: "M5.5 5.5l9 9M14.5 5.5l-9 9",
+		stroke: "currentColor",
+		strokeWidth: "1.6",
+		strokeLinecap: "round"
+	})
+}), J = ({ open: e, onClose: t, title: n, description: a, footer: o, size: c = "md", dismissible: l = !0, className: f, children: m }) => {
+	let h = s(null), g = i(), _ = n == null ? void 0 : `${g}-title`, v = a == null ? void 0 : `${g}-description`;
+	return r(() => {
+		let t = h.current;
+		t && (e && !t.open && (t.showModal(), t.querySelector("[data-autofocus], .glass-dialog__body :is(input, select, textarea):not([disabled], [type=\"hidden\"])")?.focus()), !e && t.open && t.close());
+	}, [e]), r(() => {
+		let e = h.current;
+		if (!e) return;
+		let n = (e) => {
+			e.preventDefault(), l && t();
+		};
+		return e.addEventListener("cancel", n), () => e.removeEventListener("cancel", n);
+	}, [l, t]), /* @__PURE__ */ u("dialog", {
+		ref: h,
+		"aria-labelledby": _,
+		"aria-describedby": v,
+		className: p("glass-dialog", c !== "md" && `glass-dialog--${c}`, f),
+		onClick: (e) => {
+			l && e.target === e.currentTarget && t();
+		},
+		children: /* @__PURE__ */ d(T, {
+			intensity: "strong",
+			padding: "none",
+			className: "glass-dialog__panel",
+			children: [
+				(n != null || l) && /* @__PURE__ */ d("header", {
+					className: "glass-dialog__header",
+					children: [/* @__PURE__ */ d("div", {
+						className: "glass-dialog__heading",
+						children: [n != null && /* @__PURE__ */ u("h2", {
+							id: _,
+							className: "glass-dialog__title",
+							children: n
+						}), a != null && /* @__PURE__ */ u("p", {
+							id: v,
+							className: "glass-dialog__description",
+							children: a
+						})]
+					}), l && /* @__PURE__ */ u(k, {
+						variant: "ghost",
+						size: "sm",
+						icon: !0,
+						"aria-label": "Close",
+						onClick: t,
+						children: /* @__PURE__ */ u(q, {})
+					})]
+				}),
+				m != null && /* @__PURE__ */ u("div", {
+					className: "glass-dialog__body",
+					children: m
+				}),
+				o != null && /* @__PURE__ */ u("footer", {
+					className: "glass-dialog__footer",
+					children: o
+				})
+			]
+		})
+	});
+}, Y = 8, X = 8, ne = ({ trigger: t, children: n, placement: a = "bottom-start", padded: o = !1, onOpenChange: c, "aria-label": f, className: h }) => {
+	let g = `glass-popover-${i().replace(/[^\w-]/g, "")}`, _ = s(null), v = s(null), y = s(c);
+	r(() => {
+		y.current = c;
+	}), r(() => {
+		let e = _.current;
+		if (!e) return;
+		let [t, n = "center"] = a.split("-"), r = (r = !1) => {
+			let i = v.current?.getBoundingClientRect();
+			if (!i) return;
+			let { clientWidth: a, clientHeight: o } = document.documentElement, s = t === "top" !== r;
+			Object.assign(e.style, {
+				top: "",
+				bottom: "",
+				left: "",
+				right: "",
+				translate: ""
+			}), s ? e.style.bottom = `${o - i.top + Y}px` : e.style.top = `${i.bottom + Y}px`, n === "start" ? e.style.left = `${i.left}px` : n === "end" ? e.style.right = `${a - i.right}px` : (e.style.left = `${i.left + i.width / 2}px`, e.style.translate = "-50% 0");
+		}, i = () => {
+			r();
+			let { clientWidth: n, clientHeight: i } = document.documentElement, a = e.getBoundingClientRect(), o = v.current?.getBoundingClientRect();
+			o && (a.bottom > i - X || a.top < X) && (t === "top" ? i - o.bottom - Y - X : o.top - Y - X) >= a.height && (r(!0), a = e.getBoundingClientRect()), (a.left < X || a.right > n - X) && Object.assign(e.style, {
+				right: "",
+				translate: "",
+				left: `${Math.max(X, Math.min(a.left, n - X - a.width))}px`
+			});
+		}, o = (e) => {
+			e.newState === "open" && r();
+		}, s = (t) => {
+			let n = t.newState === "open";
+			y.current?.(n), n ? (i(), e.querySelector("[role=\"menuitem\"]")?.focus({ preventScroll: !0 }), window.addEventListener("scroll", i, {
+				passive: !0,
+				capture: !0
+			}), window.addEventListener("resize", i)) : (window.removeEventListener("scroll", i, { capture: !0 }), window.removeEventListener("resize", i));
+		};
+		return e.addEventListener("beforetoggle", o), e.addEventListener("toggle", s), () => {
+			e.removeEventListener("beforetoggle", o), e.removeEventListener("toggle", s), window.removeEventListener("scroll", i, { capture: !0 }), window.removeEventListener("resize", i);
+		};
+	}, [a]);
+	let b = () => _.current?.hidePopover(), x = t.props;
+	return /* @__PURE__ */ d(l, { children: [e(t, {
+		popoverTarget: g,
+		ref: m(x.ref, v)
+	}), /* @__PURE__ */ u(T, {
+		ref: _,
+		id: g,
+		popover: "auto",
+		"aria-label": f,
+		intensity: "strong",
+		padding: "none",
+		radius: "card",
+		className: p("glass-popover", o && "glass-popover--padded", h),
+		children: typeof n == "function" ? n(b) : n
+	})] });
+}, Z = "[role=\"menuitem\"]:not([disabled]):not([aria-disabled=\"true\"])", re = ({ className: e, onKeyDown: t, ...n }) => /* @__PURE__ */ u("div", {
+	role: "menu",
+	className: p("glass-menu", e),
+	onKeyDown: (e) => {
+		t?.(e);
+		let n = [...e.currentTarget.querySelectorAll(Z)];
+		if (!n.length || ![
+			"ArrowDown",
+			"ArrowUp",
+			"Home",
+			"End"
+		].includes(e.key)) return;
+		e.preventDefault();
+		let r = n.indexOf(document.activeElement);
+		n[{
+			ArrowDown: (r + 1) % n.length,
+			ArrowUp: (r - 1 + n.length) % n.length,
+			Home: 0,
+			End: n.length - 1
+		}[e.key]]?.focus();
+	},
+	...n
+}), ie = ({ as: e, icon: t, hint: n, danger: r = !1, className: i, children: a, ...o }) => {
+	let s = e ?? "button";
+	return /* @__PURE__ */ d(s, {
+		role: "menuitem",
+		type: s === "button" ? "button" : void 0,
+		className: p("glass-menu__item", r && "glass-menu__item--danger", i),
+		...o,
+		children: [
+			t,
+			/* @__PURE__ */ u("span", { children: a }),
+			n != null && /* @__PURE__ */ u("span", {
+				className: "glass-menu__hint",
+				children: n
+			})
+		]
+	});
+}, ae = (e) => e.split(/\s+/).filter(Boolean).slice(0, 2).map((e) => e[0].toUpperCase()).join(""), oe = (e) => [...e].reduce((e, t) => (e * 31 + t.charCodeAt(0)) % 360, 7), se = ({ name: e, src: t, size: n = "md", className: r, style: i, ...a }) => /* @__PURE__ */ u("span", {
+	role: t ? void 0 : "img",
+	"aria-label": t ? void 0 : e,
+	className: p("glass-avatar", n !== "md" && `glass-avatar--${n}`, r),
+	style: {
+		"--avatar-hue": oe(e),
+		...i
+	},
+	...a,
+	children: t ? /* @__PURE__ */ u("img", {
+		src: t,
+		alt: e
+	}) : ae(e)
+}), ce = ({ tone: e = "neutral", dot: t = !1, className: n, children: r, ...i }) => /* @__PURE__ */ d("span", {
+	className: p("glass-badge", `glass-badge--${e}`, n),
+	...i,
+	children: [t && /* @__PURE__ */ u("span", {
+		"aria-hidden": "true",
+		className: "glass-badge__dot"
+	}), r]
+}), le = ({ className: e, ...t }) => /* @__PURE__ */ u("kbd", {
+	className: p("glass-kbd", e),
+	...t
+}), ue = ({ label: e, orientation: t = "horizontal", className: n }) => t === "vertical" ? /* @__PURE__ */ u("div", {
+	role: "separator",
+	"aria-orientation": "vertical",
+	className: p("glass-divider glass-divider--vertical", n)
+}) : e == null ? /* @__PURE__ */ u("hr", { className: p("glass-divider", n) }) : /* @__PURE__ */ u("div", {
+	role: "separator",
+	className: p("glass-divider glass-divider--labelled", n),
+	children: e
+}), de = {
+	success: "M5 10.5l3.2 3.2L15 7",
+	error: "M6.5 6.5l7 7M13.5 6.5l-7 7",
+	info: "M10 6v.5M10 9.5V14"
+}, fe = ({ open: e, onClose: t, duration: n = 4500, tone: i = "success", action: a, className: o, children: s }) => {
+	r(() => {
+		if (!e || !n || !t) return;
+		let r = setTimeout(t, n);
+		return () => clearTimeout(r);
+	}, [
+		e,
+		n,
+		t
+	]);
+	let c = /* @__PURE__ */ d("div", {
+		role: i === "error" ? "alert" : "status",
+		"aria-live": i === "error" ? "assertive" : "polite",
+		"data-open": e,
+		className: p("glass-toast", i !== "success" && `glass-toast--${i}`, o),
+		children: [
+			/* @__PURE__ */ u("span", {
+				className: "glass-toast__icon",
+				"aria-hidden": "true",
+				children: /* @__PURE__ */ u("svg", {
+					width: "20",
+					height: "20",
+					viewBox: "0 0 20 20",
+					fill: "none",
+					children: /* @__PURE__ */ u("path", {
+						d: de[i],
+						stroke: "currentColor",
+						strokeWidth: "1.8",
+						strokeLinecap: "round",
+						strokeLinejoin: "round"
+					})
+				})
+			}),
+			/* @__PURE__ */ u("span", {
+				className: "glass-toast__message",
+				children: e ? s : null
+			}),
+			e && a && /* @__PURE__ */ u("span", {
+				className: "glass-toast__action",
+				children: a
+			})
+		]
+	});
+	return typeof document > "u" ? c : f(c, document.body);
+}, Q = (e, t, n) => ({
+	...e !== void 0 && { "--glass-gap": g(e) },
+	...Object.fromEntries(Object.entries(n ?? {}).filter(([, e]) => e !== void 0)),
+	...t
+}), pe = ({ as: e, width: t = "default", className: n, ...r }) => /* @__PURE__ */ u(e ?? "div", {
+	className: p("glass-container", t !== "default" && `glass-container--${t}`, n),
+	...r
+}), $ = ({ as: e, gap: t, className: n, style: r, ...i }) => /* @__PURE__ */ u(e ?? "div", {
+	className: p("glass-stack", n),
+	style: Q(t, r),
+	...i
+}), me = {
+	start: void 0,
+	center: "center",
+	end: "flex-end",
+	between: "space-between"
+}, he = ({ as: e, gap: t, justify: n = "start", className: r, style: i, ...a }) => /* @__PURE__ */ u(e ?? "div", {
+	className: p("glass-cluster", r),
+	style: Q(t, {
+		justifyContent: me[n],
+		...i
+	}),
+	...a
+}), ge = ({ as: e, gap: t, min: n, className: r, style: i, ...a }) => /* @__PURE__ */ u(e ?? "div", {
+	className: p("glass-grid", r),
+	style: Q(t, i, { "--glass-min": n }),
+	...a
+}), _e = ({ as: e, gap: t, side: n, sideAt: r = "start", className: i, style: a, ...o }) => /* @__PURE__ */ u(e ?? "div", {
+	className: p("glass-split", r === "end" && "glass-split--end", i),
+	style: Q(t, a, { "--glass-side": n }),
+	...o
+});
 //#endregion
-export { R as BG_PRESETS, j as CARD_BG_ALPHA, g as GLASS_BLUR, d as GLASS_DEFAULTS, _ as GLASS_LIGHT_ALPHA, h as GLASS_OPACITY, N as GLASS_REST_ANGLE, v as GLASS_SHADOW_ALPHA, A as GLOW_BL, k as GLOW_TR, W as GlassDivider, K as GlassInput, G as GlassInputWrap, B as GlassOrbs, V as GlassPanel, U as GlassPill, p as GlassProvider, $ as GlassSegmented, Z as GlassSlider, X as GlassSwitch, q as GlassTextarea, Y as GlassToast, L as PATTERNS, M as getGlassStyles, z as makeHueGradient, m as useGlass, P as useGlassPointer, F as useGlassReveal };
+export { _ as GLASS_DEFAULTS, E as GLASS_PALETTES, S as GLASS_REST, D as GLASS_TEXTURES, se as GlassAvatar, O as GlassBackdrop, ce as GlassBadge, k as GlassButton, R as GlassCheckbox, he as GlassCluster, pe as GlassContainer, J as GlassDialog, ue as GlassDivider, N as GlassField, ge as GlassGrid, te as GlassInput, le as GlassKbd, re as GlassMenu, ie as GlassMenuItem, K as GlassNav, T as GlassPanel, ne as GlassPopover, x as GlassProvider, z as GlassRadio, G as GlassSegmented, I as GlassSelect, V as GlassSlider, _e as GlassSplit, $ as GlassStack, B as GlassSwitch, F as GlassTextarea, fe as GlassToast, p as cx, b as glassVars, ee as useGlass, j as useGlassField, H as useGlassIndicator, C as useGlassPointer, w as useGlassReveal };

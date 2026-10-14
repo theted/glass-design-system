@@ -1,0 +1,52 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Base — the few element defaults the system assumes. In @layer base, so
+   anything you write (or Tailwind's preflight) can override it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: dark;
+    background-color: var(--color-ground-deep);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd) {
+    margin: 0;
+  }
+
+  :where(button, input, textarea, select) {
+    font: inherit;
+    color: inherit;
+  }
+
+  :where(img, svg, video, canvas) {
+    display: block;
+    max-width: 100%;
+  }
+
+  :where(code, kbd, pre, samp) {
+    font-family: var(--font-code);
+  }
+
+  ::selection {
+    background: oklch(0.86 0.12 var(--light-hue) / 0.32);
+    color: var(--color-text);
+  }
+}

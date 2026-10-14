@@ -1,0 +1,216 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Overlays — dialogs, popovers, menus. Built on the platform's top layer
+   (<dialog>.showModal() and the popover attribute), so focus, Escape and
+   stacking come for free. The pane inside is always strong glass: the
+   closest thing on screen.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+
+  /* ── Dialog ───────────────────────────────────────────────────────────── */
+
+  .glass-dialog {
+    --_w: 32rem;
+    width: min(var(--_w), calc(100vw - 2 * var(--space-gutter)));
+    max-width: none;
+    max-height: calc(100dvh - 2 * var(--space-gutter));
+    margin: auto;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    background: none;
+    color: var(--color-text);
+  }
+
+  .glass-dialog--sm { --_w: 24rem; }
+  .glass-dialog--lg { --_w: 44rem; }
+
+  /* The page behind a modal stays put. */
+  :root:has(.glass-dialog[open]) {
+    overflow: hidden;
+  }
+
+  .glass-dialog::backdrop {
+    background: oklch(0.06 0.03 var(--glass-hue, 262) / 0.55);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+
+  .glass-dialog[open]::backdrop {
+    animation: glass-fade-in var(--dur-2, 280ms) var(--ease-glass);
+  }
+
+  .glass-dialog[open] > .glass-dialog__panel {
+    animation: glass-pop-in var(--dur-3) var(--ease-spring);
+  }
+
+  .glass-dialog__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    max-height: inherit;
+    padding: var(--space-6);
+    border-radius: var(--radius-sheet);
+  }
+
+  .glass-dialog__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .glass-dialog__heading {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-width: 0;
+    padding-top: var(--space-1);
+  }
+
+  .glass-dialog__title {
+    margin: 0;
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-weight: 480;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .glass-dialog__description {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--step--1);
+    line-height: 1.55;
+    text-wrap: pretty;
+  }
+
+  .glass-dialog__body {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .glass-dialog__footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+
+  /* ── Popover ──────────────────────────────────────────────────────────────
+     Placed by GlassPopover next to its trigger. Clicking outside or pressing
+     Escape closes it (the browser's light dismiss). */
+
+  .glass-popover {
+    position: fixed;
+    inset: auto;
+    width: max-content;
+    min-width: 12rem;
+    max-width: calc(100vw - 2 * var(--space-gutter));
+    max-height: calc(100dvh - 2 * var(--space-gutter));
+    margin: 0;
+    padding: var(--space-2);
+    overflow: auto;
+    border: 0;
+    border-radius: var(--radius-card);
+    color: var(--color-text);
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+
+  .glass-popover::-webkit-scrollbar { display: none; }
+
+  .glass-popover--padded {
+    padding: var(--space-6);
+  }
+
+  .glass-popover:popover-open {
+    animation: glass-pop-in var(--dur-2) var(--ease-glass);
+  }
+
+  /* ── Menu ─────────────────────────────────────────────────────────────── */
+
+  .glass-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .glass-menu__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    min-height: var(--control-sm);
+    padding: 0 var(--space-3);
+    border: 0;
+    border-radius: var(--radius-chip);
+    background: none;
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-1) var(--ease-glass),
+      color var(--dur-1) var(--ease-glass);
+  }
+
+  .glass-menu__item svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-text-subtle);
+  }
+
+  .glass-menu__item:is(:hover, :focus-visible),
+  .glass-menu__item[aria-current]:not([aria-current='false']) {
+    outline: none;
+    background-color: var(--color-fill-hover);
+    color: var(--color-text);
+  }
+
+  .glass-menu__item:focus-visible {
+    box-shadow: inset 0 0 0 1px var(--color-light);
+  }
+
+  .glass-menu__hint {
+    margin-left: auto;
+    color: var(--color-text-subtle);
+    font-size: var(--step--2);
+    font-weight: 400;
+  }
+
+  .glass-menu__item--danger,
+  .glass-menu__item--danger svg {
+    color: var(--color-danger);
+  }
+
+  .glass-menu__label {
+    padding: var(--space-2) var(--space-3) var(--space-1);
+    color: var(--color-text-subtle);
+    font-size: var(--step--2);
+  }
+
+  .glass-menu__separator {
+    height: 1px;
+    margin: var(--space-1) var(--space-2);
+    background: var(--color-line);
+  }
+
+  @keyframes glass-fade-in {
+    from { opacity: 0; }
+  }
+
+  @keyframes glass-pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.97);
+    }
+  }
+}
