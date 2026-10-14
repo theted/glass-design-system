@@ -1,16 +1,18 @@
-import React from 'react';
-type Props = {
-    /** Extra Tailwind classes — e.g. `my-8` for vertical spacing. */
+import type { ReactNode } from 'react';
+export interface GlassDividerProps {
+    /** A word in the middle of the line, like "or". */
+    label?: ReactNode;
+    /** 'vertical' stretches to the height of a flex row. Default 'horizontal'. */
+    orientation?: 'horizontal' | 'vertical';
     className?: string;
-};
+}
 /**
- * GlassDivider — a 1px rule that fades out at both ends and warms where the
- * light hits its centre, with a faint split-light line beneath, as if the
- * edge of a glass sheet were seen through a prism.
+ * A hairline that fades out at both ends and warms where the light hits its
+ * middle. Use it between groups that a gap alone doesn't separate enough.
  *
  * ```tsx
- * <GlassDivider className="my-10" />
+ * <GlassDivider />
+ * <GlassDivider label="or" />
  * ```
  */
-declare const GlassDivider: React.FC<Props>;
-export default GlassDivider;
+export declare const GlassDivider: ({ label, orientation, className }: GlassDividerProps) => import("react/jsx-runtime").JSX.Element;

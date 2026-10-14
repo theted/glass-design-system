@@ -1,55 +1,69 @@
-// CSS tokens and utilities — consumers import via 'glass-design-system/styles'
-import './glass.css';
-import './material.css';
-import './foundations.css';
+// Styles ship separately: import 'glass-design-system/styles' once at the
+// app root. (Imported here so the library build bundles them into
+// dist/glass.css.)
+import './styles/index.css';
 
-// Context / provider
-export { GlassProvider, useGlass, GLASS_DEFAULTS } from './context/GlassContext';
-export type { GlassConfig } from './context/GlassContext';
+// Knobs
+export { GlassProvider, useGlass, glassVars, GLASS_DEFAULTS } from './components/GlassProvider';
+export type { GlassConfig, GlassProviderProps } from './components/GlassProvider';
 
-// Core config
-export {
-  getGlassStyles,
-  GLASS_OPACITY,
-  GLASS_BLUR,
-  GLASS_LIGHT_ALPHA,
-  GLASS_SHADOW_ALPHA,
-  CARD_BG_ALPHA,
-  GLOW_TR,
-  GLOW_BL,
-} from './glass';
-export type { GlassIntensity, GlassStyles } from './glass';
+// Surfaces
+export { GlassPanel } from './components/GlassPanel';
+export type { GlassPanelProps, GlassPanelOwnProps, GlassIntensity, GlassPadding, GlassRadius } from './components/GlassPanel';
+export { GlassBackdrop, GLASS_PALETTES, GLASS_TEXTURES } from './components/GlassBackdrop';
+export type { GlassBackdropProps, GlassPalette, GlassTexture } from './components/GlassBackdrop';
 
-// Material hooks — drive the glass light from the pointer on custom surfaces
-export { useGlassPointer, useGlassReveal, GLASS_REST_ANGLE } from './hooks/useGlassPointer';
+// Actions
+export { GlassButton } from './components/GlassButton';
+export type { GlassButtonProps, GlassButtonOwnProps, GlassButtonVariant, GlassButtonSize } from './components/GlassButton';
 
-// Patterns
-export { PATTERNS } from './patterns';
-export type { PatternDef, PatternId } from './patterns';
-
-// Backgrounds
-export { BG_PRESETS, makeHueGradient } from './backgrounds';
-export type { BgPreset, BgId } from './backgrounds';
-
-// Components
-export { default as GlassOrbs } from './components/GlassOrbs';
-export type { OrbPreset, OrbBlendMode, GlassOrbsProps } from './components/GlassOrbs';
-export { default as GlassPanel } from './components/GlassPanel';
-export type { GlassPanelPadding } from './components/GlassPanel';
-export { default as GlassPill } from './components/GlassPill';
-export type { GlassPillSize, GlassPillVariant } from './components/GlassPill';
-export { default as GlassDivider } from './components/GlassDivider';
-export {
-  default as GlassInput,
-  GlassInputWrap,
-  GlassTextarea,
-} from './components/GlassInput';
-export type { GlassInputVariant } from './components/GlassInput';
-export { default as GlassToast } from './components/GlassToast';
-export type { GlassToastProps, GlassToastTone } from './components/GlassToast';
-export { default as GlassSwitch } from './components/GlassSwitch';
+// Forms
+export { GlassField, useGlassField } from './components/GlassField';
+export type { GlassFieldProps } from './components/GlassField';
+export { GlassInput, GlassTextarea, GlassSelect } from './components/GlassInput';
+export type { GlassInputProps, GlassTextareaProps, GlassSelectProps, GlassControlSize } from './components/GlassInput';
+export { GlassCheckbox, GlassRadio } from './components/GlassCheckbox';
+export type { GlassCheckboxProps, GlassRadioProps } from './components/GlassCheckbox';
+export { GlassSwitch } from './components/GlassSwitch';
 export type { GlassSwitchProps } from './components/GlassSwitch';
-export { default as GlassSlider } from './components/GlassSlider';
+export { GlassSlider } from './components/GlassSlider';
 export type { GlassSliderProps } from './components/GlassSlider';
-export { default as GlassSegmented } from './components/GlassSegmented';
+export { GlassSegmented } from './components/GlassSegmented';
 export type { GlassSegmentedProps, GlassSegmentedOption } from './components/GlassSegmented';
+
+// Navigation and overlays
+export { GlassNav } from './components/GlassNav';
+export type { GlassNavProps } from './components/GlassNav';
+export { GlassDialog } from './components/GlassDialog';
+export type { GlassDialogProps } from './components/GlassDialog';
+export { GlassPopover, GlassMenu, GlassMenuItem } from './components/GlassPopover';
+export type { GlassPopoverProps, GlassPopoverPlacement, GlassMenuItemProps } from './components/GlassPopover';
+
+// Display
+export { GlassAvatar } from './components/GlassAvatar';
+export type { GlassAvatarProps } from './components/GlassAvatar';
+export { GlassBadge, GlassKbd } from './components/GlassBadge';
+export type { GlassBadgeProps, GlassKbdProps, GlassTone } from './components/GlassBadge';
+export { GlassDivider } from './components/GlassDivider';
+export type { GlassDividerProps } from './components/GlassDivider';
+export { GlassToast } from './components/GlassToast';
+export type { GlassToastProps, GlassToastTone } from './components/GlassToast';
+
+// Layout
+export { GlassContainer, GlassStack, GlassCluster, GlassGrid, GlassSplit } from './components/layout';
+export type {
+  GlassContainerProps,
+  GlassStackProps,
+  GlassClusterProps,
+  GlassGridProps,
+  GlassSplitProps,
+} from './components/layout';
+
+// Hooks for your own glass
+export { useGlassPointer, GLASS_REST } from './hooks/useGlassPointer';
+export { useGlassReveal } from './hooks/useGlassReveal';
+export { useGlassIndicator } from './hooks/useGlassIndicator';
+
+// Helpers
+export { cx } from './utils';
+export type { PolymorphicProps, SpaceStep } from './utils';

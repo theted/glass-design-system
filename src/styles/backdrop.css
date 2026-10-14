@@ -1,0 +1,284 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Backdrop — the light the glass refracts.
+
+   Glass is only as good as what's behind it: on a flat colour, backdrop
+   blur has nothing to blur. A backdrop is a ground gradient plus six soft
+   orbs of colour, laid out the same way in every palette: one big cool field
+   top left, a low sun top right (the corner every rim catches light from), a
+   bridge colour between them, an accent low on the left, a wash along the
+   bottom.
+
+     <div class="glass-backdrop glass-backdrop--kiln glass-backdrop--fixed">
+       <span class="glass-backdrop__orb"></span> × 6
+     </div>
+
+   <GlassBackdrop> renders that for you. Palettes only set colours; motion
+   and texture are separate modifiers. Orbs are sized in container units, so
+   a backdrop fills whatever box it's in: the viewport when fixed, or any
+   position: relative; isolation: isolate parent (.glass-stage) otherwise.
+   All motion is transform and opacity; softness comes from gradient
+   falloff, never filter: blur.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+
+  .glass-backdrop {
+    /* Palette: kiln, the house look. Cobalt field, violet bridge, a cool
+       teal accent, and the warm sun. */
+    --_ground: oklch(0.15 0.035 var(--glass-hue));
+    --_deep: oklch(0.08 0.03 calc(var(--glass-hue) + 2));
+    --_field: oklch(0.46 0.2 calc(var(--glass-hue) + 2));
+    --_bridge: oklch(0.46 0.19 calc(var(--glass-hue) + 33));
+    --_accent: oklch(0.6 0.11 calc(var(--glass-hue) - 67));
+    --_wash: oklch(0.36 0.17 var(--glass-hue));
+    --_sun-hue: var(--light-hue);
+    --_sun: 1;
+    --_speed: var(--backdrop-speed, 8s);
+
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    container-type: size;
+    background:
+      radial-gradient(ellipse 120% 70% at 50% 110%, color-mix(in oklch, var(--_deep) 90%, transparent), transparent 70%),
+      linear-gradient(180deg, var(--_ground), var(--_deep));
+    animation: glass-fade-in 1.6s ease-out both;
+  }
+
+  .glass-backdrop--fixed {
+    position: fixed;
+  }
+
+  /* Wrap an absolutely placed backdrop and the things on it. */
+  .glass-stage {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .glass-backdrop__orb {
+    position: absolute;
+    width: var(--_s);
+    height: var(--_s);
+    border-radius: 50%;
+    opacity: var(--backdrop-strength, 1);
+    mix-blend-mode: screen;
+    will-change: transform;
+    animation: var(--_move) calc(var(--_speed) * var(--_beats)) ease-in-out infinite alternate;
+  }
+
+  /* 1 · the cool field, top left */
+  .glass-backdrop__orb:nth-child(1) {
+    --_s: max(100cqw, 80cqh);
+    --_move: glass-orb-1;
+    --_beats: 6;
+    top: calc(var(--_s) * -0.42);
+    left: calc(var(--_s) * -0.34);
+    background: radial-gradient(circle, var(--_field) 0%, color-mix(in oklch, var(--_field) 50%, transparent) 35%, transparent 66%);
+  }
+
+  /* 2 · the sun, top right. Laid on normally: screen would bleach it.
+     Amber over blue turns grey, so its falloff runs through rose into
+     violet before it meets the cool field. */
+  .glass-backdrop__orb:nth-child(2) {
+    --_s: max(58cqw, 46cqh);
+    --_move: glass-orb-sun;
+    --_beats: 8;
+    top: calc(var(--_s) * -0.414);
+    right: calc(var(--_s) * -0.276);
+    mix-blend-mode: normal;
+    opacity: calc(var(--_sun) * var(--backdrop-strength, 1));
+    background: radial-gradient(
+      circle,
+      oklch(0.96 0.07 calc(var(--_sun-hue) + 14) / 0.95) 0%,
+      oklch(0.88 0.14 var(--_sun-hue) / 0.72) 10%,
+      oklch(0.75 0.18 calc(var(--_sun-hue) - 26) / 0.44) 21%,
+      oklch(0.62 0.21 calc(var(--_sun-hue) - 56) / 0.26) 34%,
+      oklch(0.5 0.2 calc(var(--_sun-hue) - 91) / 0.13) 48%,
+      transparent 66%
+    );
+  }
+
+  /* 3 · the accent, low left */
+  .glass-backdrop__orb:nth-child(3) {
+    --_s: max(62cqw, 50cqh);
+    --_move: glass-orb-3;
+    --_beats: 7;
+    top: 38cqh;
+    left: calc(var(--_s) * -0.19);
+    background: radial-gradient(circle, color-mix(in oklch, var(--_accent) 50%, transparent) 0%, transparent 62%);
+  }
+
+  /* 4 · the bridge, right */
+  .glass-backdrop__orb:nth-child(4) {
+    --_s: max(64cqw, 52cqh);
+    --_move: glass-orb-4;
+    --_beats: 9;
+    top: 4cqh;
+    right: calc(var(--_s) * -0.31);
+    background: radial-gradient(circle, color-mix(in oklch, var(--_bridge) 85%, transparent) 0%, color-mix(in oklch, var(--_bridge) 40%, transparent) 35%, transparent 64%);
+  }
+
+  /* 5 · the wash along the bottom */
+  .glass-backdrop__orb:nth-child(5) {
+    --_s: 120cqw;
+    --_move: glass-orb-5;
+    --_beats: 10;
+    height: 56cqw;
+    bottom: -26cqw;
+    left: -10cqw;
+    background: radial-gradient(ellipse, var(--_wash) 0%, transparent 70%);
+  }
+
+  /* 6 · the sun's hot core */
+  .glass-backdrop__orb:nth-child(6) {
+    --_s: max(16cqw, 13cqh);
+    --_move: glass-orb-core;
+    --_beats: 8;
+    top: calc(var(--_s) * -0.125);
+    right: calc(var(--_s) * 0.44);
+    mix-blend-mode: normal;
+    opacity: calc(var(--_sun) * var(--backdrop-strength, 1));
+    background: radial-gradient(
+      circle,
+      oklch(0.99 0.04 calc(var(--_sun-hue) + 16) / 0.55) 0%,
+      oklch(0.92 0.08 calc(var(--_sun-hue) + 9) / 0.15) 40%,
+      transparent 70%
+    );
+  }
+
+  /* ── Palettes ─────────────────────────────────────────────────────────── */
+
+  /* Violet evening with a low amber sun. */
+  .glass-backdrop--dusk {
+    --_ground: oklch(0.14 0.04 295);
+    --_deep: oklch(0.08 0.03 300);
+    --_field: oklch(0.44 0.2 300);
+    --_bridge: oklch(0.46 0.19 345);
+    --_accent: oklch(0.55 0.15 250);
+    --_wash: oklch(0.34 0.16 285);
+    --_sun-hue: 62;
+  }
+
+  /* Northern lights: teal and magenta, no sun. */
+  .glass-backdrop--aurora {
+    --_ground: oklch(0.13 0.03 215);
+    --_deep: oklch(0.07 0.025 235);
+    --_field: oklch(0.5 0.15 185);
+    --_bridge: oklch(0.46 0.2 320);
+    --_accent: oklch(0.62 0.15 150);
+    --_wash: oklch(0.34 0.14 250);
+    --_sun: 0;
+  }
+
+  /* Coals: deep red and orange under a hot sun. */
+  .glass-backdrop--ember {
+    --_ground: oklch(0.13 0.035 28);
+    --_deep: oklch(0.07 0.02 18);
+    --_field: oklch(0.44 0.17 28);
+    --_bridge: oklch(0.42 0.17 355);
+    --_accent: oklch(0.52 0.15 50);
+    --_wash: oklch(0.32 0.13 20);
+    --_sun-hue: 64;
+  }
+
+  /* Cold water under a pale sun: low chroma, calm. */
+  .glass-backdrop--fjord {
+    --_ground: oklch(0.15 0.025 232);
+    --_deep: oklch(0.08 0.02 240);
+    --_field: oklch(0.44 0.09 228);
+    --_bridge: oklch(0.42 0.08 260);
+    --_accent: oklch(0.6 0.08 190);
+    --_wash: oklch(0.32 0.08 230);
+    --_sun-hue: 96;
+  }
+
+  /* Almost nothing: a dim cool field for apps where content leads. */
+  .glass-backdrop--abyss {
+    --_ground: oklch(0.12 0.025 var(--glass-hue));
+    --_deep: oklch(0.06 0.015 var(--glass-hue));
+    --_field: oklch(0.3 0.1 calc(var(--glass-hue) - 8));
+    --_bridge: oklch(0.26 0.08 calc(var(--glass-hue) + 16));
+    --_accent: oklch(0.3 0.06 calc(var(--glass-hue) - 40));
+    --_wash: oklch(0.22 0.08 var(--glass-hue));
+    --_sun: 0;
+  }
+
+  /* ── Motion and texture ───────────────────────────────────────────────── */
+
+  .glass-backdrop--still .glass-backdrop__orb {
+    animation: none;
+  }
+
+  .glass-backdrop--grain::after,
+  .glass-backdrop--dots::after,
+  .glass-backdrop--grid::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    mix-blend-mode: soft-light;
+  }
+
+  .glass-backdrop--grain::after {
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 256px;
+  }
+
+  .glass-backdrop--dots::after {
+    opacity: 0.22;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Ccircle cx='9' cy='9' r='1.2' fill='white'/%3E%3C/svg%3E");
+    background-size: 18px;
+  }
+
+  .glass-backdrop--grid::after {
+    opacity: 0.16;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M32 0H0v32' fill='none' stroke='white' stroke-width='0.6'/%3E%3C/svg%3E");
+    background-size: 32px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000, transparent);
+  }
+
+  @keyframes glass-orb-1 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(6cqw, 5cqh) scale(1.06); }
+    100% { transform: translate(2cqw, 10cqh) scale(0.97); }
+  }
+
+  @keyframes glass-orb-sun {
+    0%   { transform: translate(0, 0) scale(0.96); }
+    60%  { transform: translate(-3cqw, 3cqh) scale(1.03); }
+    100% { transform: translate(-5cqw, 5cqh) scale(1.06); }
+  }
+
+  @keyframes glass-orb-3 {
+    0%   { transform: translate(0, 0); }
+    40%  { transform: translate(10cqw, -6cqh); }
+    100% { transform: translate(18cqw, 4cqh); }
+  }
+
+  @keyframes glass-orb-4 {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-8cqw, 10cqh) scale(1.08); }
+    100% { transform: translate(-3cqw, 18cqh) scale(0.95); }
+  }
+
+  @keyframes glass-orb-5 {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(-8cqw, -4cqh); }
+  }
+
+  @keyframes glass-orb-core {
+    0%   { transform: translate(0, 0) scale(1); }
+    60%  { transform: translate(-3cqw, 3cqh) scale(1.12); }
+    100% { transform: translate(-5cqw, 5cqh) scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glass-backdrop,
+    .glass-backdrop__orb {
+      animation: none;
+    }
+  }
+}

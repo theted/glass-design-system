@@ -1,6 +1,6 @@
-// Fails the showcase build if the library's component styles are missing
-// from the bundled CSS. Dev mode loads them even when the production build
-// drops them, so this is the only place the mistake shows up.
+// Fails the showcase build if the library's styles are missing from the
+// bundled CSS. Dev mode loads them even when the production build drops
+// them, so this is the only place the mistake shows up.
 import { readdirSync, readFileSync } from 'node:fs';
 
 const dir = 'showcase-dist/assets';
@@ -9,14 +9,17 @@ const css = readdirSync(dir)
   .map((f) => readFileSync(`${dir}/${f}`, 'utf8'))
   .join('\n');
 
-// Selectors only the library defines (the showcase's own CSS doesn't use them).
+// Selectors only the library defines (the site's own CSS doesn't use them).
 const required = [
-  '.glass-pill--accent', // material.css
+  '--glass-hue:', // tokens.css
+  '.glass--strong', // material.css
+  '.glass-button--primary', // controls.css
   '.glass-switch__thumb',
-  '.glass-segmented__indicator',
-  '.glass-container--wide', // foundations.css
-  '.glass-orbs--kiln', // orbs.css
-  '--space-6:', // glass.css tokens
+  '.glass-indicator',
+  '.glass-container--wide', // layout.css
+  '.glass-badge--success', // display.css
+  '.glass-dialog__panel', // overlay.css
+  '.glass-backdrop--fixed', // backdrop.css
 ];
 
 const missing = required.filter((s) => !css.includes(s));

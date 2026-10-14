@@ -1,139 +1,126 @@
-import React, { useState } from 'react';
-import { useGlass } from '../context/GlassContext';
+import { useRef } from 'react';
+import type { ComponentPropsWithRef, MouseEvent, ReactNode } from 'react';
+import { cx, useMergedRef } from '../utils';
+import { useFieldProps } from './GlassField';
 
-export type GlassInputVariant = 'input' | 'textarea' | 'select';
+export type GlassControlSize = 'sm' | 'md' | 'lg';
 
-type SharedProps = {
-    /** Blur amount in px for the field backdrop-filter. Default: 16 */
-    fieldBlur?: number;
-    /** Extra className for the outer wrapper div. */
-    wrapperClassName?: string;
-    /** Style applied to the outer wrapper div. */
-    wrapperStyle?: React.CSSProperties;
-    /** Whether to show the top-edge shimmer line. Default: true */
-    shimmer?: boolean;
+interface ControlOwnProps {
+  /** Height from the shared control scale: 34 / 40 / 48px. Default 'md'. */
+  size?: GlassControlSize;
+  /** Marks the control invalid. Inside a GlassField, its `error` does this. */
+  invalid?: boolean;
+}
+
+const sizeClass = (base: string, size: GlassControlSize) => size !== 'md' && `${base}--${size}`;
+
+export type GlassInputProps = Omit<ComponentPropsWithRef<'input'>, 'size'> &
+  ControlOwnProps & {
+    /** An icon or text inside the field, before the value. */
+    leading?: ReactNode;
+    /** An icon, unit, shortcut or button inside the field, after the value. */
+    trailing?: ReactNode;
+  };
+
+/**
+ * A text field cut into the glass. Takes every `<input>` prop; `onChange`
+ * is the native event, so form libraries work as usual. With `leading` or
+ * `trailing`, `className` and `style` go on the wrapping group; everything
+ * else stays on the input.
+ *
+ * ```tsx
+ * <GlassInput type="search" placeholder="Search snippets" leading={<SearchIcon />} />
+ * <GlassInput inputMode="decimal" trailing="kr" />
+ * ```
+ */
+export const GlassInput = ({
+  size = 'md',
+  invalid,
+  leading,
+  trailing,
+  className,
+  style,
+  ref,
+  id,
+  required,
+  'aria-describedby': describedBy,
+  ...rest
+}: GlassInputProps) => {
+  const own = useRef<HTMLInputElement>(null);
+  const setRef = useMergedRef(own, ref);
+  const field = useFieldProps({ id, invalid, required, 'aria-describedby': describedBy });
+  const grouped = leading != null || trailing != null;
+
+  const input = (
+    <input
+      ref={setRef}
+      className={cx('glass-input', !grouped && sizeClass('glass-input', size), !grouped && className)}
+      style={grouped ? undefined : style}
+      {...field}
+      {...rest}
+    />
+  );
+
+  if (!grouped) return input;
+
+  // A press anywhere in the group (an icon, the padding) focuses the input.
+  const focusInput = (e: MouseEvent) => {
+    if (e.target === own.current || (e.target as HTMLElement).closest('button, a, input, select, textarea')) return;
+    e.preventDefault();
+    own.current?.focus();
+  };
+
+  return (
+    <div className={cx('glass-input-group', sizeClass('glass-input-group', size), className)} style={style} onMouseDown={focusInput}>
+      {leading}
+      {input}
+      {trailing}
+    </div>
+  );
 };
 
-// ── GlassInputWrap ────────────────────────────────────────────────────────────
-// Standalone wrapper — use when you need to apply glass treatment to your
-// own <input>, <textarea>, or <select> element. On focus a catch-light runs
-// once around the rim and settles top-right, where the light comes from.
-//
-// ```tsx
-// <GlassInputWrap>
-//   <input className="glass-field__control" />
-// </GlassInputWrap>
-// ```
+export type GlassTextareaProps = ComponentPropsWithRef<'textarea'> &
+  Omit<ControlOwnProps, 'size'> & {
+    /** Grow with the text instead of scrolling (where the browser supports field-sizing). */
+    autoGrow?: boolean;
+  };
 
-type WrapProps = React.PropsWithChildren<
-    SharedProps & {
-        /** Controlled focus state — useful when wrapping <select> or custom elements. */
-        focused?: boolean;
-        /** Border-radius CSS value. Default: var(--radius-field) */
-        radius?: string;
-    }
->;
-
-export const GlassInputWrap: React.FC<WrapProps> = ({
-    children,
-    focused: controlledFocused,
-    fieldBlur = 16,
-    radius,
-    wrapperClassName = '',
-    wrapperStyle,
-    shimmer = true,
-}) => {
-    const [uncontrolledFocused, setUncontrolledFocused] = useState(false);
-    const isFocused = controlledFocused ?? uncontrolledFocused;
-    const { opacity } = useGlass();
-
-    const vars = {
-        ...(radius && { '--field-radius': radius }),
-        '--field-blur': `${fieldBlur}px`,
-        '--glass-opacity': opacity,
-    } as React.CSSProperties;
-
-    return (
-        <div
-            className={`glass-field ${wrapperClassName}`.trim()}
-            data-focused={isFocused}
-            style={{ ...vars, ...wrapperStyle }}
-            onFocus={() => { if (controlledFocused === undefined) setUncontrolledFocused(true); }}
-            onBlur={() => { if (controlledFocused === undefined) setUncontrolledFocused(false); }}
-        >
-            {shimmer && <div aria-hidden="true" className="glass-field__shimmer" />}
-            {children}
-        </div>
-    );
+/** A multi-line text field. Takes every `<textarea>` prop. */
+export const GlassTextarea = ({
+  invalid,
+  autoGrow = false,
+  className,
+  id,
+  required,
+  'aria-describedby': describedBy,
+  ...rest
+}: GlassTextareaProps) => {
+  const field = useFieldProps({ id, invalid, required, 'aria-describedby': describedBy });
+  return <textarea className={cx('glass-input', autoGrow && 'glass-input--auto', className)} {...field} {...rest} />;
 };
 
-// ── GlassInput ────────────────────────────────────────────────────────────────
-// A fully glass-styled <input> element. Accepts all standard <input> props.
-//
-// ```tsx
-// <GlassInput
-//   type="text"
-//   placeholder="Search snippets…"
-//   value={query}
-//   onChange={(e) => setQuery(e.target.value)}
-// />
-// ```
+export type GlassSelectProps = Omit<ComponentPropsWithRef<'select'>, 'size'> & ControlOwnProps;
 
-type InputProps = React.ComponentPropsWithoutRef<'input'> & SharedProps;
-
-export const GlassInput = React.forwardRef<HTMLInputElement, InputProps>(
-    ({ fieldBlur, wrapperClassName, wrapperStyle, shimmer, onFocus, onBlur, className, ...props }, ref) => {
-        const [focused, setFocused] = useState(false);
-        return (
-            <GlassInputWrap
-                focused={focused}
-                fieldBlur={fieldBlur}
-                wrapperClassName={wrapperClassName}
-                wrapperStyle={wrapperStyle}
-                shimmer={shimmer}
-            >
-                <input
-                    ref={ref}
-                    {...props}
-                    className={`glass-field__control ${className ?? ''}`.trim()}
-                    onFocus={(e) => { setFocused(true); onFocus?.(e); }}
-                    onBlur={(e) => { setFocused(false); onBlur?.(e); }}
-                />
-            </GlassInputWrap>
-        );
-    }
-);
-
-GlassInput.displayName = 'GlassInput';
-
-// ── GlassTextarea ─────────────────────────────────────────────────────────────
-// A glass-styled <textarea>. Accepts all standard <textarea> props.
-
-type TextareaProps = React.ComponentPropsWithoutRef<'textarea'> & SharedProps;
-
-export const GlassTextarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-    ({ fieldBlur, wrapperClassName, wrapperStyle, shimmer, onFocus, onBlur, className, ...props }, ref) => {
-        const [focused, setFocused] = useState(false);
-        return (
-            <GlassInputWrap
-                focused={focused}
-                fieldBlur={fieldBlur}
-                wrapperClassName={wrapperClassName}
-                wrapperStyle={wrapperStyle}
-                shimmer={shimmer}
-            >
-                <textarea
-                    ref={ref}
-                    {...props}
-                    className={`glass-field__control ${className ?? ''}`.trim()}
-                    onFocus={(e) => { setFocused(true); onFocus?.(e); }}
-                    onBlur={(e) => { setFocused(false); onBlur?.(e); }}
-                />
-            </GlassInputWrap>
-        );
-    }
-);
-
-GlassTextarea.displayName = 'GlassTextarea';
-
-export default GlassInput;
+/**
+ * A native select in the same well as the text fields, with its own
+ * chevron. The menu itself is the browser's.
+ *
+ * ```tsx
+ * <GlassSelect defaultValue="ts">
+ *   <option value="ts">TypeScript</option>
+ *   <option value="go">Go</option>
+ * </GlassSelect>
+ * ```
+ */
+export const GlassSelect = ({
+  size = 'md',
+  invalid,
+  className,
+  id,
+  required,
+  'aria-describedby': describedBy,
+  ...rest
+}: GlassSelectProps) => {
+  const field = useFieldProps({ id, invalid, required, 'aria-describedby': describedBy });
+  return <select className={cx('glass-input', sizeClass('glass-input', size), className)} {...field} {...rest} />;
+};

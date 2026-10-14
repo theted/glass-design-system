@@ -1,32 +1,37 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { ComponentPropsWithRef, CSSProperties, ReactNode } from 'react';
+import { cx } from '../utils';
 
-export interface GlassSliderProps
-  extends Omit<React.ComponentPropsWithoutRef<'input'>, 'onChange' | 'value' | 'defaultValue' | 'type'> {
+export type GlassSliderProps = Omit<
+  ComponentPropsWithRef<'input'>,
+  'onChange' | 'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'
+> & {
   value?: number;
   defaultValue?: number;
+  /** Called with the new value as a number. */
   onChange?: (value: number) => void;
   min?: number;
   max?: number;
   step?: number;
   /** Visible label above the track. Without it, pass `aria-label`. */
-  label?: React.ReactNode;
-  /** Show the current value opposite the label. Default true when `label` is set. */
+  label?: ReactNode;
+  /** Show the current value opposite the label. Default true when there's a label. */
   showValue?: boolean;
   /** Format the shown value, e.g. (v) => `${v}px`. */
   format?: (value: number) => string;
-  /** Extra className on the outer wrapper. */
+  /** Extra class on the outer label (when there is one). */
   wrapperClassName?: string;
-}
+};
 
 /**
- * GlassSlider — a range input on a recessed glass track. The filled part of
- * the track is the warm light; the thumb is a bead of frosted glass.
+ * A native range input on a recessed track. The filled part is the light;
+ * the thumb is a bead of frosted glass.
  *
  * ```tsx
  * <GlassSlider label="Blur" min={0} max={80} value={blur} onChange={setBlur} format={(v) => `${v}px`} />
  * ```
  */
-const GlassSlider: React.FC<GlassSliderProps> = ({
+export const GlassSlider = ({
   value,
   defaultValue,
   onChange,
@@ -34,13 +39,13 @@ const GlassSlider: React.FC<GlassSliderProps> = ({
   max = 100,
   step = 1,
   label,
-  showValue,
+  showValue = true,
   format = String,
-  className = '',
-  wrapperClassName = '',
+  className,
+  wrapperClassName,
   style,
   ...rest
-}) => {
+}: GlassSliderProps) => {
   const [inner, setInner] = useState(defaultValue ?? min);
   const current = value ?? inner;
   const fill = max === min ? 0 : ((current - min) / (max - min)) * 100;
@@ -57,23 +62,21 @@ const GlassSlider: React.FC<GlassSliderProps> = ({
         if (value === undefined) setInner(next);
         onChange?.(next);
       }}
-      className={`glass-slider ${className}`.trim()}
-      style={{ '--fill': `${fill}%`, ...style } as React.CSSProperties}
+      className={cx('glass-slider', className)}
+      style={{ '--fill': `${fill}%`, ...style } as CSSProperties}
       {...rest}
     />
   );
 
-  if (!label) return input;
+  if (label == null) return input;
 
   return (
-    <label className={`glass-slider-field ${wrapperClassName}`.trim()}>
+    <label className={cx('glass-slider-field', wrapperClassName)}>
       <span className="glass-slider-field__head">
         <span>{label}</span>
-        {(showValue ?? true) && <span className="glass-slider-field__value">{format(current)}</span>}
+        {showValue && <span className="glass-slider-field__value">{format(current)}</span>}
       </span>
       {input}
     </label>
   );
 };
-
-export default GlassSlider;

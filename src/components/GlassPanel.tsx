@@ -1,119 +1,87 @@
-import React, { useCallback, useRef } from 'react';
-import { getGlassStyles } from '../glass';
-import { useGlass } from '../context/GlassContext';
-import { useGlassPointer, useGlassReveal } from '../hooks/useGlassPointer';
+import { useRef } from 'react';
+import type { ElementType } from 'react';
+import { useGlassPointer } from '../hooks/useGlassPointer';
+import { useGlassReveal } from '../hooks/useGlassReveal';
+import { cx, useMergedRef } from '../utils';
+import type { PolymorphicProps } from '../utils';
 
-export type { GlassIntensity } from '../glass';
-import type { GlassIntensity } from '../glass';
+/** How thick the pane is: closer things are denser and cast deeper shadows. */
+export type GlassIntensity = 'subtle' | 'medium' | 'strong';
+/** sm 24px · md fluid 20 → 40px · lg fluid 28 → 64px. */
+export type GlassPadding = 'none' | 'sm' | 'md' | 'lg';
+export type GlassRadius = 'chip' | 'field' | 'card' | 'panel' | 'sheet' | 'round';
 
-/** sm = 24px, md = fluid 20→40px (--space-panel), lg = fluid 28→64px. */
-export type GlassPanelPadding = 'none' | 'sm' | 'md' | 'lg';
-
-type Props = React.PropsWithChildren<{
-  /** Controls opacity/blur/shadow depth. Scales against GlassProvider config. */
+export interface GlassPanelOwnProps {
+  /** subtle for regions and rows, medium for cards, strong for dialogs. Default 'medium'. */
   intensity?: GlassIntensity;
-  /** Show top-right ambient glow from the warm light source. Default true. */
-  topGlow?: boolean;
-  /** Show bottom-left cobalt bounce light. Default false. */
-  bottomGlow?: boolean;
-  /** Inner padding from the spacing scale. Default 'none' (pad it yourself). */
-  padding?: GlassPanelPadding;
-  /**
-   * Border-radius class, e.g. 'rounded-3xl'. Default: none, the panel uses
-   * var(--radius-panel). Set the radius with style={{ borderRadius }} if
-   * your Tailwind doesn't scan this package.
-   */
-  rounded?: string;
-  /** Lean away from the pointer in 3D, like pressing on a pane. Default false. */
+  /** Inner padding from the spacing scale. Default 'md'. */
+  padding?: GlassPadding;
+  /** Corner radius token. Default 'panel' (28px). */
+  radius?: GlassRadius;
+  /** The warm light pooling in the top-right corner. Default false. */
+  glow?: boolean;
+  /** A spectral fringe where the rim splits the light. Default false. */
+  prism?: boolean;
+  /** Lean away from the pointer, like pressing on a pane. Default false. */
   tilt?: boolean;
   /** Frost condenses onto the pane the first time it scrolls into view. Default false. */
   reveal?: boolean;
-  /** Draw the spectral dispersion fringe along the rim. Default true. */
-  spectrum?: boolean;
+  /** The light follows the pointer. Off, it rests in the upper right. Default true. */
+  pointerLight?: boolean;
   className?: string;
-  style?: React.CSSProperties;
-  /** Render as a different HTML element (e.g. 'form', 'section'). Default 'div'. */
-  as?: React.ElementType;
-  ref?: React.Ref<HTMLElement>;
-  [key: string]: unknown;
-}>;
+}
+
+export type GlassPanelProps<E extends ElementType = 'div'> = PolymorphicProps<E, GlassPanelOwnProps>;
 
 /**
- * GlassPanel — the primary glass surface.
- *
- * Every panel has a rim that catches the light (warm on the lit side, cool
- * opposite) and a faint spectral fringe where thick glass splits it. On
- * hover the light source follows the pointer: the rim turns toward it and
- * a wide, faint pool of warm light drifts after it.
- *
- * Decorative layers sit beneath your content, so children need no wrapper.
+ * A pane of glass: the surface everything else sits on. The rim catches the
+ * light, a sheen follows the pointer, and both sit around your content, so
+ * children need no wrapper.
  *
  * ```tsx
- * <GlassPanel intensity="medium" padding="md" tilt reveal>
- *   <h3>…</h3>
+ * <GlassPanel intensity="strong" padding="lg" glow>
+ *   <h2 className="glass-h3">Low sun, cold water</h2>
  * </GlassPanel>
+ *
+ * <GlassPanel as="a" href="/work" radius="card" tilt>…</GlassPanel>
  * ```
  */
-const GlassPanel: React.FC<Props> = ({
+export const GlassPanel = <E extends ElementType = 'div'>({
+  as,
   intensity = 'medium',
-  topGlow = true,
-  bottomGlow = false,
-  padding = 'none',
-  rounded,
+  padding = 'md',
+  radius,
+  glow = false,
+  prism = false,
   tilt = false,
   reveal = false,
-  spectrum = true,
-  className = '',
-  style,
-  children,
-  as: Tag = 'div',
-  ref: forwardedRef,
+  pointerLight = true,
+  className,
+  ref,
   ...rest
-}) => {
-  const config = useGlass();
-  const glass = getGlassStyles(intensity, config);
-  const ref = useRef<HTMLElement | null>(null);
+}: GlassPanelProps<E>) => {
+  const Tag: ElementType = as ?? 'div';
+  const own = useRef<HTMLElement | null>(null);
+  const setRef = useMergedRef(own, ref);
 
-  useGlassPointer(ref);
-  useGlassReveal(ref, reveal);
-
-  const setRef = useCallback(
-    (node: HTMLElement | null) => {
-      ref.current = node;
-      if (typeof forwardedRef === 'function') forwardedRef(node);
-      else if (forwardedRef) (forwardedRef as React.MutableRefObject<HTMLElement | null>).current = node;
-    },
-    [forwardedRef],
-  );
-
-  const classes = [
-    'glass-surface',
-    tilt && 'glass-surface--tilt',
-    reveal && 'glass-surface--reveal',
-    padding !== 'none' && `glass-surface--pad-${padding}`,
-    rounded,
-    className,
-  ].filter(Boolean).join(' ');
-
-  const vars = {
-    '--glass-light-alpha': config.lightAlpha,
-    '--glass-shadow-alpha': config.shadowAlpha,
-    '--glass-lip': glass.shimmerColor,
-  } as React.CSSProperties;
+  useGlassPointer(own, pointerLight);
+  useGlassReveal(own, reveal);
 
   return (
-    <Tag ref={setRef} className={classes} style={{ ...glass.panel, ...vars, ...style }} {...rest}>
-      <div aria-hidden="true" className="glass-surface__lip" />
-      <div aria-hidden="true" className="glass-surface__shade" />
-      <div aria-hidden="true" className="glass-surface__sheen" />
-      {topGlow && <div aria-hidden="true" className="glass-surface__glow glass-surface__glow--tr" style={glass.topRightGlow} />}
-      {bottomGlow && <div aria-hidden="true" className="glass-surface__glow glass-surface__glow--bl" style={glass.bottomLeftGlow} />}
-      <div aria-hidden="true" className="glass-surface__rim" />
-      {spectrum && <div aria-hidden="true" className="glass-surface__spectrum" />}
-
-      {children}
-    </Tag>
+    <Tag
+      ref={setRef}
+      className={cx(
+        'glass',
+        intensity !== 'medium' && `glass--${intensity}`,
+        padding !== 'none' && `glass--pad-${padding}`,
+        radius && `glass--radius-${radius}`,
+        glow && 'glass--glow',
+        prism && 'glass--prism',
+        tilt && 'glass--tilt',
+        reveal && 'glass--reveal',
+        className,
+      )}
+      {...rest}
+    />
   );
 };
-
-export default GlassPanel;

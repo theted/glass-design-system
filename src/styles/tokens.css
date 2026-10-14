@@ -1,0 +1,193 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Tokens
+
+   Cool glass, warm light. The glass, the ground and every neutral share one
+   cool hue; the single light source has one warm hue. Change either knob and
+   the whole palette follows:
+
+     --glass-hue    262   the cool body: glass tint, ground, text, hairlines
+     --light-hue     76   the warm light: rims, focus, the primary action
+
+   The material has three more knobs, read wherever glass is drawn:
+
+     --glass-blur    40px  how frosted the glass is
+     --glass-opacity 0.66  how dense the tint is (0 = clear, 1 = smoked)
+     --glass-sheen   0.22  how bright the light under the pointer is
+
+   Set any of them on :root, on any element, or with <GlassProvider>.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Tailwind v4's layer order, declared first so importing Tailwind after
+   this stylesheet keeps it. */
+@layer theme, base, components, utilities;
+
+@layer theme {
+  :root {
+    /* ── Knobs ──────────────────────────────────────────────────────────── */
+    --glass-hue: 262;
+    --light-hue: 76;
+    --glass-blur: 40px;
+    --glass-opacity: 0.66;
+    --glass-sheen: 0.22;
+
+    /* ── Type ───────────────────────────────────────────────────────────── */
+    --font-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI Variable Display', system-ui, sans-serif;
+    --font-body: 'Schibsted Grotesk', 'Avenir Next', 'Segoe UI Variable Text', system-ui, sans-serif;
+    --font-code: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', 'Cascadia Code', monospace;
+
+    /* Fluid modular scale: ratio 1.2 at 360px wide, 1.3 at 1440px; body
+       16 → 17px. Nothing smaller than --step--2 (12px). */
+    --step--2: 0.75rem;
+    --step--1: 0.875rem;
+    --step-0: clamp(1rem, 0.979rem + 0.093vw, 1.0625rem);
+    --step-1: clamp(1.2rem, 1.14rem + 0.268vw, 1.381rem);
+    --step-2: clamp(1.44rem, 1.321rem + 0.527vw, 1.796rem);
+    --step-3: clamp(1.728rem, 1.526rem + 0.898vw, 2.334rem);
+    --step-4: clamp(2.074rem, 1.754rem + 1.422vw, 3.034rem);
+    --step-5: clamp(2.488rem, 2.002rem + 2.159vw, 3.945rem);
+    --step-6: clamp(2.986rem, 2.272rem + 3.175vw, 5.129rem);
+    --step-7: clamp(3.583rem, 2.555rem + 4.569vw, 6.667rem);
+
+    /* ── Space ──────────────────────────────────────────────────────────────
+       Ten steps on a 4px grid, named like Tailwind's spacing numbers
+       (var(--space-6) = p-6 = 24px). Use only these steps. */
+    --space-1: 0.25rem;  /*   4  icon ↔ label                 */
+    --space-2: 0.5rem;   /*   8  buttons in a group           */
+    --space-3: 0.75rem;  /*  12  label ↔ field, title ↔ body  */
+    --space-4: 1rem;     /*  16  inside compact parts         */
+    --space-6: 1.5rem;   /*  24  between related blocks       */
+    --space-8: 2rem;     /*  32  card padding, form groups    */
+    --space-12: 3rem;    /*  48  heading ↔ section content    */
+    --space-16: 4rem;    /*  64  between groups in a section  */
+    --space-24: 6rem;    /*  96  between sections             */
+    --space-32: 8rem;    /* 128  hero breathing room          */
+
+    /* Fluid page structure: one value per job, phone → desktop. */
+    --space-gutter: clamp(1rem, 0.6rem + 1.8vw, 2.5rem);
+    --space-section: clamp(4rem, 2.67rem + 5.9vw, 8rem);
+    --space-panel: clamp(1.25rem, 0.83rem + 1.85vw, 2.5rem);
+    --space-grid: clamp(0.75rem, 0.5rem + 1.1vw, 1.5rem);
+
+    /* ── Layout ─────────────────────────────────────────────────────────── */
+    --page-max: 76rem;
+    --page-wide: 96rem;
+    --page-narrow: 48rem;
+    --measure: 62ch;
+
+    /* ── Shape ──────────────────────────────────────────────────────────────
+       Bigger things are rounder. Nested corners stay concentric when
+       inner radius = outer radius − padding. */
+    --radius-chip: 0.5rem;
+    --radius-field: 0.75rem;
+    --radius-card: 1.25rem;
+    --radius-panel: 1.75rem;
+    --radius-sheet: 2.25rem;
+    --radius-round: 9999px;
+
+    /* Control heights, shared by buttons, inputs and selects so a row of
+       them lines up. */
+    --control-xs: 1.75rem;
+    --control-sm: 2.125rem;
+    --control-md: 2.5rem;
+    --control-lg: 3rem;
+
+    /* ── Motion ─────────────────────────────────────────────────────────────
+       glass:  decelerates hard, like something heavy settling into place.
+       spring: a mass-spring curve with a slight overshoot, for press/release.
+       in:     starts slow and leaves; for things getting out of the way.
+       Durations double each step: pick one, don't invent numbers. */
+    --ease-glass: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-glass: cubic-bezier(0.55, 0, 0.75, 0.3);
+    --ease-spring: linear(
+      0, 0.033, 0.116, 0.23, 0.359, 0.491, 0.617, 0.73, 0.828, 0.909, 0.972,
+      1.019, 1.052, 1.072, 1.081, 1.083, 1.08, 1.072, 1.062, 1.051, 1.04, 1.03,
+      1.021, 1.013, 1.006, 1.001, 0.998, 0.995, 0.994, 0.993, 0.993, 0.993,
+      0.994, 0.995, 0.996, 0.997, 1
+    );
+    --dur-1: 140ms;
+    --dur-2: 280ms;
+    --dur-3: 560ms;
+    --dur-4: 1120ms;
+  }
+
+  /* ── Colour ────────────────────────────────────────────────────────────────
+     Declared on :root and on every .glass-scope (what <GlassProvider>
+     renders), so a nested hue change recomputes the palette for its subtree
+     instead of inheriting the colours already worked out above it. */
+  :root,
+  .glass-scope {
+    /* Ground: the page behind the glass. */
+    --color-ground: oklch(0.15 0.035 var(--glass-hue));
+    --color-ground-deep: oklch(0.09 0.028 var(--glass-hue));
+
+    /* Text, from loudest to quietest. */
+    --color-text: oklch(0.97 0.008 calc(var(--glass-hue) - 12));
+    --color-text-muted: oklch(0.83 0.022 calc(var(--glass-hue) - 10));
+    --color-text-subtle: oklch(0.69 0.032 calc(var(--glass-hue) - 6));
+
+    /* Hairlines and the clear glass of controls. */
+    --color-line: oklch(0.9 0.03 calc(var(--glass-hue) - 10) / 0.14);
+    --color-line-strong: oklch(0.92 0.03 calc(var(--glass-hue) - 10) / 0.28);
+    --color-fill: oklch(0.96 0.015 calc(var(--glass-hue) - 12) / 0.07);
+    --color-fill-hover: oklch(0.96 0.015 calc(var(--glass-hue) - 12) / 0.12);
+    --color-fill-active: oklch(0.96 0.015 calc(var(--glass-hue) - 12) / 0.17);
+
+    /* Recessed: wells that fields, tracks and trays are cut into. */
+    --color-well: oklch(0.11 0.03 var(--glass-hue) / 0.5);
+    --color-shadow: oklch(0.05 0.02 var(--glass-hue));
+
+    /* The light: the only warm colour. Things that catch it are warm;
+       nothing else is. */
+    --color-light: oklch(0.86 0.12 var(--light-hue));
+    --color-light-bright: oklch(0.94 0.07 calc(var(--light-hue) + 8));
+    --color-light-soft: oklch(0.86 0.12 var(--light-hue) / 0.18);
+    --color-on-light: oklch(0.26 0.06 calc(var(--light-hue) - 18));
+
+    /* Status. Pair with an icon or words; colour alone isn't a message. */
+    --color-success: oklch(0.8 0.13 165);
+    --color-warning: oklch(0.84 0.13 85);
+    --color-danger: oklch(0.71 0.17 25);
+    --color-info: oklch(0.78 0.11 calc(var(--glass-hue) - 16));
+
+    /* Rim light: a hot catch-light where the light hits the edge, warm on
+       either side of it, a cool reflection opposite. */
+    --rim-hot: oklch(0.99 0.04 calc(var(--light-hue) + 14));
+    --rim-warm: oklch(0.9 0.12 calc(var(--light-hue) + 2) / 0.85);
+    --rim-cool: oklch(0.8 0.1 calc(var(--glass-hue) - 22) / 0.4);
+
+    /* ── Elevation ─────────────────────────────────────────────────────────
+       The higher the step, the softer and further the shadow falls. */
+    --elevation-1:
+      0 1px 2px oklch(0.05 0.02 var(--glass-hue) / 0.3),
+      0 6px 16px -8px oklch(0.05 0.02 var(--glass-hue) / 0.45);
+    --elevation-2:
+      0 2px 4px oklch(0.05 0.02 var(--glass-hue) / 0.25),
+      0 18px 44px -16px oklch(0.05 0.02 var(--glass-hue) / 0.55);
+    --elevation-3:
+      0 4px 10px oklch(0.05 0.02 var(--glass-hue) / 0.25),
+      0 36px 90px -24px oklch(0.04 0.02 var(--glass-hue) / 0.7);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --dur-1: 1ms;
+      --dur-2: 1ms;
+      --dur-3: 1ms;
+      --dur-4: 1ms;
+    }
+  }
+
+  /* Denser glass and brighter quiet text for people who ask for contrast. */
+  @media (prefers-contrast: more) {
+    :root {
+      --glass-opacity: 1;
+    }
+
+    :root,
+    .glass-scope {
+      --color-text-muted: oklch(0.9 0.015 calc(var(--glass-hue) - 10));
+      --color-text-subtle: oklch(0.8 0.025 calc(var(--glass-hue) - 6));
+      --color-line: oklch(0.9 0.03 calc(var(--glass-hue) - 10) / 0.3);
+    }
+  }
+}

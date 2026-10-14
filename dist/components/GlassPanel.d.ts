@@ -1,51 +1,41 @@
-import React from 'react';
-export type { GlassIntensity } from '../glass';
-import type { GlassIntensity } from '../glass';
-/** sm = 24px, md = fluid 20→40px (--space-panel), lg = fluid 28→64px. */
-export type GlassPanelPadding = 'none' | 'sm' | 'md' | 'lg';
-type Props = React.PropsWithChildren<{
-    /** Controls opacity/blur/shadow depth. Scales against GlassProvider config. */
+import type { ElementType } from 'react';
+import type { PolymorphicProps } from '../utils';
+/** How thick the pane is: closer things are denser and cast deeper shadows. */
+export type GlassIntensity = 'subtle' | 'medium' | 'strong';
+/** sm 24px · md fluid 20 → 40px · lg fluid 28 → 64px. */
+export type GlassPadding = 'none' | 'sm' | 'md' | 'lg';
+export type GlassRadius = 'chip' | 'field' | 'card' | 'panel' | 'sheet' | 'round';
+export interface GlassPanelOwnProps {
+    /** subtle for regions and rows, medium for cards, strong for dialogs. Default 'medium'. */
     intensity?: GlassIntensity;
-    /** Show top-right ambient glow from the warm light source. Default true. */
-    topGlow?: boolean;
-    /** Show bottom-left cobalt bounce light. Default false. */
-    bottomGlow?: boolean;
-    /** Inner padding from the spacing scale. Default 'none' (pad it yourself). */
-    padding?: GlassPanelPadding;
-    /**
-     * Border-radius class, e.g. 'rounded-3xl'. Default: none, the panel uses
-     * var(--radius-panel). Set the radius with style={{ borderRadius }} if
-     * your Tailwind doesn't scan this package.
-     */
-    rounded?: string;
-    /** Lean away from the pointer in 3D, like pressing on a pane. Default false. */
+    /** Inner padding from the spacing scale. Default 'md'. */
+    padding?: GlassPadding;
+    /** Corner radius token. Default 'panel' (28px). */
+    radius?: GlassRadius;
+    /** The warm light pooling in the top-right corner. Default false. */
+    glow?: boolean;
+    /** A spectral fringe where the rim splits the light. Default false. */
+    prism?: boolean;
+    /** Lean away from the pointer, like pressing on a pane. Default false. */
     tilt?: boolean;
     /** Frost condenses onto the pane the first time it scrolls into view. Default false. */
     reveal?: boolean;
-    /** Draw the spectral dispersion fringe along the rim. Default true. */
-    spectrum?: boolean;
+    /** The light follows the pointer. Off, it rests in the upper right. Default true. */
+    pointerLight?: boolean;
     className?: string;
-    style?: React.CSSProperties;
-    /** Render as a different HTML element (e.g. 'form', 'section'). Default 'div'. */
-    as?: React.ElementType;
-    ref?: React.Ref<HTMLElement>;
-    [key: string]: unknown;
-}>;
+}
+export type GlassPanelProps<E extends ElementType = 'div'> = PolymorphicProps<E, GlassPanelOwnProps>;
 /**
- * GlassPanel — the primary glass surface.
- *
- * Every panel has a rim that catches the light (warm on the lit side, cool
- * opposite) and a faint spectral fringe where thick glass splits it. On
- * hover the light source follows the pointer: the rim turns toward it and
- * a wide, faint pool of warm light drifts after it.
- *
- * Decorative layers sit beneath your content, so children need no wrapper.
+ * A pane of glass: the surface everything else sits on. The rim catches the
+ * light, a sheen follows the pointer, and both sit around your content, so
+ * children need no wrapper.
  *
  * ```tsx
- * <GlassPanel intensity="medium" padding="md" tilt reveal>
- *   <h3>…</h3>
+ * <GlassPanel intensity="strong" padding="lg" glow>
+ *   <h2 className="glass-h3">Low sun, cold water</h2>
  * </GlassPanel>
+ *
+ * <GlassPanel as="a" href="/work" radius="card" tilt>…</GlassPanel>
  * ```
  */
-declare const GlassPanel: React.FC<Props>;
-export default GlassPanel;
+export declare const GlassPanel: <E extends ElementType = "div">({ as, intensity, padding, radius, glow, prism, tilt, reveal, pointerLight, className, ref, ...rest }: GlassPanelProps<E>) => import("react/jsx-runtime").JSX.Element;

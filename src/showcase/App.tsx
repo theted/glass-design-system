@@ -1,88 +1,67 @@
-import React, { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { GlassProvider } from 'glass-design-system';
-import { BackgroundProvider, useBackground } from './context/BackgroundContext';
-import SiteHeader from './components/SiteHeader';
-import SiteFooter from './components/SiteFooter';
+import { useEffect } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { GlassBackdrop, glassVars } from 'glass-design-system';
+import { Header } from './site/Header';
+import { Footer } from './site/Footer';
+import { ThemeProvider, useTheme } from './site/theme';
 import Home from './pages/Home';
+import GetStarted from './pages/GetStarted';
 import Foundations from './pages/Foundations';
+import ComponentsIndex from './pages/ComponentsIndex';
+import ComponentPage from './pages/ComponentPage';
 import Examples from './pages/Examples';
-import GlassShowcase from './pages/GlassShowcase';
-import Philosophy from './pages/Philosophy';
-import TypeShowcase from './pages/TypeShowcase';
-import ColorShowcase from './pages/ColorShowcase';
-import ProductDemo from './pages/ProductDemo';
-import ComponentDocs from './pages/ComponentDocs';
-import LayoutShowcase from './pages/LayoutShowcase';
-import OrbShowcase from './pages/OrbShowcase';
+import Backdrops from './pages/Backdrops';
+import NotFound from './pages/NotFound';
 
-// Reset scroll position on every route change, unless it targets an anchor
-const ScrollToTop: React.FC = () => {
+/** New page: start at the top, or at the anchor the link names. */
+const ScrollRestore = () => {
   const { pathname, hash } = useLocation();
-  useEffect(() => { if (!hash) window.scrollTo(0, 0); }, [pathname, hash]);
+  useEffect(() => {
+    if (!hash) return window.scrollTo(0, 0);
+    document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView();
+  }, [pathname, hash]);
   return null;
 };
 
-// Inner component so it can consume the BackgroundContext
-const AppInner: React.FC = () => {
-  const { activeGradient, activePattern, glass } = useBackground();
+const Site = () => {
+  const { theme } = useTheme();
+  const { palette, texture, motion, ...knobs } = theme;
 
-  // Apply active gradient to body background; restore on unmount
+  // The site's knobs go on :root, so everything follows them: toasts in
+  // document.body, the page background, the scrollbars.
   useEffect(() => {
-    const prevBg = document.body.style.background;
-    const prevAttachment = document.body.style.backgroundAttachment;
-    const prevTransition = document.body.style.transition;
-    document.body.style.transition = 'background 700ms ease';
-    document.body.style.background = activeGradient;
-    document.body.style.backgroundAttachment = 'fixed';
-    return () => {
-      document.body.style.background = prevBg;
-      document.body.style.backgroundAttachment = prevAttachment;
-      document.body.style.transition = prevTransition;
-    };
-  }, [activeGradient]);
+    const root = document.documentElement.style;
+    for (const [name, value] of Object.entries(glassVars(knobs))) root.setProperty(name, value);
+  });
 
   return (
-    <GlassProvider {...glass}>
+    <>
+      <GlassBackdrop fixed palette={palette} texture={texture} motion={motion} />
+      <ScrollRestore />
       <div className="site">
-        {/* Pattern texture overlay — sits above gradient, below all content */}
-        {activePattern.url && (
-          <div
-            aria-hidden="true"
-            className="site-pattern"
-            style={{ backgroundImage: `url("${activePattern.url}")`, backgroundSize: activePattern.size }}
-          />
-        )}
-
-        <SiteHeader />
-        <ScrollToTop />
-
+        <Header />
         <main className="site-main">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/start" element={<GetStarted />} />
             <Route path="/foundations" element={<Foundations />} />
+            <Route path="/components" element={<ComponentsIndex />} />
+            <Route path="/components/:slug" element={<ComponentPage />} />
             <Route path="/examples" element={<Examples />} />
-            <Route path="/surfaces" element={<GlassShowcase />} />
-            <Route path="/components" element={<ComponentDocs />} />
-            <Route path="/philosophy" element={<Philosophy />} />
-            <Route path="/type" element={<TypeShowcase />} />
-            <Route path="/colors" element={<ColorShowcase />} />
-            <Route path="/product" element={<ProductDemo />} />
-            <Route path="/layouts" element={<LayoutShowcase />} />
-            <Route path="/orbs" element={<OrbShowcase />} />
+            <Route path="/backdrops" element={<Backdrops />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-
-        <SiteFooter />
+        <Footer />
       </div>
-    </GlassProvider>
+    </>
   );
 };
 
-const App: React.FC = () => (
-  <BackgroundProvider>
-    <AppInner />
-  </BackgroundProvider>
+const App = () => (
+  <ThemeProvider>
+    <Site />
+  </ThemeProvider>
 );
 
 export default App;

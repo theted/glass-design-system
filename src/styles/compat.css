@@ -1,0 +1,48 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   0.x compatibility — the old token names and text-bevel classes, mapped
+   onto 1.0. For upgrading an app in steps:
+
+     @import 'glass-design-system/styles';
+     @import 'glass-design-system/compat';   ← delete once nothing uses them
+
+   Nothing in the library uses these. Each line says what to use instead.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer theme {
+  :root,
+  .glass-scope {
+    --color-bg: var(--color-ground);                /* → --color-ground */
+    --color-bg-deep: var(--color-ground-deep);      /* → --color-ground-deep */
+    --color-border: oklch(0.52 0.05 calc(var(--glass-hue) - 7) / 0.3);        /* → --color-line */
+    --color-border-strong: oklch(0.74 0.08 calc(var(--glass-hue) - 12) / 0.42); /* → --color-line-strong */
+    --color-surface: oklch(0.25 0.04 calc(var(--glass-hue) - 2) / 0.56);      /* → class="glass" */
+    --color-surface-strong: oklch(0.3 0.05 calc(var(--glass-hue) - 2) / 0.72); /* → class="glass glass--strong" */
+    --color-surface-muted: oklch(0.21 0.03 calc(var(--glass-hue) - 2) / 0.58); /* → --color-fill or --color-well */
+    --color-glass-card: oklch(0.22 0.035 calc(var(--glass-hue) - 2) / 0.32);  /* → class="glass" */
+    --color-glass-row: oklch(0.22 0.03 calc(var(--glass-hue) - 2) / 0.28);    /* → class="glass glass--subtle" */
+    --color-glass-field: oklch(0.16 0.025 var(--glass-hue) / 0.24);           /* → --color-well */
+    --color-accent: oklch(0.66 0.17 var(--glass-hue));                         /* → --color-info, or the light */
+    --color-accent-bright: oklch(0.82 0.1 calc(var(--glass-hue) - 12));       /* → --color-info */
+    --color-accent-soft: oklch(0.66 0.17 var(--glass-hue) / 0.2);             /* → --color-fill-active */
+    --color-ink: oklch(0.2 0.03 var(--glass-hue));                             /* → --color-on-light */
+  }
+}
+
+/* Text on 1.0 glass doesn't need a shadow; these keep 0.x pages looking the
+   same until you take them out. */
+@layer utilities {
+  .text-bevel {
+    text-shadow: 0 1px 1px oklch(0 0 0 / 0.42), 0 -1px 0 oklch(1 0 0 / 0.06);
+  }
+
+  .text-bevel-strong {
+    text-shadow:
+      0 1px 2px oklch(0 0 0 / 0.55),
+      0 -1px 0 oklch(1 0 0 / 0.16),
+      0 2px 16px oklch(0 0 0 / 0.3);
+  }
+
+  .text-bevel-ink {
+    text-shadow: 0 1px 0 oklch(1 0 0 / 0.32), 0 -1px 0 oklch(0 0 0 / 0.1);
+  }
+}

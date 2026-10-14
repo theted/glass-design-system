@@ -1,0 +1,236 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Material — one class, the whole pane.
+
+     <div class="glass">                       medium glass
+     <div class="glass glass--strong">         denser, closer, deeper shadow
+     <div class="glass glass--glow glass--prism">  opt-in warm corner light and
+                                               spectral fringe
+
+   Everything is drawn by the element itself and its two pseudo-elements:
+     background     the tint, density scaled by --glass-opacity
+     box-shadow     elevation plus a hairline of light on the top lip
+     ::before       the rim: the 1px edge, catching the light (on top)
+     ::after        the sheen: a pool of light under the pointer (beneath
+                    your content, so children need no wrapper)
+
+   The light follows four registered properties. Hovering sets --glass-hover
+   in CSS; useGlassPointer() (built into <GlassPanel>) writes the rest
+   straight onto the element, never through React state:
+
+     --glass-x, --glass-y   pointer position, 0 → 1 across the element
+     --glass-angle          the direction the light comes from, 0deg = up
+     --glass-hover          0 → 1, whether the pointer is over the pane
+
+   Registered with @property, so the browser interpolates them and the light
+   glides after the pointer instead of snapping to it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@property --glass-x { syntax: '<number>'; inherits: true; initial-value: 0.72; }
+@property --glass-y { syntax: '<number>'; inherits: true; initial-value: 0.18; }
+@property --glass-hover { syntax: '<number>'; inherits: true; initial-value: 0; }
+@property --glass-angle { syntax: '<angle>'; inherits: true; initial-value: 45deg; }
+
+@layer components {
+
+  .glass {
+    /* Per-intensity values; the modifiers below change only these. */
+    --_tint: 0.3;
+    --_edge: 0.3;
+    --_lip: 0.16;
+    --_rim: 0.6;
+    --_saturate: 1.5;
+    --_elevation: var(--elevation-2);
+
+    position: relative;
+    isolation: isolate;
+    border-radius: var(--radius-panel);
+    background-color: oklch(0.21 0.034 var(--glass-hue) / calc(var(--_tint) * var(--glass-opacity)));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--_saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--_saturate));
+    box-shadow:
+      inset 0 1px 0 oklch(0.95 0.06 calc(var(--light-hue) + 6) / var(--_lip)),
+      inset 0 -1px 0 oklch(0.05 0.02 var(--glass-hue) / 0.25),
+      var(--_elevation);
+    transition:
+      --glass-x var(--dur-3) var(--ease-glass),
+      --glass-y var(--dur-3) var(--ease-glass),
+      --glass-angle var(--dur-4) var(--ease-glass),
+      --glass-hover var(--dur-3) var(--ease-glass);
+  }
+
+  .glass--subtle {
+    --_tint: 0.17;
+    --_edge: 0.2;
+    --_lip: 0.1;
+    --_rim: 0.45;
+    --_saturate: 1.35;
+    --_elevation: var(--elevation-1);
+  }
+
+  .glass--strong {
+    --_tint: 0.64;
+    --_edge: 0.4;
+    --_lip: 0.24;
+    --_rim: 0.75;
+    --_saturate: 1.6;
+    --_elevation: var(--elevation-3);
+  }
+
+  /* The rim, drawn only on the 1px edge: a uniform hairline with the
+     catch-light laid over it, turned toward wherever the light comes from. */
+  .glass::before {
+    --_rim-light: conic-gradient(
+      from var(--glass-angle),
+      var(--rim-hot) 0deg,
+      var(--rim-warm) 12deg,
+      transparent 70deg,
+      var(--rim-cool) 180deg,
+      transparent 290deg,
+      var(--rim-warm) 348deg,
+      var(--rim-hot) 360deg
+    );
+    --_rim-edge: linear-gradient(
+      oklch(0.85 0.04 calc(var(--glass-hue) - 8) / var(--_edge)) 0 0
+    );
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: 1px;
+    border-radius: inherit;
+    pointer-events: none;
+    background: var(--_rim-light), var(--_rim-edge);
+    opacity: calc(var(--_rim) + var(--glass-hover) * (1 - var(--_rim)));
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+  }
+
+  /* The sheen: a wide, faint pool of warm light under the pointer, sized to
+     the pane. (Percentages only: Chrome drops a radial-gradient whose size
+     mixes lengths and percentages.) */
+  .glass::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 130% 130% at calc(var(--glass-x) * 100%) calc(var(--glass-y) * 100%),
+      oklch(0.95 0.05 calc(var(--light-hue) + 8) / calc(var(--glass-sheen) * 0.36)) 0%,
+      oklch(0.9 0.06 calc(var(--light-hue) + 4) / calc(var(--glass-sheen) * 0.16)) 22%,
+      oklch(0.84 0.06 var(--light-hue) / calc(var(--glass-sheen) * 0.04)) 45%,
+      transparent 70%
+    );
+    opacity: var(--glass-hover);
+    mix-blend-mode: screen;
+  }
+
+  @media (hover: hover) {
+    .glass:hover {
+      --glass-hover: 1;
+    }
+  }
+
+  /* Opt-in: the warm light pooling in the top-right corner, where it comes
+     from. For the one pane a screen is about. */
+  .glass--glow {
+    background-image: radial-gradient(
+      70% 90% at 100% 0%,
+      oklch(0.82 0.12 var(--light-hue) / calc(var(--glass-opacity) * 0.16)),
+      oklch(0.8 0.12 var(--light-hue) / calc(var(--glass-opacity) * 0.05)) 45%,
+      transparent 75%
+    );
+  }
+
+  /* Opt-in: thick glass splitting the light just past the catch-light. */
+  .glass--prism::before {
+    background:
+      conic-gradient(
+        from calc(var(--glass-angle) + 14deg),
+        transparent 0deg,
+        oklch(0.72 0.2 25 / 0.9) 12deg,
+        oklch(0.88 0.17 95 / 0.9) 24deg,
+        oklch(0.82 0.17 155 / 0.9) 36deg,
+        oklch(0.72 0.16 235 / 0.9) 48deg,
+        oklch(0.62 0.22 300 / 0.9) 60deg,
+        transparent 76deg
+      ),
+      var(--_rim-light),
+      var(--_rim-edge);
+    background-blend-mode: screen, normal, normal;
+  }
+
+  /* Padding steps: sm 24px; md is fluid 20 → 40px; lg fluid 28 → 64px. */
+  .glass--pad-sm { padding: var(--space-6); }
+  .glass--pad-md { padding: var(--space-panel); }
+  .glass--pad-lg { padding: clamp(1.75rem, 1rem + 3.3vw, 4rem); }
+
+  /* Radius steps; the rim and sheen follow whatever radius the pane has. */
+  .glass--radius-chip { border-radius: var(--radius-chip); }
+  .glass--radius-field { border-radius: var(--radius-field); }
+  .glass--radius-card { border-radius: var(--radius-card); }
+  .glass--radius-panel { border-radius: var(--radius-panel); }
+  .glass--radius-sheet { border-radius: var(--radius-sheet); }
+  .glass--radius-round { border-radius: var(--radius-round); }
+
+  /* Interactive panes (links, buttons): a focus ring, and a press. */
+  :is(a, button).glass {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :is(a, button).glass:focus-visible {
+    outline: 2px solid var(--color-light);
+    outline-offset: 3px;
+  }
+
+  /* Tilt: the pane leans away from the pointer, like pressing on glass. */
+  .glass--tilt {
+    --glass-tilt-max: 3deg;
+    transform: perspective(1600px)
+      rotateX(calc((0.5 - var(--glass-y)) * var(--glass-tilt-max) * var(--glass-hover)))
+      rotateY(calc((var(--glass-x) - 0.5) * var(--glass-tilt-max) * var(--glass-hover)));
+  }
+
+  /* Reveal: frost condenses onto a clear pane the first time it scrolls in
+     (useGlassReveal sets data-reveal). */
+  .glass--reveal[data-reveal='pending'] {
+    opacity: 0;
+  }
+
+  .glass--reveal[data-reveal='in'] {
+    animation: glass-condense var(--dur-4) var(--ease-glass) both;
+  }
+
+  @keyframes glass-condense {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem) scale(0.985);
+      -webkit-backdrop-filter: blur(0px);
+      backdrop-filter: blur(0px);
+    }
+    40% { opacity: 1; }
+  }
+
+  /* A solid fallback for people who turn transparency off. */
+  @media (prefers-reduced-transparency: reduce) {
+    .glass {
+      background-color: oklch(0.2 0.03 var(--glass-hue));
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glass--tilt { transform: none; }
+    .glass--reveal[data-reveal] { opacity: 1; animation: none; }
+  }
+}
