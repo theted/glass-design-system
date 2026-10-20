@@ -9,9 +9,8 @@
    layer order Tailwind v4 uses, so importing Tailwind afterwards keeps it.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&display=swap');
-
 @import './tokens.css';
+@import './fonts.css';
 @import './base.css';
 @import './material.css';
 @import './type.css';

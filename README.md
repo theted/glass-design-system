@@ -43,6 +43,8 @@ Glass needs light behind it: backdrop blur on a flat colour is just grey. `Glass
 
 The stylesheet brings the fonts (Bricolage Grotesque, Schibsted Grotesk, JetBrains Mono), the tokens in `@layer theme`, a few element defaults in `@layer base`, and every component in `@layer components`. Anything you write, Tailwind utilities included, overrides them without a specificity fight.
 
+The fonts ship inside the package as woff2 files in `dist/fonts/`. Your bundler copies them next to your own assets, so they load from your origin and nothing waits on a font service before the first paint. A page downloads only the files it uses, usually the latin cuts of the display and body faces (about 125 kB together). To use other fonts, set `--font-display`, `--font-body` or `--font-code`; a family you replace is never downloaded.
+
 ## Components
 
 | | |
