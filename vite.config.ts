@@ -4,6 +4,9 @@ import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  // Relative asset URLs, so dist/glass.css points at dist/fonts/ wherever the
+  // package is installed.
+  base: './',
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -15,6 +18,7 @@ export default defineConfig({
       output: {
         assetFileNames: (assetInfo) => {
           if (assetInfo.name?.endsWith('.css')) return 'glass.css';
+          if (assetInfo.name?.endsWith('.woff2')) return 'fonts/[name][extname]';
           return assetInfo.name ?? 'asset';
         },
       },

@@ -26,9 +26,11 @@ src/
 ├── index.ts                  ← Public API. Imports styles/index.css so the lib build emits dist/glass.css
 ├── utils.ts                  ← cx, PolymorphicProps, mergeRefs/useMergedRef, SpaceStep
 ├── styles/
-│   ├── index.css             ← Entry: fonts @import, then the files below (order matters)
+│   ├── index.css             ← Entry: @imports the files below (order matters)
 │   ├── tokens.css            ← @layer theme: knobs, type steps, space, layout, radius, control heights, motion;
 │   │                            colours on `:root, .glass-scope` so a nested hue recomputes them
+│   ├── fonts.css             ← @layer theme: @font-face for the self-hosted woff2 in fonts/ (latin + latin-ext,
+│   │                            from @fontsource-variable; `?no-inline` keeps the lib build from base64-ing them)
 │   ├── base.css              ← @layer base: box-sizing, body, element resets, ::selection
 │   ├── material.css          ← .glass (+ --subtle/--strong/--pad-*/--radius-*/--glow/--prism/--tilt/--reveal),
 │   │                            @property --glass-x/-y/-hover/-angle
