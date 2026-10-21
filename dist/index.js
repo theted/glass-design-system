@@ -95,8 +95,11 @@ var p = (...e) => e.filter(Boolean).join(" "), m = (...e) => (t) => {
 }, E = [
 	"kiln",
 	"dusk",
-	"aurora",
+	"dawn",
 	"ember",
+	"aurora",
+	"forest",
+	"lagoon",
 	"fjord",
 	"abyss"
 ], D = [

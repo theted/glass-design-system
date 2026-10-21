@@ -49,7 +49,7 @@ The fonts ship inside the package as woff2 files in `dist/fonts/`. Your bundler 
 
 | | |
 |---|---|
-| **Surfaces** | `GlassPanel` (the material, any element via `as`), `GlassBackdrop` (six palettes) |
+| **Surfaces** | `GlassPanel` (the material, any element via `as`), `GlassBackdrop` (nine palettes) |
 | **Actions** | `GlassButton` (primary, secondary, ghost, danger; four sizes; toggle, loading, icon) |
 | **Forms** | `GlassField` (label, hint, error, wired up), `GlassInput` (with leading/trailing), `GlassTextarea`, `GlassSelect`, `GlassCheckbox`, `GlassRadio`, `GlassSwitch`, `GlassSlider`, `GlassSegmented` |
 | **Navigation** | `GlassNav` (a pane glides to the link with `aria-current`) |
@@ -165,7 +165,7 @@ Hover lights the rim in pure CSS; `useGlassPointer` (built into `GlassPanel`) ma
 
 ## Upgrading from 0.x
 
-1.0 is a clean break: one CSS-first material instead of seven layered divs, six backdrop palettes instead of 39 presets, and a dozen new components. The main renames are `GlassPill` → `GlassButton` (accent → primary), `GlassPanel`'s `topGlow`/`spectrum`/`rounded` → `glow`/`prism`/`radius`, and `getGlassStyles()` → `class="glass"`. **[MIGRATION.md](./MIGRATION.md)** lists every change with before-and-after code.
+1.0 is a clean break: one CSS-first material instead of seven layered divs, nine backdrop palettes instead of 39 presets, and a dozen new components. The main renames are `GlassPill` → `GlassButton` (accent → primary), `GlassPanel`'s `topGlow`/`spectrum`/`rounded` → `glow`/`prism`/`radius`, and `getGlassStyles()` → `class="glass"`. **[MIGRATION.md](./MIGRATION.md)** lists every change with before-and-after code.
 
 ## Develop
 

@@ -84,7 +84,7 @@ const Upgrade = () => (
       { name: 'GlassPill', type: 'GlassButton', description: <>variant accent → primary, default → secondary, active → pressed (or aria-current).</> },
       { name: 'GlassPanel', type: 'GlassPanel', description: <>topGlow / bottomGlow → glow (off by default), spectrum → prism (off by default), rounded="rounded-…" → radius="card". padding now defaults to md.</> },
       { name: 'GlassInputWrap', type: 'GlassInput leading / trailing', description: <>Or put className="glass-input" on your own control. Focus is pure CSS now.</> },
-      { name: 'GlassOrbs, BG_PRESETS, PATTERNS', type: 'GlassBackdrop', description: <>Twelve orb presets, fifteen gradients and twelve patterns became six palettes, motion on or off, and four textures.</> },
+      { name: 'GlassOrbs, BG_PRESETS, PATTERNS', type: 'GlassBackdrop', description: <>Twelve orb presets, fifteen gradients and twelve patterns became nine palettes, motion on or off, and four textures.</> },
       { name: 'getGlassStyles, CARD_BG_ALPHA, GLOW_*', type: 'class="glass"', description: <>The material is CSS now. A custom surface is a className, not a style object.</> },
       { name: 'GlassProvider lightAlpha / shadowAlpha', type: 'sheen, hue, lightHue', description: <>The provider sets CSS variables; shadowAlpha went with the shade layer.</> },
       { name: 'text-bevel utilities', type: '(removed)', description: <>Text on glass doesn’t need a shadow any more.</> },
