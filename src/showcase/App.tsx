@@ -16,9 +16,11 @@ import NotFound from './pages/NotFound';
 /** New page: start at the top, or at the anchor the link names. */
 const ScrollRestore = () => {
   const { pathname, hash } = useLocation();
+  // Braces, not `return window.scrollTo()`: Chromium's scroll methods now
+  // return a Promise, and React would call it as the effect's cleanup.
   useEffect(() => {
-    if (!hash) return window.scrollTo(0, 0);
-    document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView();
+    if (hash) document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView();
+    else window.scrollTo(0, 0);
   }, [pathname, hash]);
   return null;
 };
