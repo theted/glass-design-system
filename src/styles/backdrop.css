@@ -58,94 +58,133 @@
     overflow: hidden;
   }
 
+  /* Every orb shares one falloff, a bell curve ((1 − t²)³ from the centre
+     to the edge of its box): flat at the heart and flat where it meets
+     transparent, so no orb shows a rim or a hot spot and neighbours melt
+     into each other. Each orb sets its centre (--_x, --_y), size (--_s, or
+     --_w × --_h), colour (--_c) and peak strength (--_a). */
   .glass-backdrop__orb {
+    --_w: var(--_s);
+    --_h: var(--_s);
     position: absolute;
-    width: var(--_s);
-    height: var(--_s);
-    border-radius: 50%;
+    left: calc(var(--_x) - var(--_w) / 2);
+    top: calc(var(--_y) - var(--_h) / 2);
+    width: var(--_w);
+    height: var(--_h);
     opacity: var(--backdrop-strength, 1);
     mix-blend-mode: screen;
     will-change: transform;
     animation: var(--_move) calc(var(--_speed) * var(--_beats)) ease-in-out infinite alternate;
+    background: radial-gradient(
+      closest-side,
+      color-mix(in oklch, var(--_c) calc(var(--_a) * 100%), transparent) 0%,
+      color-mix(in oklch, var(--_c) calc(var(--_a) * 97%), transparent) 10%,
+      color-mix(in oklch, var(--_c) calc(var(--_a) * 88.5%), transparent) 20%,
+      color-mix(in oklch, var(--_c) calc(var(--_a) * 75.4%), transparent) 30%,
+      color-mix(in oklch, var(--_c) calc(var(--_a) * 59.3%), transparent) 40%,
+      color-mix(in oklch, var(--_c) calc(var(--_a) * 42.2%), transparent) 50%,
+      color-mix(in oklch, var(--_c) calc(var(--_a) * 26.2%), transparent) 60%,
+      color-mix(in oklch, var(--_c) calc(var(--_a) * 13.3%), transparent) 70%,
+      color-mix(in oklch, var(--_c) calc(var(--_a) * 4.7%), transparent) 80%,
+      color-mix(in oklch, var(--_c) calc(var(--_a) * 0.7%), transparent) 90%,
+      transparent 100%
+    );
   }
 
   /* 1 · the cool field, top left */
   .glass-backdrop__orb:nth-child(1) {
-    --_s: max(100cqw, 80cqh);
+    --_s: max(160cqw, 130cqh);
+    --_x: 12cqw;
+    --_y: 6cqh;
+    --_c: var(--_field);
+    --_a: 0.95;
     --_move: glass-orb-1;
     --_beats: 6;
-    top: calc(var(--_s) * -0.42);
-    left: calc(var(--_s) * -0.34);
-    background: radial-gradient(circle, var(--_field) 0%, color-mix(in oklch, var(--_field) 50%, transparent) 35%, transparent 66%);
   }
 
   /* 2 · the sun, top right. Laid on normally: screen would bleach it.
-     Amber over blue turns grey, so its falloff runs through rose into
-     violet before it meets the cool field. */
+     Amber over blue turns grey, so the amber stays close to the core and
+     the long halo turns through rose into violet before it meets the cool
+     field. */
   .glass-backdrop__orb:nth-child(2) {
-    --_s: max(58cqw, 46cqh);
+    --_s: max(110cqw, 90cqh);
+    --_x: 86cqw;
+    --_y: 4cqh;
     --_move: glass-orb-sun;
     --_beats: 8;
-    top: calc(var(--_s) * -0.414);
-    right: calc(var(--_s) * -0.276);
     mix-blend-mode: normal;
     opacity: calc(var(--_sun) * var(--backdrop-strength, 1));
     background: radial-gradient(
-      circle,
-      oklch(0.96 0.07 calc(var(--_sun-hue) + 14) / 0.95) 0%,
-      oklch(0.88 0.14 var(--_sun-hue) / 0.72) 10%,
-      oklch(0.75 0.18 calc(var(--_sun-hue) - 26) / 0.44) 21%,
-      oklch(0.62 0.21 calc(var(--_sun-hue) - 56) / 0.26) 34%,
-      oklch(0.5 0.2 calc(var(--_sun-hue) - 91) / 0.13) 48%,
-      transparent 66%
+      closest-side,
+      oklch(0.93 0.12 calc(var(--_sun-hue) + 10) / 0.72) 0%,
+      oklch(0.88 0.15 calc(var(--_sun-hue) + 4) / 0.62) 6%,
+      oklch(0.8 0.18 calc(var(--_sun-hue) - 14) / 0.46) 13%,
+      oklch(0.71 0.2 calc(var(--_sun-hue) - 38) / 0.3) 22%,
+      oklch(0.63 0.2 calc(var(--_sun-hue) - 62) / 0.17) 33%,
+      oklch(0.56 0.2 calc(var(--_sun-hue) - 84) / 0.09) 46%,
+      oklch(0.5 0.19 calc(var(--_sun-hue) - 102) / 0.04) 61%,
+      oklch(0.46 0.18 calc(var(--_sun-hue) - 114) / 0.012) 78%,
+      transparent 100%
     );
   }
 
   /* 3 · the accent, low left */
   .glass-backdrop__orb:nth-child(3) {
-    --_s: max(62cqw, 50cqh);
+    --_s: max(110cqw, 90cqh);
+    --_x: 14cqw;
+    --_y: 94cqh;
+    --_c: var(--_accent);
+    --_a: 0.55;
     --_move: glass-orb-3;
     --_beats: 7;
-    top: 38cqh;
-    left: calc(var(--_s) * -0.19);
-    background: radial-gradient(circle, color-mix(in oklch, var(--_accent) 50%, transparent) 0%, transparent 62%);
   }
 
   /* 4 · the bridge, right */
   .glass-backdrop__orb:nth-child(4) {
-    --_s: max(64cqw, 52cqh);
+    --_s: max(110cqw, 90cqh);
+    --_x: 92cqw;
+    --_y: 54cqh;
+    --_c: var(--_bridge);
+    --_a: 0.8;
     --_move: glass-orb-4;
     --_beats: 9;
-    top: 4cqh;
-    right: calc(var(--_s) * -0.31);
-    background: radial-gradient(circle, color-mix(in oklch, var(--_bridge) 85%, transparent) 0%, color-mix(in oklch, var(--_bridge) 40%, transparent) 35%, transparent 64%);
   }
 
   /* 5 · the wash along the bottom */
   .glass-backdrop__orb:nth-child(5) {
-    --_s: 120cqw;
+    --_w: 200cqw;
+    --_h: max(80cqw, 70cqh);
+    --_x: 50cqw;
+    --_y: 108cqh;
+    --_c: var(--_wash);
+    --_a: 0.9;
     --_move: glass-orb-5;
     --_beats: 10;
-    height: 56cqw;
-    bottom: -26cqw;
-    left: -10cqw;
-    background: radial-gradient(ellipse, var(--_wash) 0%, transparent 70%);
   }
 
-  /* 6 · the sun's hot core */
+  /* 6 · the sun's hot core, screened on so it glows instead of greying.
+     A glow, not a bell: 1/(1 + 16t²) tapered to nothing at the edge, so it
+     peaks gently under the sun and fades out over a long tail. */
   .glass-backdrop__orb:nth-child(6) {
-    --_s: max(16cqw, 13cqh);
+    --_s: max(56cqw, 46cqh);
+    --_x: 85cqw;
+    --_y: 5cqh;
+    --_c: oklch(0.92 0.12 calc(var(--_sun-hue) + 8));
     --_move: glass-orb-core;
     --_beats: 8;
-    top: calc(var(--_s) * -0.125);
-    right: calc(var(--_s) * 0.44);
-    mix-blend-mode: normal;
     opacity: calc(var(--_sun) * var(--backdrop-strength, 1));
     background: radial-gradient(
-      circle,
-      oklch(0.99 0.04 calc(var(--_sun-hue) + 16) / 0.55) 0%,
-      oklch(0.92 0.08 calc(var(--_sun-hue) + 9) / 0.15) 40%,
-      transparent 70%
+      closest-side,
+      color-mix(in oklch, var(--_c) 56%, transparent) 0%,
+      color-mix(in oklch, var(--_c) 47%, transparent) 10%,
+      color-mix(in oklch, var(--_c) 31.5%, transparent) 20%,
+      color-mix(in oklch, var(--_c) 19%, transparent) 30%,
+      color-mix(in oklch, var(--_c) 11%, transparent) 40%,
+      color-mix(in oklch, var(--_c) 6.3%, transparent) 50%,
+      color-mix(in oklch, var(--_c) 3.4%, transparent) 60%,
+      color-mix(in oklch, var(--_c) 1.6%, transparent) 70%,
+      color-mix(in oklch, var(--_c) 0.6%, transparent) 80%,
+      transparent 100%
     );
   }
 
@@ -160,6 +199,17 @@
     --_accent: oklch(0.55 0.15 250);
     --_wash: oklch(0.34 0.16 285);
     --_sun-hue: 62;
+  }
+
+  /* First light: rose and peach under a pale gold sun. */
+  .glass-backdrop--dawn {
+    --_ground: oklch(0.15 0.04 350);
+    --_deep: oklch(0.08 0.03 340);
+    --_field: oklch(0.5 0.17 356);
+    --_bridge: oklch(0.56 0.14 38);
+    --_accent: oklch(0.58 0.13 300);
+    --_wash: oklch(0.32 0.12 320);
+    --_sun-hue: 82;
   }
 
   /* Northern lights: teal and magenta, no sun. */
@@ -182,6 +232,28 @@
     --_accent: oklch(0.52 0.15 50);
     --_wash: oklch(0.32 0.13 20);
     --_sun-hue: 64;
+  }
+
+  /* Pine and moss at golden hour. */
+  .glass-backdrop--forest {
+    --_ground: oklch(0.14 0.035 160);
+    --_deep: oklch(0.07 0.025 170);
+    --_field: oklch(0.44 0.12 152);
+    --_bridge: oklch(0.42 0.1 180);
+    --_accent: oklch(0.6 0.12 128);
+    --_wash: oklch(0.3 0.09 165);
+    --_sun-hue: 70;
+  }
+
+  /* Shallow turquoise over deep blue, under a high pale sun. */
+  .glass-backdrop--lagoon {
+    --_ground: oklch(0.15 0.04 225);
+    --_deep: oklch(0.08 0.03 240);
+    --_field: oklch(0.55 0.13 200);
+    --_bridge: oklch(0.48 0.15 238);
+    --_accent: oklch(0.68 0.12 172);
+    --_wash: oklch(0.34 0.12 250);
+    --_sun-hue: 92;
   }
 
   /* Cold water under a pale sun: low chroma, calm. */

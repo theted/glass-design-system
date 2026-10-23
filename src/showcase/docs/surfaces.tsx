@@ -80,12 +80,12 @@ export const SURFACES: ComponentDoc[] = [
     ),
     demos: [
       { id: 'backdrop/Stage', title: 'A backdrop in a box', description: 'Inside a .glass-stage instead of the viewport.', layout: 'fill' },
-      { id: 'backdrop/Still', title: 'Six palettes', description: 'kiln is the house look and follows --glass-hue, as does abyss.', layout: 'fill' },
+      { id: 'backdrop/Still', title: 'Nine palettes', description: 'kiln is the house look and follows --glass-hue, as does abyss.', layout: 'fill' },
     ],
     props: [
       {
         rows: [
-          { name: 'palette', type: "'kiln' | 'dusk' | 'aurora' | 'ember' | 'fjord' | 'abyss'", default: "'kiln'", description: 'Colours only; every palette shares the layout and motion.' },
+          { name: 'palette', type: "'kiln' | 'dusk' | 'dawn' | 'ember' | 'aurora' | 'forest' | 'lagoon' | 'fjord' | 'abyss'", default: "'kiln'", description: 'Colours only; every palette shares the layout and motion.' },
           { name: 'fixed', type: 'boolean', default: 'false', description: 'Cover the viewport and stay put while the page scrolls. Without it, it fills the nearest .glass-stage.' },
           { name: 'motion', type: 'boolean', default: 'true', description: 'The orbs drift. Reduced motion always holds them still.' },
           { name: 'speed', type: 'number', default: '8', description: 'Seconds per beat; a full drift is 6 to 10 beats.' },

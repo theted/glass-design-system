@@ -110,9 +110,10 @@
       linear-gradient(#000 0 0);
   }
 
-  /* The sheen: a wide, faint pool of warm light under the pointer, sized to
-     the pane. (Percentages only: Chrome drops a radial-gradient whose size
-     mixes lengths and percentages.) */
+  /* The sheen: a broad pool of warm light under the pointer, 30rem across
+     whatever the pane's size, so it lifts a whole card rather than lighting
+     a spot. Its falloff is the backdrop's bell curve: flat under the pointer
+     and flat where it fades out, with no edge to find. */
   .glass::after {
     content: '';
     position: absolute;
@@ -121,11 +122,18 @@
     border-radius: inherit;
     pointer-events: none;
     background: radial-gradient(
-      ellipse 130% 130% at calc(var(--glass-x) * 100%) calc(var(--glass-y) * 100%),
+      circle 30rem at calc(var(--glass-x) * 100%) calc(var(--glass-y) * 100%),
       oklch(0.95 0.05 calc(var(--light-hue) + 8) / calc(var(--glass-sheen) * 0.36)) 0%,
-      oklch(0.9 0.06 calc(var(--light-hue) + 4) / calc(var(--glass-sheen) * 0.16)) 22%,
-      oklch(0.84 0.06 var(--light-hue) / calc(var(--glass-sheen) * 0.04)) 45%,
-      transparent 70%
+      oklch(0.95 0.05 calc(var(--light-hue) + 8) / calc(var(--glass-sheen) * 0.35)) 10%,
+      oklch(0.94 0.05 calc(var(--light-hue) + 7) / calc(var(--glass-sheen) * 0.32)) 20%,
+      oklch(0.93 0.055 calc(var(--light-hue) + 6) / calc(var(--glass-sheen) * 0.27)) 30%,
+      oklch(0.92 0.055 calc(var(--light-hue) + 5) / calc(var(--glass-sheen) * 0.215)) 40%,
+      oklch(0.91 0.06 calc(var(--light-hue) + 4) / calc(var(--glass-sheen) * 0.152)) 50%,
+      oklch(0.9 0.06 calc(var(--light-hue) + 3) / calc(var(--glass-sheen) * 0.095)) 60%,
+      oklch(0.88 0.06 calc(var(--light-hue) + 2) / calc(var(--glass-sheen) * 0.048)) 70%,
+      oklch(0.86 0.06 var(--light-hue) / calc(var(--glass-sheen) * 0.017)) 80%,
+      oklch(0.84 0.06 var(--light-hue) / calc(var(--glass-sheen) * 0.0025)) 90%,
+      transparent 100%
     );
     opacity: var(--glass-hover);
     mix-blend-mode: screen;
@@ -141,10 +149,13 @@
      from. For the one pane a screen is about. */
   .glass--glow {
     background-image: radial-gradient(
-      70% 90% at 100% 0%,
-      oklch(0.82 0.12 var(--light-hue) / calc(var(--glass-opacity) * 0.16)),
-      oklch(0.8 0.12 var(--light-hue) / calc(var(--glass-opacity) * 0.05)) 45%,
-      transparent 75%
+      90% 110% at 100% 0%,
+      oklch(0.82 0.12 var(--light-hue) / calc(var(--glass-opacity) * 0.16)) 0%,
+      oklch(0.82 0.12 var(--light-hue) / calc(var(--glass-opacity) * 0.142)) 20%,
+      oklch(0.81 0.12 var(--light-hue) / calc(var(--glass-opacity) * 0.095)) 40%,
+      oklch(0.8 0.12 var(--light-hue) / calc(var(--glass-opacity) * 0.042)) 60%,
+      oklch(0.8 0.12 var(--light-hue) / calc(var(--glass-opacity) * 0.0075)) 80%,
+      transparent 100%
     );
   }
 

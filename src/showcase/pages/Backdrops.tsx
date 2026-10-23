@@ -7,8 +7,11 @@ import { useTheme } from '../site/theme';
 const ABOUT: Record<GlassPalette, string> = {
   kiln: 'Cobalt field, one low amber sun. The house look; follows --glass-hue.',
   dusk: 'Violet evening with a low amber sun.',
-  aurora: 'Northern lights: teal and magenta, no sun.',
+  dawn: 'First light: rose and peach under a pale gold sun.',
   ember: 'Coals: deep reds under a hot sun.',
+  aurora: 'Northern lights: teal and magenta, no sun.',
+  forest: 'Pine and moss at golden hour.',
+  lagoon: 'Shallow turquoise over deep blue, under a high pale sun.',
   fjord: 'Cold water under a pale sun. Low chroma, calm.',
   abyss: 'Almost nothing, for apps where content leads. Follows --glass-hue.',
 };
@@ -32,7 +35,7 @@ const Backdrops = () => {
         lede="The light the glass refracts. Every palette shares one layout: a cool field top left, a low sun top right, where every rim catches its light. Pick one for the whole site below."
       />
 
-      <Section id="palettes" title="Six palettes">
+      <Section id="palettes" title="Nine palettes">
         <GlassGrid min="22rem" gap={8}>
           {GLASS_PALETTES.map((palette) => {
             const current = theme.palette === palette;

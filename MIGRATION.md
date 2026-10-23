@@ -1,6 +1,6 @@
 # Upgrading from 0.x to 1.0
 
-1.0 rebuilds Glass around one idea: **the material is CSS**. A pane used to be seven decorative divs plus inline styles computed in JavaScript; now it's `class="glass"`, tuned by five CSS custom properties. Components are thin, typed wrappers around classes. Backdrop presets, patterns and orbs became one `GlassBackdrop` with six palettes.
+1.0 rebuilds Glass around one idea: **the material is CSS**. A pane used to be seven decorative divs plus inline styles computed in JavaScript; now it's `class="glass"`, tuned by five CSS custom properties. Components are thin, typed wrappers around classes. Backdrop presets, patterns and orbs became one `GlassBackdrop` with nine palettes.
 
 Most apps upgrade in three passes: rename components, swap removed props, then move off the old token names (or import `compat.css` and do that last).
 
@@ -111,10 +111,10 @@ The field is now the native element itself (`.glass-input`), with focus in pure 
 | 0.x | 1.0 |
 |---|---|
 | `preset="kiln"` | `palette="kiln"` (the default) |
-| other orb presets | the nearest palette: `drift`/`float`/`breathe` → `kiln`; `aurora`/`silk`/`tide` → `aurora`; `nebula`/`orbit`/`lava` → `dusk`; `ember`/`pulse` → `ember` |
+| other orb presets | the nearest palette: `drift`/`float`/`breathe` → `kiln`; `aurora`/`silk` → `aurora`; `tide` → `lagoon`; `nebula`/`orbit`/`lava` → `dusk`; `ember`/`pulse` → `ember` |
 | `opacity` | `strength` |
 | `blendMode` | removed |
-| `BG_PRESETS` (15 gradients) | `palette` (6), or `--glass-hue` with `kiln` / `abyss` |
+| `BG_PRESETS` (15 gradients) | `palette` (9), or `--glass-hue` with `kiln` / `abyss` |
 | `PATTERNS` (12 tiles) | `texture="grain" \| "dots" \| "grid"` |
 
 The backdrop sits at `z-index: -1`, so page content needs no `position: relative; z-index: 1`. Without `fixed` it fills the nearest `.glass-stage`.

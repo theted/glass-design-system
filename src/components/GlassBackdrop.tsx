@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import { cx } from '../utils';
 
 /** The palettes, in the order a picker should show them. kiln is the house look. */
-export const GLASS_PALETTES = ['kiln', 'dusk', 'aurora', 'ember', 'fjord', 'abyss'] as const;
+export const GLASS_PALETTES = ['kiln', 'dusk', 'dawn', 'ember', 'aurora', 'forest', 'lagoon', 'fjord', 'abyss'] as const;
 export type GlassPalette = (typeof GLASS_PALETTES)[number];
 
 export const GLASS_TEXTURES = ['none', 'grain', 'dots', 'grid'] as const;
@@ -12,8 +12,11 @@ export interface GlassBackdropProps {
   /**
    * - `kiln`   cobalt field, one low amber sun: the house look. Follows --glass-hue.
    * - `dusk`   violet evening, low amber sun
-   * - `aurora` teal and magenta, no sun
+   * - `dawn`   rose and peach under a pale gold sun
    * - `ember`  deep reds under a hot sun
+   * - `aurora` teal and magenta, no sun
+   * - `forest` pine and moss at golden hour
+   * - `lagoon` bright turquoise over deep blue, high pale sun
    * - `fjord`  cold, low-chroma water under a pale sun
    * - `abyss`  almost nothing: for apps where content leads. Follows --glass-hue.
    */
