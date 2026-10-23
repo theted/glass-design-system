@@ -79,11 +79,11 @@ const SPACE: [number, string][] = [
 ];
 
 const RADII: [GlassRadius, string][] = [
-  ['chip', '8px'],
-  ['field', '12px'],
-  ['card', '20px'],
-  ['panel', '28px'],
-  ['sheet', '36px'],
+  ['chip', '6px'],
+  ['field', '10px'],
+  ['card', '14px'],
+  ['panel', '20px'],
+  ['sheet', '26px'],
   ['round', 'pill'],
 ];
 

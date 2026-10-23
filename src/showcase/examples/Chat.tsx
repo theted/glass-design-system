@@ -11,7 +11,7 @@ interface Message {
 
 const START: Message[] = [
   { id: 1, mine: false, text: 'Did the glass knobs ship?' },
-  { id: 2, mine: true, text: 'They did. Five CSS variables: blur, opacity, sheen and the two hues.' },
+  { id: 2, mine: true, text: 'They did. Six CSS variables: blur, opacity, sheen, the two hues and roundness.' },
   { id: 3, mine: false, text: 'So I can make the sidebar denser without touching a component?' },
 ];
 

@@ -9,30 +9,34 @@ var p = (...e) => e.filter(Boolean).join(" "), m = (...e) => (t) => {
 	opacity: .66,
 	sheen: .22,
 	hue: 262,
-	lightHue: 76
+	lightHue: 76,
+	roundness: 1
 }, v = t(_), y = {
 	blur: (e) => ["--glass-blur", `${e}px`],
 	opacity: (e) => ["--glass-opacity", String(e)],
 	sheen: (e) => ["--glass-sheen", String(e)],
 	hue: (e) => ["--glass-hue", String(e)],
-	lightHue: (e) => ["--light-hue", String(e)]
+	lightHue: (e) => ["--light-hue", String(e)],
+	roundness: (e) => ["--glass-roundness", String(e)]
 }, b = (e) => Object.fromEntries(Object.keys(y).filter((t) => e[t] !== void 0).map((t) => y[t](e[t]))), x = ({ children: e, className: t, style: r, ...i }) => {
-	let a = n(v), { blur: s, opacity: c, sheen: l, hue: d, lightHue: f } = i, m = o(() => ({
+	let a = n(v), { blur: s, opacity: c, sheen: l, hue: d, lightHue: f, roundness: m } = i, h = o(() => ({
 		blur: s ?? a.blur,
 		opacity: c ?? a.opacity,
 		sheen: l ?? a.sheen,
 		hue: d ?? a.hue,
-		lightHue: f ?? a.lightHue
+		lightHue: f ?? a.lightHue,
+		roundness: m ?? a.roundness
 	}), [
 		s,
 		c,
 		l,
 		d,
 		f,
+		m,
 		a
 	]);
 	return /* @__PURE__ */ u(v.Provider, {
-		value: m,
+		value: h,
 		children: /* @__PURE__ */ u("div", {
 			className: p("glass-scope", t),
 			style: {

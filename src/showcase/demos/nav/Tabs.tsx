@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { GlassNav, GlassPanel, GlassStack } from 'glass-design-system';
 
 const TABS = {
-  Readme: 'Cool glass, warm light. One material, five knobs.',
+  Readme: 'Cool glass, warm light. One material, six knobs.',
   Changelog: '1.0: one .glass class, CSS knobs, a Tailwind bridge, twelve new components.',
   License: 'MIT. Use it, change it, ship it.',
 };

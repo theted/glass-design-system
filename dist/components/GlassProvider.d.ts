@@ -10,6 +10,8 @@ export interface GlassConfig {
     hue: number;
     /** Hue of the light: rims, focus, the primary action. Default 76, amber. */
     lightHue: number;
+    /** Scales every corner radius except the pill's: 0 square → 2 twice as round. Default 1. */
+    roundness: number;
 }
 export declare const GLASS_DEFAULTS: GlassConfig;
 /**
