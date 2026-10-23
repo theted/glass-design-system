@@ -7,12 +7,13 @@ export const SYSTEM: ComponentDoc[] = [
     slug: 'theming',
     name: 'Theming',
     group: 'System',
-    summary: 'Five knobs retune every pane: in CSS, or with a provider.',
+    summary: 'Six knobs retune every pane: in CSS, or with a provider.',
     intro: (
       <>
         <InlineCode>--glass-blur</InlineCode>, <InlineCode>--glass-opacity</InlineCode> and{' '}
         <InlineCode>--glass-sheen</InlineCode> set the material; <InlineCode>--glass-hue</InlineCode> and{' '}
-        <InlineCode>--light-hue</InlineCode> set the palette. They’re CSS custom properties: set them on{' '}
+        <InlineCode>--light-hue</InlineCode> set the palette, and <InlineCode>--glass-roundness</InlineCode> scales
+        every corner. They’re CSS custom properties: set them on{' '}
         <InlineCode>:root</InlineCode> for the app, on any element for a region, or with{' '}
         <InlineCode>GlassProvider</InlineCode> from React. You don’t need a provider at all.
       </>
@@ -29,7 +30,7 @@ export const SYSTEM: ComponentDoc[] = [
     ),
     demos: [
       { id: 'theming/Provider', title: 'Nested providers', description: 'Each provider retunes only its subtree.', layout: 'fill' },
-      { id: 'theming/Css', title: 'Plain CSS', description: 'Blur, opacity and sheen work on any element; the hues need :root or .glass-scope.' },
+      { id: 'theming/Css', title: 'Plain CSS', description: 'Blur, opacity and sheen work on any element; the hues and roundness need :root or .glass-scope.' },
     ],
     props: [
       {
@@ -40,6 +41,7 @@ export const SYSTEM: ComponentDoc[] = [
           { name: 'sheen', type: 'number', default: '0.22', description: 'Brightness of the light under the pointer. → --glass-sheen' },
           { name: 'hue', type: 'number', default: '262', description: 'Glass, ground and every neutral (OKLCH degrees). → --glass-hue' },
           { name: 'lightHue', type: 'number', default: '76', description: 'Rims, focus and the primary action. → --light-hue' },
+          { name: 'roundness', type: 'number', default: '1', description: 'Scales every corner radius but the pill’s, 0 square → 2 twice as round. → --glass-roundness' },
         ],
       },
     ],
@@ -48,6 +50,7 @@ export const SYSTEM: ComponentDoc[] = [
   --glass-opacity: 0.75;
   --glass-hue: 250;   /* bluer glass */
   --light-hue: 60;    /* a lower, oranger sun */
+  --glass-roundness: 0.5; /* crisper corners */
 }
 
 .sidebar { --glass-opacity: 0.9; }`,

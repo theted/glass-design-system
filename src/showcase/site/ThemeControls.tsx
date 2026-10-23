@@ -5,7 +5,7 @@ import { useTheme } from './theme';
 const capitalise = (s: string) => s[0].toUpperCase() + s.slice(1);
 
 /**
- * The site's theme: the five material knobs (fed to the GlassProvider
+ * The site's theme: the six knobs (fed to the GlassProvider
  * around every page) and the backdrop. Each palette swatch is a real,
  * still backdrop at swatch size.
  */
@@ -30,6 +30,7 @@ export const ThemeControls = () => {
         <GlassSlider label="Sheen" min={0} max={0.6} step={0.01} value={theme.sheen} onChange={(sheen) => setTheme({ sheen })} format={(v) => v.toFixed(2)} />
         <GlassSlider label="Glass hue" className="hue-track" min={0} max={359} value={theme.hue} onChange={(hue) => setTheme({ hue })} format={(v) => `${v}°`} />
         <GlassSlider label="Light hue" className="hue-track" min={0} max={359} value={theme.lightHue} onChange={(lightHue) => setTheme({ lightHue })} format={(v) => `${v}°`} />
+        <GlassSlider label="Roundness" min={0} max={2} step={0.05} value={theme.roundness} onChange={(roundness) => setTheme({ roundness })} format={(v) => v.toFixed(2)} />
       </div>
 
       <GlassDivider />

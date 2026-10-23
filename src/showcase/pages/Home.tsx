@@ -47,8 +47,8 @@ const PRINCIPLES = [
     body: 'The glass and every neutral share one cool hue. The light is the only warm colour: rims, focus, the primary action, anything switched on. Nothing else is amber.',
   },
   {
-    title: 'Five knobs',
-    body: 'Blur, opacity, sheen and two hues, as CSS custom properties. Set them on :root, on a sidebar, or from React. Change one and every pane follows.',
+    title: 'Six knobs',
+    body: 'Blur, opacity, sheen, two hues and roundness, as CSS custom properties. Set them on :root, on a sidebar, or from React. Change one and every pane follows.',
   },
 ];
 
@@ -122,6 +122,7 @@ const Knobs = () => {
           <GlassSlider label="Opacity" min={0} max={1} step={0.01} value={theme.opacity} onChange={(opacity) => setTheme({ opacity })} format={(v) => v.toFixed(2)} />
           <GlassSlider label="Glass hue" className="hue-track" min={0} max={359} value={theme.hue} onChange={(hue) => setTheme({ hue })} format={(v) => `${v}°`} />
           <GlassSlider label="Light hue" className="hue-track" min={0} max={359} value={theme.lightHue} onChange={(lightHue) => setTheme({ lightHue })} format={(v) => `${v}°`} />
+          <GlassSlider label="Roundness" min={0} max={2} step={0.05} value={theme.roundness} onChange={(roundness) => setTheme({ roundness })} format={(v) => v.toFixed(2)} />
           <GlassCluster justify="between">
             <span className="glass-caption">Remembered in this browser.</span>
             <GlassButton size="sm" variant="ghost" onClick={resetTheme} disabled={isDefault}>
@@ -136,6 +137,7 @@ const Knobs = () => {
   --glass-sheen: ${theme.sheen};
   --glass-hue: ${theme.hue};${theme.hue === THEME_DEFAULTS.hue ? '   /* cobalt */' : ''}
   --light-hue: ${theme.lightHue};${theme.lightHue === THEME_DEFAULTS.lightHue ? '    /* amber */' : ''}
+  --glass-roundness: ${theme.roundness};
 }`}</CodeBlock>
     </div>
   );
@@ -150,7 +152,7 @@ const Home = () => (
         </GlassBadge>
         <h1 className="glass-display hero__title">Cool glass, warm light.</h1>
         <p className="glass-lede">
-          A design system for React where every surface is one frosted material, lit from the upper right. Five CSS
+          A design system for React where every surface is one frosted material, lit from the upper right. Six CSS
           variables tune all of it.
         </p>
         <GlassCluster gap={3}>
