@@ -7,8 +7,9 @@ import type { CSSProperties } from 'react';
 //   .sidebar     { --glass-opacity: 0.9; }
 //   .danger-zone { --glass-hue: 20; --light-hue: 30; }
 //
-// Blur, opacity and sheen apply anywhere. The two hues recolour derived
-// tokens, so set them on :root or on an element with class="glass-scope".
+// Blur, opacity and sheen apply anywhere. The two hues and the roundness
+// feed derived tokens, so set them on :root or on an element with
+// class="glass-scope".
 export default function ThemingCss() {
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-4)', justifyContent: 'center' }}>

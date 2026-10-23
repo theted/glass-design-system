@@ -5,7 +5,7 @@
 Live docs, with every component, example and its source: **[glass.sundbergsolutions.se](https://glass.sundbergsolutions.se)**
 
 - **One material, one class.** `class="glass"` draws the tint, the rim that catches the light and the sheen that follows the pointer. The React components are thin, typed wrappers around classes like it, so the whole system also works in plain HTML.
-- **Five knobs.** `--glass-blur`, `--glass-opacity`, `--glass-sheen`, `--glass-hue` and `--light-hue` are CSS custom properties. Set them on `:root`, on a sidebar, or with `<GlassProvider>`; every pane follows.
+- **Six knobs.** `--glass-blur`, `--glass-opacity`, `--glass-sheen`, `--glass-hue`, `--light-hue` and `--glass-roundness` are CSS custom properties. Set them on `:root`, on a sidebar, or with `<GlassProvider>`; every pane follows.
 - **Cool glass, warm light.** The glass, the ground and every neutral share one hue. The light is the only warm colour: rims, focus, the primary action, anything switched on.
 - **No re-renders on mousemove.** The pointer light lives in registered CSS properties written straight onto the element. The browser interpolates them; React stays idle.
 - **Built on the platform.** Dialogs are `<dialog>`, popovers use the `popover` attribute, form controls are the native elements. Focus, Escape, the top layer and form libraries just work.
@@ -113,6 +113,7 @@ export const Contact = () => {
   --glass-sheen: 0.22;    /* the light under the pointer */
   --glass-hue: 262;       /* the glass, the ground, every neutral (cobalt) */
   --light-hue: 76;        /* the light: rims, focus, the primary action (amber) */
+  --glass-roundness: 1;   /* scales every corner but the pill's: 0 square → 2 twice as round */
 }
 
 .sidebar { --glass-opacity: 0.9; }
@@ -159,7 +160,7 @@ Hover lights the rim in pure CSS; `useGlassPointer` (built into `GlassPanel`) ma
 - **Colour:** OKLCH throughout. Ground, three text steps (`--color-text`, `-muted`, `-subtle`), hairlines and fills, recessed wells, the light (`--color-light`, `-bright`, `-soft`, `--color-on-light`) and four status colours. All derived from the two hues.
 - **Type:** a fluid scale `--step--2` (12px) to `--step-7` (57 → 107px); one class per role: `.glass-display`, `.glass-h1` … `.glass-h4`, `.glass-lede`, `.glass-body`, `.glass-small`, `.glass-caption`, `.glass-label`, `.glass-code`, `.glass-link`, `.glass-prose`.
 - **Space:** `--space-1 2 3 4 6 8 12 16 24 32` on a 4px grid, named like Tailwind's steps, plus fluid `--space-gutter`, `--space-section`, `--space-panel`, `--space-grid`.
-- **Shape:** `--radius-chip` 8, `-field` 12, `-card` 20, `-panel` 28, `-sheet` 36, `-round`. Control heights `--control-xs/sm/md/lg` (28/34/40/48px) shared by buttons, fields and selects.
+- **Shape:** `--radius-chip` 6, `-field` 10, `-card` 14, `-panel` 20, `-sheet` 26, `-round`, all but `-round` times `--glass-roundness`. Control heights `--control-xs/sm/md/lg` (28/34/40/48px) shared by buttons, fields and selects.
 - **Depth:** three intensities of glass with `--elevation-1` … `-3`.
 - **Motion:** `--ease-glass`, `--ease-spring`, `--ease-in-glass` and `--dur-1` … `-4` (140 → 1120ms). Reduced motion collapses them; reduced transparency makes glass solid; more contrast makes it denser.
 

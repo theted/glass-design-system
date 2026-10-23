@@ -96,7 +96,7 @@
     padding: 0 0.375rem;
     border: 1px solid var(--color-line-strong);
     border-bottom-width: 2px;
-    border-radius: 0.375rem;
+    border-radius: var(--radius-chip);
     background-color: var(--color-well);
     color: var(--color-text-muted);
     font-family: var(--font-code);

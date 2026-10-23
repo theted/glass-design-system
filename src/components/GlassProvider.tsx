@@ -13,6 +13,8 @@ export interface GlassConfig {
   hue: number;
   /** Hue of the light: rims, focus, the primary action. Default 76, amber. */
   lightHue: number;
+  /** Scales every corner radius except the pill's: 0 square → 2 twice as round. Default 1. */
+  roundness: number;
 }
 
 export const GLASS_DEFAULTS: GlassConfig = {
@@ -21,6 +23,7 @@ export const GLASS_DEFAULTS: GlassConfig = {
   sheen: 0.22,
   hue: 262,
   lightHue: 76,
+  roundness: 1,
 };
 
 const GlassContext = createContext<GlassConfig>(GLASS_DEFAULTS);
@@ -31,6 +34,7 @@ const VARS: Record<keyof GlassConfig, (v: number) => [string, string]> = {
   sheen: (v) => ['--glass-sheen', String(v)],
   hue: (v) => ['--glass-hue', String(v)],
   lightHue: (v) => ['--light-hue', String(v)],
+  roundness: (v) => ['--glass-roundness', String(v)],
 };
 
 /**
@@ -69,7 +73,7 @@ export type GlassProviderProps = PropsWithChildren<
  */
 export const GlassProvider = ({ children, className, style, ...knobs }: GlassProviderProps) => {
   const parent = useContext(GlassContext);
-  const { blur, opacity, sheen, hue, lightHue } = knobs;
+  const { blur, opacity, sheen, hue, lightHue, roundness } = knobs;
 
   const value = useMemo<GlassConfig>(
     () => ({
@@ -78,8 +82,9 @@ export const GlassProvider = ({ children, className, style, ...knobs }: GlassPro
       sheen: sheen ?? parent.sheen,
       hue: hue ?? parent.hue,
       lightHue: lightHue ?? parent.lightHue,
+      roundness: roundness ?? parent.roundness,
     }),
-    [blur, opacity, sheen, hue, lightHue, parent],
+    [blur, opacity, sheen, hue, lightHue, roundness, parent],
   );
 
   return (

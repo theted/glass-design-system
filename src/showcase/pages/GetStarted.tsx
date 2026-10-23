@@ -148,13 +148,14 @@ const GetStarted = () => (
       </p>
     </Section>
 
-    <Section id="theming" title="Theme it" lede="Five CSS variables. Set them on :root for the whole app.">
+    <Section id="theming" title="Theme it" lede="Six CSS variables. Set them on :root for the whole app.">
       <CodeBlock title="app.css" collapsible={false}>{`:root {
   --glass-blur: 40px;     /* how frosted */
   --glass-opacity: 0.66;  /* how dense the tint is, 0 → 1 */
   --glass-sheen: 0.22;    /* the light under the pointer */
   --glass-hue: 262;       /* the glass and every neutral */
   --light-hue: 76;        /* the light: rims, focus, the primary action */
+  --glass-roundness: 1;   /* every corner, 0 square → 2 twice as round */
 }`}</CodeBlock>
       <GlassCluster gap={3}>
         <GlassButton as={Link} to="/components/theming">
